@@ -3,14 +3,14 @@
 
 namespace Tests\AppBundle;
 
-use AppBundle\Repository\AppUserDao;
+use AppBundle\Repository\UserRepository;
 use AppBundle\Service\AppUserService;
 use AppBundle\Entity\AppLocation;
 use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
 use AppBundle\Entity\RideEventType;
-use AppBundle\Repository\RideDao;
+use AppBundle\Repository\RideRepository;
 use AppBundle\Service\RideService;
 use AppBundle\Exception\RoleLifeCycleException;
 use Doctrine\ORM\EntityManagerInterface;
@@ -48,8 +48,8 @@ abstract class AppTestCase extends WebTestCase
         parent::setUp();
         self::bootKernel();
         $this->em = static::$kernel->getContainer()->get('doctrine')->getManager();
-        $this->appUserService = new AppUserService(new AppUserDao($this->em()));
-        $this->rideService = new RideService(new RideDao($this->em()));
+        $this->appUserService = new AppUserService(new UserRepository($this->em()));
+        $this->rideService = new RideService(new RideRepository($this->em()));
         $this->setUpEntityManager();
 
         $this->setTestLocations();

@@ -7,9 +7,8 @@ use AppBundle\Entity\AppLocation;
 use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
 use AppBundle\Entity\RideEvent;
-use AppBundle\Repository\AppDao;
 
-class RideDao extends AppDao
+class RideRepository extends AppRepository
 {
     public function createRideForUser(
         AppUser $savedUserOne,

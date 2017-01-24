@@ -3,7 +3,7 @@
 
 namespace AppBundle\Service;
 
-use AppBundle\Repository\AppUserDao;
+use AppBundle\Repository\UserRepository;
 use AppBundle\Entity\AppLocation;
 use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
@@ -11,14 +11,14 @@ use AppBundle\Entity\Ride;
 class AppUserService
 {
     /**
-     * @var AppUserDao
+     * @var UserRepository
      */
     private $userDao;
 
     /**
-     * @param AppUserDao $dao
+     * @param UserRepository $dao
      */
-    public function __construct(AppUserDao $dao)
+    public function __construct(UserRepository $dao)
     {
         $this->userDao = $dao;
     }

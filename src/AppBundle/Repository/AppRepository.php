@@ -6,7 +6,7 @@ namespace AppBundle\Repository;
 use AppBundle\Entity\RideEventType;
 use Doctrine\ORM\EntityManagerInterface;
 
-class AppDao
+class AppRepository
 {
     /**
      * @var EntityManagerInterface

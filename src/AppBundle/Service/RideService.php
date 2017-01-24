@@ -8,18 +8,18 @@ use AppBundle\Entity\AppLocation;
 use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
 use AppBundle\Entity\RideEvent;
-use AppBundle\Repository\RideDao;
+use AppBundle\Repository\RideRepository;
 use AppBundle\Exception\RideEventLifeCycleException;
 use Doctrine\ORM\NoResultException;
 
 class RideService
 {
     /**
-     * @var RideDao
+     * @var RideRepository
      */
     private $dao;
 
-    public function __construct(RideDao $dao)
+    public function __construct(RideRepository $dao)
     {
 
         $this->dao = $dao;
