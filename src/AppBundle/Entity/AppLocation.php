@@ -53,7 +53,7 @@ class AppLocation
 
     private function floatsEqual($first, $second)
     {
-        return ((abs($first - $second) / $second) < 0.00001);
+        return ((abs($first - $second)) < 0.00001);
     }
 
     public function equals(AppLocation $locationToCompare)
