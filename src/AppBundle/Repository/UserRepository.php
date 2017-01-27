@@ -41,23 +41,17 @@ class UserRepository extends AppRepository
     public function makeUserPassenger(AppUser $user)
     {
         $passengerRole = $this->getPassengerRole();
-        if ($this->isUserPassenger($user)) {
-            $this->throwRoleLifeCycleException($user, $passengerRole);
-        } else {
-            $userPassengerRole = new UserRole($user, $passengerRole);
-            $this->save($userPassengerRole);
-        }
+        $this->verifyPassengerRole($user, $passengerRole);
+        $userPassengerRole = new UserRole($user, $passengerRole);
+        $this->save($userPassengerRole);
     }
 
     public function makeUserDriver(AppUser $user)
     {
         $driverRole = $this->getDriverRole();
-        if ($this->isUserDriver($user)) {
-            $this->throwRoleLifeCycleException($user, $driverRole);
-        } else {
-            $userDriverRole = new UserRole($user, $driverRole);
-            $this->save($userDriverRole);
-        }
+        $this->verifyDriverRole($user, $driverRole);
+        $userDriverRole = new UserRole($user, $driverRole);
+        $this->save($userDriverRole);
     }
 
     public function saveUser(AppUser $user)
@@ -159,5 +153,27 @@ class UserRepository extends AppRepository
             'select l from E:AppLocation l'
         )
         ->getResult();
+    }
+
+    /**
+     * @param AppUser $user
+     * @param AppRole $passengerRole
+     */
+    private function verifyPassengerRole(AppUser $user, AppRole $passengerRole)
+    {
+        if ($this->isUserPassenger($user)) {
+            $this->throwRoleLifeCycleException($user, $passengerRole);
+        }
+    }
+
+    /**
+     * @param AppUser $user
+     * @param AppRole $driverRole
+     */
+    private function verifyDriverRole(AppUser $user, AppRole $driverRole)
+    {
+        if ($this->isUserDriver($user)) {
+            $this->throwRoleLifeCycleException($user, $driverRole);
+        }
     }
 }

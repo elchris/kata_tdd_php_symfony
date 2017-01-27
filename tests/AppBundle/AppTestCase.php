@@ -19,6 +19,10 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 abstract class AppTestCase extends WebTestCase
 {
+    const USER_ONE_FIRST_NAME = 'Chris';
+    const USER_ONE_LAST_NAME = 'Holland';
+    const USER_TWO_FIRST_NAME = 'Scott';
+    const USER_TWO_LAST_NAME = 'Sims';
     /** @var  EntityManagerInterface */
     private $em;
 
@@ -54,6 +58,7 @@ abstract class AppTestCase extends WebTestCase
 
         $this->setTestLocations();
         $this->setTestUsers();
+
         $this->setEditorialRoles();
         $this->setEditorialRideEventTypes();
     }
@@ -187,10 +192,10 @@ abstract class AppTestCase extends WebTestCase
 
     protected function setTestUsers()
     {
-        $userOne = new AppUser('Chris', 'Holland');
+        $userOne = new AppUser(self::USER_ONE_FIRST_NAME, self::USER_ONE_LAST_NAME);
         $this->user()->saveUser($userOne);
 
-        $userTwo = new AppUser('Scott', 'Sims');
+        $userTwo = new AppUser(self::USER_TWO_FIRST_NAME, self::USER_TWO_LAST_NAME);
         $this->user()->saveUser($userTwo);
 
         /** @var AppUser $savedUser */

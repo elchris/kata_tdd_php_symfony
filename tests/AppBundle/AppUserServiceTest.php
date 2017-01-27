@@ -6,8 +6,8 @@ class AppUserServiceTest extends AppTestCase
 {
     public function testRetrieveUser()
     {
-        self::assertSame('Chris', $this->savedUserOne->getFirstName());
-        self::assertSame('Holland', $this->savedUserOne->getLastName());
+        self::assertSame(self::USER_ONE_FIRST_NAME, $this->savedUserOne->getFirstName());
+        self::assertSame(self::USER_ONE_LAST_NAME, $this->savedUserOne->getLastName());
     }
 
     public function testMakeUserPassenger()
