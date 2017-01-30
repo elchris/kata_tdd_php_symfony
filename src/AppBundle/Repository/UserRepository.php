@@ -96,17 +96,18 @@ class UserRepository extends AppRepository
      */
     protected function getRolesForUser(AppUser $user, AppRole $role)
     {
-        $userRoles = $this->em->createQuery(
-            'select ur
-                from E:UserRole ur
-                where ur.user = :user
-                and ur.role = :role
-            '
-        )
-            ->setParameter('user', $user)
-            ->setParameter('role', $role)
-            ->getResult();
-        return $userRoles;
+        return
+            $this->em
+                ->createQueryBuilder()
+                ->select(['ur'])
+                ->from(UserRole::class, 'ur')
+                ->where('ur.user = :user')
+                ->andWhere('ur.role = :role')
+                ->setParameter('user', $user)
+                ->setParameter('role', $role)
+                ->getQuery()
+                ->getResult()
+        ;
     }
 
     /**
