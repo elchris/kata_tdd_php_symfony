@@ -16,7 +16,7 @@ abstract class AppTestCase extends WebTestCase
     private $em;
 
     /** @var  AppService */
-    private $appService;
+    protected $appService;
 
     protected function setUp()
     {

@@ -18,6 +18,5 @@ class AppTest extends AppTestCase
 {
     public function testCreateAndRetrieveUser()
     {
-
     }
 }
