@@ -9,20 +9,6 @@ use AppBundle\Exception\RideEventLifeCycleException;
 
 class RideServiceTest extends AppTestCase
 {
-    public function testDuplicatePassengerRoleThrowsException()
-    {
-        $roleName = 'Passenger';
-        $this->setUpDuplicateRoleThrowsException($roleName);
-        $this->makePassenger($this->savedUserOne);
-    }
-
-    public function testDuplicateDriverRoleThrowsException()
-    {
-        $roleName = 'Driver';
-        $this->setUpDuplicateRoleThrowsException($roleName);
-        $this->makeDriver($this->savedUserOne);
-    }
-
     public function testNoLocationDuplication()
     {
         $this->ride()->createRideForUser(
