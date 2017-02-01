@@ -3,6 +3,7 @@
 
 namespace AppBundle;
 
+use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -33,5 +34,19 @@ class AppService
     public function getUserById($userId)
     {
         return $this->dao->getUserById($userId);
+    }
+
+    public function assignRoleToUser(AppUser $userOne, AppRole $role)
+    {
+        $this->dao->assignRoleToUser($userOne, $role);
+    }
+
+    /**
+     * @param AppUser $user
+     * @return bool
+     */
+    public function isUserDriver(AppUser $user)
+    {
+        return $this->dao->isUserInRole($user, AppRole::asPassenger());
     }
 }

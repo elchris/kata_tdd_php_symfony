@@ -2,6 +2,7 @@
 
 namespace Tests\AppBundle;
 
+use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
 
 /**
@@ -18,16 +19,31 @@ use AppBundle\Entity\AppUser;
  */
 class AppTest extends AppTestCase
 {
-    public function testCreateAndRetrieveUser()
+    /** @var  AppUser */
+    private $userOne;
+    /** @var  AppUser */
+    private $userTwo;
+
+    public function setUp()
     {
+        parent::setUp();
         $this->appService->newUser('Chris', 'Holland');
         $this->appService->newUser('Scott', 'Sims');
-
         /** @var AppUser $user */
-        $user = $this->appService->getUserById(2);
-        self::assertEquals('Scott', $user->getFirstName());
+        $this->userTwo = $this->appService->getUserById(2);
+        $this->userOne = $this->appService->getUserById(1);
+    }
 
-        $user = $this->appService->getUserById(1);
-        self::assertEquals('Chris', $user->getFirstName());
+    public function testCreateAndRetrieveUser()
+    {
+        self::assertEquals('Scott', $this->userTwo->getFirstName());
+        self::assertEquals('Chris', $this->userOne->getFirstName());
+    }
+
+    public function testMakeUserDriver()
+    {
+        $this->save(AppRole::asPassenger());
+        $this->appService->assignRoleToUser($this->userOne, AppRole::asPassenger());
+        self::assertTrue($this->appService->isUserDriver($this->userOne));
     }
 }
