@@ -2,6 +2,8 @@
 
 namespace Tests\AppBundle;
 
+use AppBundle\Entity\AppUser;
+
 /**
  * Consult ride-hailing.svg to digest some key application concepts.
  *
@@ -18,5 +20,14 @@ class AppTest extends AppTestCase
 {
     public function testCreateAndRetrieveUser()
     {
+        $this->appService->newUser('Chris', 'Holland');
+        $this->appService->newUser('Scott', 'Sims');
+
+        /** @var AppUser $user */
+        $user = $this->appService->getUserById(2);
+        self::assertEquals('Scott', $user->getFirstName());
+
+        $user = $this->appService->getUserById(1);
+        self::assertEquals('Chris', $user->getFirstName());
     }
 }
