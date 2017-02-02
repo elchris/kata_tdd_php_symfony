@@ -70,4 +70,17 @@ class AppTest extends AppTestCase
         $this->expectException(RoleLifeCycleException::class);
         $this->appService->assignRoleToUser($this->userOne, AppRole::asPassenger());
     }
+    /*
+     * home: 37.773160, -122.432444
+     * work: 37.7721718,-122.4310872
+     */
+    public function testGetOrCreateLocation()
+    {
+        $home = $this->appService->getLocation(
+            37.773160,
+            -122.432444
+        );
+        self::assertEquals(37.773160, $home->getLat(), 0.00000001);
+        self::assertEquals(-122.432444, $home->getLong(), 0.00000001);
+    }
 }

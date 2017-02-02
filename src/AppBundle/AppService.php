@@ -3,6 +3,7 @@
 
 namespace AppBundle;
 
+use AppBundle\Entity\AppLocation;
 use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
 
@@ -61,5 +62,18 @@ class AppService
     public function isUserDriver(AppUser $user)
     {
         return $this->dao->isUserInRole($user, AppRole::asDriver());
+    }
+
+    /**
+     * @param float $lat
+     * @param float $long
+     * @return AppLocation
+     */
+    public function getLocation($lat, $long)
+    {
+        return $this->dao->getOrCreateLocation(
+            $lat,
+            $long
+        );
     }
 }

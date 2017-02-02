@@ -3,10 +3,12 @@
 
 namespace AppBundle;
 
+use AppBundle\Entity\AppLocation;
 use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
 use AppBundle\Entity\UserRole;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\NoResultException;
 
 class AppDao
 {
@@ -74,5 +76,38 @@ class AppDao
        ->getResult();
 
        return sizeof($matchingRoles) === 1;
+    }
+
+    /**
+     * @param float $lat
+     * @param float $long
+     * @return AppLocation
+     */
+    public function getOrCreateLocation($lat, $long)
+    {
+        try {
+            return $this->getExistingLocation($lat, $long);
+        } catch (NoResultException $e) {
+            $this->save(new AppLocation($lat, $long));
+            return $this->getExistingLocation($lat, $long);
+        }
+    }
+
+    /**
+     * @param $lat
+     * @param $long
+     * @return AppLocation
+     */
+    private function getExistingLocation($lat, $long)
+    {
+        $matchingLocation =
+            $this->em->createQuery(
+                'select l from E:AppLocation l where l.lat = :lat and l.long = :long'
+            )
+            ->setParameter('lat', $lat)
+            ->setParameter('long', $long)
+            ->getSingleResult();
+
+        return $matchingLocation;
     }
 }
