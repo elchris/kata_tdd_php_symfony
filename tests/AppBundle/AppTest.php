@@ -32,6 +32,9 @@ class AppTest extends AppTestCase
         /** @var AppUser $user */
         $this->userTwo = $this->appService->getUserById(2);
         $this->userOne = $this->appService->getUserById(1);
+
+        $this->save(AppRole::asPassenger());
+        $this->save(AppRole::asDriver());
     }
 
     public function testCreateAndRetrieveUser()
@@ -42,15 +45,21 @@ class AppTest extends AppTestCase
 
     public function testMakeUserPassenger()
     {
-        $this->save(AppRole::asPassenger());
         $this->appService->assignRoleToUser($this->userOne, AppRole::asPassenger());
         self::assertTrue($this->appService->isUserPassenger($this->userOne));
     }
 
     public function testMakerUserDriver()
     {
-        $this->save(AppRole::asDriver());
         $this->appService->assignRoleToUser($this->userOne, AppRole::asDriver());
+        self::assertTrue($this->appService->isUserDriver($this->userOne));
+    }
+
+    public function testUserHasBothRoles()
+    {
+        $this->appService->assignRoleToUser($this->userOne, AppRole::asPassenger());
+        $this->appService->assignRoleToUser($this->userOne, AppRole::asDriver());
+        self::assertTrue($this->appService->isUserPassenger($this->userOne));
         self::assertTrue($this->appService->isUserDriver($this->userOne));
     }
 }
