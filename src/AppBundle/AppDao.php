@@ -6,6 +6,7 @@ namespace AppBundle;
 use AppBundle\Entity\AppLocation;
 use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
+use AppBundle\Entity\Ride;
 use AppBundle\Entity\UserRole;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NoResultException;
@@ -109,5 +110,26 @@ class AppDao
             ->getSingleResult();
 
         return $matchingLocation;
+    }
+
+    public function createRide(AppUser $passenger, AppLocation $departure)
+    {
+        $this->save(new Ride(
+            $passenger,
+            $departure
+        ));
+    }
+
+    /**
+     * @param AppUser $passenger
+     * @return Ride[]
+     */
+    public function getRidesForPassenger(AppUser $passenger)
+    {
+        return $this->em->createQuery(
+        'select r from E:Ride r where r.passenger = :passenger'
+        )
+        ->setParameter('passenger', $passenger)
+        ->getResult();
     }
 }

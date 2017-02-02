@@ -2,8 +2,10 @@
 
 namespace Tests\AppBundle;
 
+use AppBundle\Entity\AppLocation;
 use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
+use AppBundle\Entity\Ride;
 use AppBundle\RoleLifeCycleException;
 
 /**
@@ -20,6 +22,8 @@ use AppBundle\RoleLifeCycleException;
  */
 class AppTest extends AppTestCase
 {
+    /** @var  AppLocation */
+    private $home;
     /** @var  AppUser */
     private $userOne;
     /** @var  AppUser */
@@ -33,6 +37,11 @@ class AppTest extends AppTestCase
         /** @var AppUser $user */
         $this->userTwo = $this->appService->getUserById(2);
         $this->userOne = $this->appService->getUserById(1);
+
+        $this->home = $this->appService->getLocation(
+            37.773160,
+            -122.432444
+        );
 
         $this->save(AppRole::asPassenger());
         $this->save(AppRole::asDriver());
@@ -76,11 +85,23 @@ class AppTest extends AppTestCase
      */
     public function testGetOrCreateLocation()
     {
-        $home = $this->appService->getLocation(
-            37.773160,
-            -122.432444
+        self::assertEquals(37.773160, $this->home->getLat(), 0.00000001);
+        self::assertEquals(-122.432444, $this->home->getLong(), 0.00000001);
+    }
+
+    public function testCreateRideForPassengerAndDeparture()
+    {
+        $this->appService->assignRoleToUser($this->userOne, AppRole::asPassenger());
+        $this->appService->createRide(
+            $this->userOne,
+            $this->home
         );
-        self::assertEquals(37.773160, $home->getLat(), 0.00000001);
-        self::assertEquals(-122.432444, $home->getLong(), 0.00000001);
+
+        /** @var Ride[] $ridesForUser */
+        $ridesForUser = $this->appService->getRidesForPassenger($this->userOne);
+        self::assertCount(1, $ridesForUser);
+        $firstRide = $ridesForUser[0];
+        self::assertEquals($this->userOne->getFullName(), $firstRide->getPassenger()->getFullName());
+        self::assertTrue($this->home->equals($firstRide->getDeparture()));
     }
 }

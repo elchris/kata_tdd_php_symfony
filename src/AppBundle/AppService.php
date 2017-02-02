@@ -6,6 +6,7 @@ namespace AppBundle;
 use AppBundle\Entity\AppLocation;
 use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
+use AppBundle\Entity\Ride;
 
 class AppService
 {
@@ -75,5 +76,19 @@ class AppService
             $lat,
             $long
         );
+    }
+
+    public function createRide(AppUser $passenger, AppLocation $departure)
+    {
+        $this->dao->createRide($passenger, $departure);
+    }
+
+    /**
+     * @param AppUser $passenger
+     * @return Ride[]
+     */
+    public function getRidesForPassenger(AppUser $passenger)
+    {
+        return $this->dao->getRidesForPassenger($passenger);
     }
 }

@@ -56,4 +56,13 @@ class AppLocation
     {
         return $this->long;
     }
+
+    public function equals(AppLocation $otherLocation)
+    {
+        return (
+            ($this->getLat() === $otherLocation->getLat())
+            &&
+            ($this->getLong() === $otherLocation->getLong())
+        );
+    }
 }
