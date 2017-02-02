@@ -36,9 +36,18 @@ class AppService
         return $this->dao->getUserById($userId);
     }
 
-    public function assignRoleToUser(AppUser $userOne, AppRole $role)
+    public function assignRoleToUser(AppUser $user, AppRole $role)
     {
-        $this->dao->assignRoleToUser($userOne, $role);
+        if (!$this->dao->isUserInRole($user, $role)) {
+            $this->dao->assignRoleToUser($user, $role);
+        } else {
+            throw new RoleLifeCycleException(
+                'User: '
+                .$user->getFullName()
+                .' is already of Role: '
+                .$role->getName()
+            );
+        }
     }
 
     /**

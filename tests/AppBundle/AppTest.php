@@ -4,6 +4,7 @@ namespace Tests\AppBundle;
 
 use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
+use AppBundle\RoleLifeCycleException;
 
 /**
  * Consult ride-hailing.svg to digest some key application concepts.
@@ -61,5 +62,12 @@ class AppTest extends AppTestCase
         $this->appService->assignRoleToUser($this->userOne, AppRole::asDriver());
         self::assertTrue($this->appService->isUserPassenger($this->userOne));
         self::assertTrue($this->appService->isUserDriver($this->userOne));
+    }
+
+    public function testDuplicateRoleAssignmentThrowsException()
+    {
+        $this->appService->assignRoleToUser($this->userOne, AppRole::asPassenger());
+        $this->expectException(RoleLifeCycleException::class);
+        $this->appService->assignRoleToUser($this->userOne, AppRole::asPassenger());
     }
 }

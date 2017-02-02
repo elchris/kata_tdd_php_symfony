@@ -43,4 +43,9 @@ class AppRole
     {
         return new self(2, 'Driver');
     }
+
+    public function getName()
+    {
+        return $this->name;
+    }
 }

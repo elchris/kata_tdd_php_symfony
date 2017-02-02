@@ -49,4 +49,9 @@ class AppUser
     {
         return $this->firstName;
     }
+
+    public function getFullName()
+    {
+        return $this->firstName.' '.$this->lastName;
+    }
 }
