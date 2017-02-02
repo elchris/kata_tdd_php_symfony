@@ -5,7 +5,6 @@ namespace AppBundle;
 
 use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
-use Doctrine\ORM\EntityManagerInterface;
 
 class AppService
 {
