@@ -38,4 +38,9 @@ class AppRole
     {
         return new self(1, 'Passenger');
     }
+
+    public static function asDriver()
+    {
+        return new self(2, 'Driver');
+    }
 }

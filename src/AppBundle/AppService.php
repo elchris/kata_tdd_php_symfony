@@ -45,8 +45,13 @@ class AppService
      * @param AppUser $user
      * @return bool
      */
-    public function isUserDriver(AppUser $user)
+    public function isUserPassenger(AppUser $user)
     {
         return $this->dao->isUserInRole($user, AppRole::asPassenger());
+    }
+
+    public function isUserDriver(AppUser $user)
+    {
+        return $this->dao->isUserInRole($user, AppRole::asDriver());
     }
 }

@@ -40,10 +40,17 @@ class AppTest extends AppTestCase
         self::assertEquals('Chris', $this->userOne->getFirstName());
     }
 
-    public function testMakeUserDriver()
+    public function testMakeUserPassenger()
     {
         $this->save(AppRole::asPassenger());
         $this->appService->assignRoleToUser($this->userOne, AppRole::asPassenger());
+        self::assertTrue($this->appService->isUserPassenger($this->userOne));
+    }
+
+    public function testMakerUserDriver()
+    {
+        $this->save(AppRole::asDriver());
+        $this->appService->assignRoleToUser($this->userOne, AppRole::asDriver());
         self::assertTrue($this->appService->isUserDriver($this->userOne));
     }
 }
