@@ -69,14 +69,14 @@ class AppDao
 
     public function isUserInRole(AppUser $user, AppRole $role)
     {
-       $matchingRoles = $this->em->createQuery(
-            'select ur from E:UserRole ur where ur.user = :user and ur.role = :role'
+       $matchingRoleCount = $this->em->createQuery(
+            'select count(distinct ur.id) from E:UserRole ur where ur.user = :user and ur.role = :role'
        )
        ->setParameter('user', $user)
-       ->setParameter('role', $this->getStoredRole($role))
-       ->getResult();
+       ->setParameter('role', $role)
+       ->getSingleScalarResult();
 
-       return sizeof($matchingRoles) === 1;
+       return ((int)$matchingRoleCount) === 1;
     }
 
     /**
