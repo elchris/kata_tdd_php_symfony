@@ -178,4 +178,14 @@ class AppDao
         $lastEvent = $this->getLastEventForRide($ride);
         return $lastEvent->is($eventType);
     }
+
+    /**
+     * @param Ride $ride
+     * @param AppUser $driver
+     */
+    public function assignDriverToRide(Ride $ride, AppUser $driver)
+    {
+        $ride->assignDriver($driver);
+        $this->save($ride);
+    }
 }

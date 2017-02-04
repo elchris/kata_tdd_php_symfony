@@ -115,6 +115,17 @@ class AppTest extends AppTestCase
         self::assertTrue($this->appService->isRide($ride, RideEventType::asRequested()));
     }
 
+    public function testAssignDriverToRide()
+    {
+        $ride = $this->makePassengerRide();
+        $this->appService->markRideAs($ride, RideEventType::asRequested());
+
+        $this->appService->assignRoleToUser($this->userTwo, AppRole::asDriver());
+        $this->appService->assignDriverToRide($ride, $this->userTwo);
+
+        self::assertTrue($this->appService->isUserDriver($ride->getDriver()));
+    }
+
     /**
      * @return Ride
      */

@@ -122,4 +122,13 @@ class AppService
     {
         return $this->dao->isRideStatus($ride, $eventType);
     }
+
+    /**
+     * @param Ride $ride
+     * @param AppUser $driver
+     */
+    public function assignDriverToRide(Ride $ride, AppUser $driver)
+    {
+        $this->dao->assignDriverToRide($ride, $driver);
+    }
 }
