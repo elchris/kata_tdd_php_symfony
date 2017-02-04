@@ -161,7 +161,7 @@ class AppDao
     {
         //todo refactor to limit results in query
         $results = $this->em->createQuery(
-        'select e from E:RideEvent e where e.ride = :ride order by e.created desc'
+        'select e from E:RideEvent e where e.ride = :ride order by e.created desc, e.id desc'
         )
         ->setParameter('ride', $ride)
         ->getResult();

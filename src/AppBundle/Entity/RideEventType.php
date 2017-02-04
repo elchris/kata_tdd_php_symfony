@@ -41,6 +41,31 @@ class RideEventType
         return new self(1, 'Requested');
     }
 
+    public static function asAccepted()
+    {
+        return new self(2, 'Accepted');
+    }
+
+    public static function inProgress()
+    {
+        return new self(3, 'In Progress');
+    }
+
+    public static function asCancelled()
+    {
+        return new self(4, 'Cancelled');
+    }
+
+    public static function asCompleted()
+    {
+        return new self(5, 'Completed');
+    }
+
+    public static function asRejected()
+    {
+        return new self(6, 'Rejected');
+    }
+
     public function getName()
     {
         return $this->name;

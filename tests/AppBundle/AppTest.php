@@ -47,6 +47,11 @@ class AppTest extends AppTestCase
         $this->save(AppRole::asPassenger());
         $this->save(AppRole::asDriver());
         $this->save(RideEventType::asRequested());
+        $this->save(RideEventType::asAccepted());
+        $this->save(RideEventType::inProgress());
+        $this->save(RideEventType::asCancelled());
+        $this->save(RideEventType::asCompleted());
+        $this->save(RideEventType::asRejected());
     }
 
     public function testCreateAndRetrieveUser()
@@ -101,7 +106,7 @@ class AppTest extends AppTestCase
     public function testMarkRideAsRequested()
     {
         $ride = $this->makePassengerRide();
-        $this->appService->markRideAs($ride, RideEventType::asRequested());
+        $this->appService->passengerMarkRideAs($ride, RideEventType::asRequested());
 
         $rideStatus = $this->appService->getRideStatus($ride);
         self::assertEquals("Requested", $rideStatus->getType()->getName());
@@ -110,7 +115,7 @@ class AppTest extends AppTestCase
     public function testCheckRideStatus()
     {
         $ride = $this->makePassengerRide();
-        $this->appService->markRideAs($ride, RideEventType::asRequested());
+        $this->appService->passengerMarkRideAs($ride, RideEventType::asRequested());
 
         self::assertTrue($this->appService->isRide($ride, RideEventType::asRequested()));
     }
@@ -118,12 +123,37 @@ class AppTest extends AppTestCase
     public function testAssignDriverToRide()
     {
         $ride = $this->makePassengerRide();
-        $this->appService->markRideAs($ride, RideEventType::asRequested());
+        $this->appService->passengerMarkRideAs($ride, RideEventType::asRequested());
 
         $this->appService->assignRoleToUser($this->userTwo, AppRole::asDriver());
         $this->appService->assignDriverToRide($ride, $this->userTwo);
 
         self::assertTrue($this->appService->isUserDriver($ride->getDriver()));
+    }
+
+    public function testRideEventLifeCycles()
+    {
+        $ride = $this->makePassengerRide();
+        $this->appService->passengerMarkRideAs($ride, RideEventType::asRequested());
+        self::assertTrue($this->appService->isRide($ride, RideEventType::asRequested()));
+
+        $this->appService->assignRoleToUser($this->userTwo, AppRole::asDriver());
+        $this->appService->assignDriverToRide($ride, $this->userTwo);
+
+        $this->appService->driverMarkRideAs($ride, RideEventType::asAccepted());
+        self::assertTrue($this->appService->isRide($ride, RideEventType::asAccepted()));
+
+        $this->appService->driverMarkRideAs($ride, RideEventType::inProgress());
+        self::assertTrue($this->appService->isRide($ride, RideEventType::inProgress()));
+
+        $this->appService->driverMarkRideAs($ride, RideEventType::asCancelled());
+        self::assertTrue($this->appService->isRide($ride, RideEventType::asCancelled()));
+
+        $this->appService->driverMarkRideAs($ride, RideEventType::asCompleted());
+        self::assertTrue($this->appService->isRide($ride, RideEventType::asCompleted()));
+
+        $this->appService->driverMarkRideAs($ride, RideEventType::asRejected());
+        self::assertTrue($this->appService->isRide($ride, RideEventType::asRejected()));
     }
 
     /**

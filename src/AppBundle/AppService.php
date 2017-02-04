@@ -94,14 +94,16 @@ class AppService
         return $this->dao->getRidesForPassenger($passenger);
     }
 
-    public function markRideAs(Ride $ride, RideEventType $type)
+    public function passengerMarkRideAs(Ride $ride, RideEventType $type)
     {
-        $event = new RideEvent(
-            $this->dao->getEventType($type),
-            $ride,
-            $ride->getPassenger()
-        );
-        $this->dao->saveRideEvent($event);
+        $actor = $ride->getPassenger();
+        $this->markRideAsForActor($ride, $type, $actor);
+    }
+
+    public function driverMarkRideAs(Ride $ride, RideEventType $type)
+    {
+        $actor = $ride->getDriver();
+        $this->markRideAsForActor($ride, $type, $actor);
     }
 
     /**
@@ -130,5 +132,20 @@ class AppService
     public function assignDriverToRide(Ride $ride, AppUser $driver)
     {
         $this->dao->assignDriverToRide($ride, $driver);
+    }
+
+    /**
+     * @param Ride $ride
+     * @param RideEventType $type
+     * @param $actor
+     */
+    private function markRideAsForActor(Ride $ride, RideEventType $type, $actor)
+    {
+        $event = new RideEvent(
+            $this->dao->getEventType($type),
+            $ride,
+            $actor
+        );
+        $this->dao->saveRideEvent($event);
     }
 }
