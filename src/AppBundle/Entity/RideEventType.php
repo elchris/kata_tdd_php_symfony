@@ -45,4 +45,18 @@ class RideEventType
     {
         return $this->name;
     }
+
+    /**
+     * @param RideEventType $eventType
+     * @return bool
+     */
+    public function equals(RideEventType $eventType)
+    {
+        return $this->id === $eventType->getId();
+    }
+
+    private function getId()
+    {
+        return $this->id;
+    }
 }

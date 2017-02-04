@@ -167,4 +167,15 @@ class AppDao
         ->getResult();
         return $results[0];
     }
+
+    /**
+     * @param Ride $ride
+     * @param RideEventType $eventType
+     * @return bool
+     */
+    public function isRideStatus(Ride $ride, RideEventType $eventType)
+    {
+        $lastEvent = $this->getLastEventForRide($ride);
+        return $lastEvent->is($eventType);
+    }
 }

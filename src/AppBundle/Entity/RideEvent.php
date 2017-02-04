@@ -66,4 +66,13 @@ class RideEvent
     {
         return $this->eventType;
     }
+
+    /**
+     * @param RideEventType $eventTypeToCompare
+     * @return bool
+     */
+    public function is(RideEventType $eventTypeToCompare)
+    {
+        return $this->getType()->equals($eventTypeToCompare);
+    }
 }

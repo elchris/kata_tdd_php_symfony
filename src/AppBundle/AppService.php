@@ -112,4 +112,14 @@ class AppService
     {
         return $this->dao->getLastEventForRide($ride);
     }
+
+    /**
+     * @param Ride $ride
+     * @param RideEventType $eventType
+     * @return bool
+     */
+    public function isRide(Ride $ride, RideEventType $eventType)
+    {
+        return $this->dao->isRideStatus($ride, $eventType);
+    }
 }

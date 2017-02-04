@@ -107,6 +107,14 @@ class AppTest extends AppTestCase
         self::assertEquals("Requested", $rideStatus->getType()->getName());
     }
 
+    public function testCheckRideStatus()
+    {
+        $ride = $this->makePassengerRide();
+        $this->appService->markRideAsRequested($ride);
+
+        self::assertTrue($this->appService->isRide($ride, RideEventType::asRequested()));
+    }
+
     /**
      * @return Ride
      */
