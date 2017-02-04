@@ -7,6 +7,8 @@ use AppBundle\Entity\AppLocation;
 use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
+use AppBundle\Entity\RideEvent;
+use AppBundle\Entity\RideEventType;
 use AppBundle\Entity\UserRole;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NoResultException;
@@ -131,5 +133,38 @@ class AppDao
         )
         ->setParameter('passenger', $passenger)
         ->getResult();
+    }
+
+    /**
+     * @param RideEventType $type
+     * @return RideEventType
+     */
+    public function getEventType(RideEventType $type)
+    {
+        return $this->em->createQuery(
+        'select t from E:RideEventType t where t = :type'
+        )
+        ->setParameter('type', $type)
+        ->getSingleResult();
+    }
+
+    public function saveRideEvent(RideEvent $event)
+    {
+        $this->save($event);
+    }
+
+    /**
+     * @param Ride $ride
+     * @return RideEvent
+     */
+    public function getLastEventForRide(Ride $ride)
+    {
+        //todo refactor to limit results in query
+        $results = $this->em->createQuery(
+        'select e from E:RideEvent e where e.ride = :ride order by e.created desc'
+        )
+        ->setParameter('ride', $ride)
+        ->getResult();
+        return $results[0];
     }
 }

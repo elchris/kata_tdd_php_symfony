@@ -6,6 +6,7 @@ use AppBundle\Entity\AppLocation;
 use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
+use AppBundle\Entity\RideEventType;
 use AppBundle\RoleLifeCycleException;
 
 /**
@@ -45,6 +46,7 @@ class AppTest extends AppTestCase
 
         $this->save(AppRole::asPassenger());
         $this->save(AppRole::asDriver());
+        $this->save(RideEventType::asRequested());
     }
 
     public function testCreateAndRetrieveUser()
@@ -91,6 +93,25 @@ class AppTest extends AppTestCase
 
     public function testCreateRideForPassengerAndDeparture()
     {
+        $firstRide = $this->makePassengerRide();
+        self::assertEquals($this->userOne->getFullName(), $firstRide->getPassenger()->getFullName());
+        self::assertTrue($this->home->equals($firstRide->getDeparture()));
+    }
+
+    public function testMarkRideAsRequested()
+    {
+        $ride = $this->makePassengerRide();
+        $this->appService->markRideAsRequested($ride);
+
+        $rideStatus = $this->appService->getRideStatus($ride);
+        self::assertEquals("Requested", $rideStatus->getType()->getName());
+    }
+
+    /**
+     * @return Ride
+     */
+    private function makePassengerRide()
+    {
         $this->appService->assignRoleToUser($this->userOne, AppRole::asPassenger());
         $this->appService->createRide(
             $this->userOne,
@@ -101,7 +122,7 @@ class AppTest extends AppTestCase
         $ridesForUser = $this->appService->getRidesForPassenger($this->userOne);
         self::assertCount(1, $ridesForUser);
         $firstRide = $ridesForUser[0];
-        self::assertEquals($this->userOne->getFullName(), $firstRide->getPassenger()->getFullName());
-        self::assertTrue($this->home->equals($firstRide->getDeparture()));
+
+        return $firstRide;
     }
 }

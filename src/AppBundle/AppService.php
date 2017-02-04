@@ -7,6 +7,8 @@ use AppBundle\Entity\AppLocation;
 use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
+use AppBundle\Entity\RideEvent;
+use AppBundle\Entity\RideEventType;
 
 class AppService
 {
@@ -90,5 +92,24 @@ class AppService
     public function getRidesForPassenger(AppUser $passenger)
     {
         return $this->dao->getRidesForPassenger($passenger);
+    }
+
+    public function markRideAsRequested(Ride $ride)
+    {
+        $event = new RideEvent(
+            $this->dao->getEventType(RideEventType::asRequested()),
+            $ride,
+            $ride->getPassenger()
+        );
+        $this->dao->saveRideEvent($event);
+    }
+
+    /**
+     * @param Ride $ride
+     * @return RideEvent
+     */
+    public function getRideStatus(Ride $ride)
+    {
+        return $this->dao->getLastEventForRide($ride);
     }
 }
