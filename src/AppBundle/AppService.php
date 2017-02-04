@@ -94,10 +94,10 @@ class AppService
         return $this->dao->getRidesForPassenger($passenger);
     }
 
-    public function markRideAsRequested(Ride $ride)
+    public function markRideAs(Ride $ride, RideEventType $type)
     {
         $event = new RideEvent(
-            $this->dao->getEventType(RideEventType::asRequested()),
+            $this->dao->getEventType($type),
             $ride,
             $ride->getPassenger()
         );
