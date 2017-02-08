@@ -159,13 +159,12 @@ class AppDao
      */
     public function getLastEventForRide(Ride $ride)
     {
-        //todo refactor to limit results in query
-        $results = $this->em->createQuery(
+        return $this->em->createQuery(
         'select e from E:RideEvent e where e.ride = :ride order by e.created desc, e.id desc'
         )
+        ->setMaxResults(1)
         ->setParameter('ride', $ride)
-        ->getResult();
-        return $results[0];
+        ->getSingleResult();
     }
 
     /**
