@@ -181,6 +181,16 @@ class AppTest extends AppTestCase
         $this->appService->driverMarkRideAs($ride, RideEventType::asAccepted());
     }
 
+    public function testOutOfSequenceInProgressEventThrows()
+    {
+        $ride = $this->makePassengerRide();
+        $this->appService->passengerMarkRideAs($ride, RideEventType::asRequested());
+        $this->assignDriverToRide($ride);
+        $this->expectException(RideEventLifeCycleException::class);
+        $this->appService->driverMarkRideAs($ride, RideEventType::inProgress());
+    }
+
+
     /**
      * @return Ride
      */
