@@ -33,14 +33,19 @@ class AppTest extends AppTestCase
     /** @var  AppUser */
     private $userTwo;
 
+    /** @var  AppUser */
+    private $prospectiveDriver;
+
     public function setUp()
     {
         parent::setUp();
         $this->appService->newUser('Chris', 'Holland');
         $this->appService->newUser('Scott', 'Sims');
+        $this->appService->newUser('Prospective', 'Driver');
         /** @var AppUser $user */
         $this->userTwo = $this->appService->getUserById(2);
         $this->userOne = $this->appService->getUserById(1);
+        $this->prospectiveDriver = $this->appService->getUserById(3);
 
         $this->home = $this->appService->getLocation(
             37.773160,
@@ -49,6 +54,9 @@ class AppTest extends AppTestCase
 
         $this->save(AppRole::asPassenger());
         $this->save(AppRole::asDriver());
+
+        $this->appService->assignRoleToUser($this->prospectiveDriver, AppRole::asDriver());
+
         $this->save(RideEventType::asRequested());
         $this->save(RideEventType::asAccepted());
         $this->save(RideEventType::inProgress());
@@ -217,8 +225,7 @@ class AppTest extends AppTestCase
     {
         $ride = $this->makePassengerRide();
         $this->appService->passengerMarkRideAs($ride, RideEventType::asRequested());
-        $this->assignDriverToRide($ride);
-        $this->appService->driverMarkRideAs($ride, RideEventType::asRejected());
+        $this->appService->prospectiveDriverMarkRideAs($ride, RideEventType::asRejected(), $this->prospectiveDriver);
         self::assertTrue($this->appService->isRide($ride, RideEventType::asRejected()));
     }
 
