@@ -146,10 +146,7 @@ class AppTest extends AppTestCase
 
         $this->appService->driverMarkRideAs($ride, RideEventType::inProgress());
         self::assertTrue($this->appService->isRide($ride, RideEventType::inProgress()));
-
-        $this->appService->driverMarkRideAs($ride, RideEventType::asCancelled());
-        self::assertTrue($this->appService->isRide($ride, RideEventType::asCancelled()));
-
+        
         $this->appService->driverMarkRideAs($ride, RideEventType::asCompleted());
         self::assertTrue($this->appService->isRide($ride, RideEventType::asCompleted()));
 
@@ -188,6 +185,27 @@ class AppTest extends AppTestCase
         $this->assignDriverToRide($ride);
         $this->expectException(RideEventLifeCycleException::class);
         $this->appService->driverMarkRideAs($ride, RideEventType::inProgress());
+    }
+
+    public function testOutOfSequenceCancelledEventThrows()
+    {
+        $ride = $this->makePassengerRide();
+        $this->appService->passengerMarkRideAs($ride, RideEventType::asRequested());
+        $this->assignDriverToRide($ride);
+        $this->appService->driverMarkRideAs($ride, RideEventType::asAccepted());
+        $this->appService->driverMarkRideAs($ride, RideEventType::inProgress());
+        self::expectException(RideEventLifeCycleException::class);
+        $this->appService->driverMarkRideAs($ride, RideEventType::asCancelled());
+    }
+
+    public function testCancelledEventWorks()
+    {
+        $ride = $this->makePassengerRide();
+        $this->appService->passengerMarkRideAs($ride, RideEventType::asRequested());
+        $this->assignDriverToRide($ride);
+        $this->appService->driverMarkRideAs($ride, RideEventType::asAccepted());
+        $this->appService->driverMarkRideAs($ride, RideEventType::asCancelled());
+        self::assertTrue($this->appService->isRide($ride, RideEventType::asCancelled()));
     }
 
 

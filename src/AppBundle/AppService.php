@@ -145,6 +145,7 @@ class AppService
         $this->validateRequestedLifecycle($ride, $type);
         $this->validateAcceptedLifecycle($ride, $type);
         $this->validateInProgressLifeCycle($ride, $type);
+        $this->validateCancelledLifeCycle($ride, $type);
         $event = new RideEvent(
             $this->dao->getEventType($type),
             $ride,
@@ -196,6 +197,27 @@ class AppService
             $type->equals(RideEventType::inProgress())
             &&
             !$this->isRide($ride, RideEventType::asAccepted())
+        ) {
+            throw new RideEventLifeCycleException();
+        }
+    }
+
+    /**
+     * @param Ride $ride
+     * @param RideEventType $type
+     * @throws RideEventLifeCycleException
+     */
+    private function validateCancelledLifeCycle(Ride $ride, RideEventType $type)
+    {
+        if (
+            $type->equals(RideEventType::asCancelled())
+            &&
+            !
+            (
+                $this->isRide($ride, RideEventType::asRequested())
+                ||
+                $this->isRide($ride, RideEventType::asAccepted())
+            )
         ) {
             throw new RideEventLifeCycleException();
         }
