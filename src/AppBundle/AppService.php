@@ -142,11 +142,7 @@ class AppService
      */
     private function markRideAsForActor(Ride $ride, RideEventType $type, $actor)
     {
-        $this->validateRequestedLifecycle($ride, $type);
-        $this->validateAcceptedLifecycle($ride, $type);
-        $this->validateInProgressLifeCycle($ride, $type);
-        $this->validateCancelledLifeCycle($ride, $type);
-        $this->validateCompletedLifeCycle($ride, $type);
+        $this->validateRideLifecycle($ride, $type);
         $event = new RideEvent(
             $this->dao->getEventType($type),
             $ride,
@@ -238,5 +234,35 @@ class AppService
         ) {
             throw new RideEventLifeCycleException();
         }
+    }
+
+    /**
+     * @param Ride $ride
+     * @param RideEventType $type
+     * @throws RideEventLifeCycleException
+     */
+    private function validateRejectedLifecycle(Ride $ride, RideEventType $type)
+    {
+        if (
+            $type->equals(RideEventType::asRejected())
+            &&
+            (!$this->isRide($ride, RideEventType::asRequested()))
+        ) {
+            throw new RideEventLifeCycleException();
+        }
+    }
+
+    /**
+     * @param Ride $ride
+     * @param RideEventType $type
+     */
+    private function validateRideLifecycle(Ride $ride, RideEventType $type)
+    {
+        $this->validateRequestedLifecycle($ride, $type);
+        $this->validateAcceptedLifecycle($ride, $type);
+        $this->validateInProgressLifeCycle($ride, $type);
+        $this->validateCancelledLifeCycle($ride, $type);
+        $this->validateCompletedLifeCycle($ride, $type);
+        $this->validateRejectedLifecycle($ride, $type);
     }
 }

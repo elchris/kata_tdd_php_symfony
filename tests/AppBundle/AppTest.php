@@ -149,9 +149,6 @@ class AppTest extends AppTestCase
         
         $this->appService->driverMarkRideAs($ride, RideEventType::asCompleted());
         self::assertTrue($this->appService->isRide($ride, RideEventType::asCompleted()));
-
-        $this->appService->driverMarkRideAs($ride, RideEventType::asRejected());
-        self::assertTrue($this->appService->isRide($ride, RideEventType::asRejected()));
     }
 
     public function testOutOfSequenceRequestedEventThrows()
@@ -207,6 +204,22 @@ class AppTest extends AppTestCase
         $ride = $this->getAcceptedPassengerRide();
         $this->expectException(RideEventLifeCycleException::class);
         $this->appService->driverMarkRideAs($ride, RideEventType::asCompleted());
+    }
+
+    public function testOutOfSequenceRejectedThrows()
+    {
+        $ride = $this->getAcceptedPassengerRide();
+        $this->expectException(RideEventLifeCycleException::class);
+        $this->appService->driverMarkRideAs($ride, RideEventType::asRejected());
+    }
+
+    public function testRejectedWorks()
+    {
+        $ride = $this->makePassengerRide();
+        $this->appService->passengerMarkRideAs($ride, RideEventType::asRequested());
+        $this->assignDriverToRide($ride);
+        $this->appService->driverMarkRideAs($ride, RideEventType::asRejected());
+        self::assertTrue($this->appService->isRide($ride, RideEventType::asRejected()));
     }
 
 
