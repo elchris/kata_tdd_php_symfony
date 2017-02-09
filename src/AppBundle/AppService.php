@@ -143,6 +143,7 @@ class AppService
     private function markRideAsForActor(Ride $ride, RideEventType $type, $actor)
     {
         $this->validateRequestedLifecycle($ride, $type);
+        $this->validateAcceptedLifecycle($ride, $type);
         $event = new RideEvent(
             $this->dao->getEventType($type),
             $ride,
@@ -164,6 +165,22 @@ class AppService
             $this->isRide($ride, RideEventType::asRequested())
         ) {
             throw new RideEventLifeCycleException('Ride is already requested.');
+        }
+    }
+
+    /**
+     * @param Ride $ride
+     * @param RideEventType $type
+     * @throws RideEventLifeCycleException
+     */
+    private function validateAcceptedLifecycle(Ride $ride, RideEventType $type)
+    {
+        if (
+            $type->equals(RideEventType::asAccepted())
+            &&
+            !$this->isRide($ride, RideEventType::asRequested())
+        ) {
+            throw new RideEventLifeCycleException();
         }
     }
 }

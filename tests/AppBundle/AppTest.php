@@ -166,6 +166,13 @@ class AppTest extends AppTestCase
         $this->appService->passengerMarkRideAs($ride, RideEventType::asRequested());
     }
 
+    public function testOutOfSequenceAcceptedEventThrows()
+    {
+        $ride = $this->makePassengerRide();
+        $this->expectException(RideEventLifeCycleException::class);
+        $this->appService->driverMarkRideAs($ride, RideEventType::asAccepted());
+    }
+
     /**
      * @return Ride
      */
