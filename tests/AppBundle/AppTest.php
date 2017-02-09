@@ -9,6 +9,7 @@ use AppBundle\Entity\Ride;
 use AppBundle\Entity\RideEventType;
 use AppBundle\RideEventLifeCycleException;
 use AppBundle\RoleLifeCycleException;
+use AppBundle\UnassignedDriverException;
 
 /**
  * Consult ride-hailing.svg to digest some key application concepts.
@@ -127,8 +128,7 @@ class AppTest extends AppTestCase
         $ride = $this->makePassengerRide();
         $this->appService->passengerMarkRideAs($ride, RideEventType::asRequested());
 
-        $this->appService->assignRoleToUser($this->userTwo, AppRole::asDriver());
-        $this->appService->assignDriverToRide($ride, $this->userTwo);
+        $this->assignDriverToRide($ride);
 
         self::assertTrue($this->appService->isUserDriver($ride->getDriver()));
     }
@@ -139,8 +139,7 @@ class AppTest extends AppTestCase
         $this->appService->passengerMarkRideAs($ride, RideEventType::asRequested());
         self::assertTrue($this->appService->isRide($ride, RideEventType::asRequested()));
 
-        $this->appService->assignRoleToUser($this->userTwo, AppRole::asDriver());
-        $this->appService->assignDriverToRide($ride, $this->userTwo);
+        $this->assignDriverToRide($ride);
 
         $this->appService->driverMarkRideAs($ride, RideEventType::asAccepted());
         self::assertTrue($this->appService->isRide($ride, RideEventType::asAccepted()));
@@ -166,9 +165,18 @@ class AppTest extends AppTestCase
         $this->appService->passengerMarkRideAs($ride, RideEventType::asRequested());
     }
 
+    public function testUnassignedDriverThrows()
+    {
+        $ride = $this->makePassengerRide();
+        $this->expectException(UnassignedDriverException::class);
+        $this->appService->driverMarkRideAs($ride, RideEventType::asAccepted());
+
+    }
+
     public function testOutOfSequenceAcceptedEventThrows()
     {
         $ride = $this->makePassengerRide();
+        $this->assignDriverToRide($ride);
         $this->expectException(RideEventLifeCycleException::class);
         $this->appService->driverMarkRideAs($ride, RideEventType::asAccepted());
     }
@@ -190,5 +198,14 @@ class AppTest extends AppTestCase
         $firstRide = $ridesForUser[0];
 
         return $firstRide;
+    }
+
+    /**
+     * @param $ride
+     */
+    private function assignDriverToRide($ride)
+    {
+        $this->appService->assignRoleToUser($this->userTwo, AppRole::asDriver());
+        $this->appService->assignDriverToRide($ride, $this->userTwo);
     }
 }

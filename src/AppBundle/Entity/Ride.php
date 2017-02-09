@@ -3,6 +3,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\UnassignedDriverException;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -85,6 +86,9 @@ class Ride
 
     public function getDriver()
     {
+        if (is_null($this->driver)) {
+            throw new UnassignedDriverException();
+        }
         return $this->driver;
     }
 }
