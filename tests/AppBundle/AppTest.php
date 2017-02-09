@@ -7,6 +7,7 @@ use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
 use AppBundle\Entity\RideEventType;
+use AppBundle\RideEventLifeCycleException;
 use AppBundle\RoleLifeCycleException;
 
 /**
@@ -16,6 +17,7 @@ use AppBundle\RoleLifeCycleException;
  * and help shape your sequencing.
  *
  * With this said, you do not have to follow the sequencing outlined.
+ * In fact, you will likely arrive at a more optimal sequencing.
  *
  *
  * Class AppTest
@@ -154,6 +156,14 @@ class AppTest extends AppTestCase
 
         $this->appService->driverMarkRideAs($ride, RideEventType::asRejected());
         self::assertTrue($this->appService->isRide($ride, RideEventType::asRejected()));
+    }
+
+    public function testOutOfSequenceRequestedEventThrows()
+    {
+        $ride = $this->makePassengerRide();
+        $this->appService->passengerMarkRideAs($ride, RideEventType::asRequested());
+        $this->expectException(RideEventLifeCycleException::class);
+        $this->appService->passengerMarkRideAs($ride, RideEventType::asRequested());
     }
 
     /**

@@ -174,8 +174,12 @@ class AppDao
      */
     public function isRideStatus(Ride $ride, RideEventType $eventType)
     {
-        $lastEvent = $this->getLastEventForRide($ride);
-        return $lastEvent->is($eventType);
+        try {
+            $lastEvent = $this->getLastEventForRide($ride);
+            return $lastEvent->is($eventType);
+        } catch (NoResultException $e) {
+            return false;
+        }
     }
 
     /**
