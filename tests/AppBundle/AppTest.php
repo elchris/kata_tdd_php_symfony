@@ -202,6 +202,13 @@ class AppTest extends AppTestCase
         self::assertTrue($this->appService->isRide($ride, RideEventType::asCancelled()));
     }
 
+    public function testOutOfSequenceCompletedThrows()
+    {
+        $ride = $this->getAcceptedPassengerRide();
+        $this->expectException(RideEventLifeCycleException::class);
+        $this->appService->driverMarkRideAs($ride, RideEventType::asCompleted());
+    }
+
 
     /**
      * @return Ride
