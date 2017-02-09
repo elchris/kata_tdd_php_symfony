@@ -189,10 +189,7 @@ class AppTest extends AppTestCase
 
     public function testOutOfSequenceCancelledEventThrows()
     {
-        $ride = $this->makePassengerRide();
-        $this->appService->passengerMarkRideAs($ride, RideEventType::asRequested());
-        $this->assignDriverToRide($ride);
-        $this->appService->driverMarkRideAs($ride, RideEventType::asAccepted());
+        $ride = $this->getAcceptedPassengerRide();
         $this->appService->driverMarkRideAs($ride, RideEventType::inProgress());
         self::expectException(RideEventLifeCycleException::class);
         $this->appService->driverMarkRideAs($ride, RideEventType::asCancelled());
@@ -200,10 +197,7 @@ class AppTest extends AppTestCase
 
     public function testCancelledEventWorks()
     {
-        $ride = $this->makePassengerRide();
-        $this->appService->passengerMarkRideAs($ride, RideEventType::asRequested());
-        $this->assignDriverToRide($ride);
-        $this->appService->driverMarkRideAs($ride, RideEventType::asAccepted());
+        $ride = $this->getAcceptedPassengerRide();
         $this->appService->driverMarkRideAs($ride, RideEventType::asCancelled());
         self::assertTrue($this->appService->isRide($ride, RideEventType::asCancelled()));
     }
@@ -235,5 +229,18 @@ class AppTest extends AppTestCase
     {
         $this->appService->assignRoleToUser($this->userTwo, AppRole::asDriver());
         $this->appService->assignDriverToRide($ride, $this->userTwo);
+    }
+
+    /**
+     * @return Ride
+     */
+    private function getAcceptedPassengerRide()
+    {
+        $ride = $this->makePassengerRide();
+        $this->appService->passengerMarkRideAs($ride, RideEventType::asRequested());
+        $this->assignDriverToRide($ride);
+        $this->appService->driverMarkRideAs($ride, RideEventType::asAccepted());
+
+        return $ride;
     }
 }
