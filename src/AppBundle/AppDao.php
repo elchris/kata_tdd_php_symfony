@@ -35,9 +35,9 @@ class AppDao
         $this->save($user);
     }
 
-    protected function save($user)
+    protected function save($entity)
     {
-        $this->em->persist($user);
+        $this->em->persist($entity);
         $this->em->flush();
     }
 
