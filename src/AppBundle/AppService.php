@@ -31,7 +31,7 @@ class AppService
     }
 
     /**
-     * @param $userId
+     * @param integer $userId
      * @return AppUser
      */
     public function getUserById($userId)
@@ -142,10 +142,10 @@ class AppService
     /**
      * @param Ride $ride
      * @param RideEventType $type
-     * @param $actor
+     * @param AppUser $actor
      * @throws RideEventLifeCycleException
      */
-    private function markRideAsForActor(Ride $ride, RideEventType $type, $actor)
+    private function markRideAsForActor(Ride $ride, RideEventType $type, AppUser $actor)
     {
         $this->validateRideLifecycle($ride, $type);
         $event = new RideEvent(

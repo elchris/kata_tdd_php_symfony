@@ -42,7 +42,7 @@ class AppDao
     }
 
     /**
-     * @param $userId
+     * @param integer $userId
      * @return AppUser
      */
     public function getUserById($userId)
@@ -97,8 +97,8 @@ class AppDao
     }
 
     /**
-     * @param $lat
-     * @param $long
+     * @param float $lat
+     * @param float $long
      * @return AppLocation
      */
     private function getExistingLocation($lat, $long)

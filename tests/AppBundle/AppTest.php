@@ -77,7 +77,7 @@ class AppTest extends AppTestCase
         self::assertTrue($this->appService->isUserPassenger($this->userOne));
     }
 
-    public function testMakerUserDriver()
+    public function testMakeUserDriver()
     {
         $this->appService->assignRoleToUser($this->userOne, AppRole::asDriver());
         self::assertTrue($this->appService->isUserDriver($this->userOne));
@@ -94,7 +94,7 @@ class AppTest extends AppTestCase
     public function testDuplicateRoleAssignmentThrowsException()
     {
         $this->appService->assignRoleToUser($this->userOne, AppRole::asPassenger());
-        $this->expectException(RoleLifeCycleException::class);
+        self::expectException(RoleLifeCycleException::class);
         $this->appService->assignRoleToUser($this->userOne, AppRole::asPassenger());
     }
     /*
@@ -163,14 +163,14 @@ class AppTest extends AppTestCase
     {
         $ride = $this->makePassengerRide();
         $this->appService->passengerMarkRideAs($ride, RideEventType::asRequested());
-        $this->expectException(RideEventLifeCycleException::class);
+        self::expectException(RideEventLifeCycleException::class);
         $this->appService->passengerMarkRideAs($ride, RideEventType::asRequested());
     }
 
     public function testUnassignedDriverThrows()
     {
         $ride = $this->makePassengerRide();
-        $this->expectException(UnassignedDriverException::class);
+        self::expectException(UnassignedDriverException::class);
         $this->appService->driverMarkRideAs($ride, RideEventType::asAccepted());
 
     }
@@ -179,7 +179,7 @@ class AppTest extends AppTestCase
     {
         $ride = $this->makePassengerRide();
         $this->assignDriverToRide($ride);
-        $this->expectException(RideEventLifeCycleException::class);
+        self::expectException(RideEventLifeCycleException::class);
         $this->appService->driverMarkRideAs($ride, RideEventType::asAccepted());
     }
 
@@ -188,7 +188,7 @@ class AppTest extends AppTestCase
         $ride = $this->makePassengerRide();
         $this->appService->passengerMarkRideAs($ride, RideEventType::asRequested());
         $this->assignDriverToRide($ride);
-        $this->expectException(RideEventLifeCycleException::class);
+        self::expectException(RideEventLifeCycleException::class);
         $this->appService->driverMarkRideAs($ride, RideEventType::inProgress());
     }
 
@@ -210,14 +210,14 @@ class AppTest extends AppTestCase
     public function testOutOfSequenceCompletedThrows()
     {
         $ride = $this->getAcceptedPassengerRide();
-        $this->expectException(RideEventLifeCycleException::class);
+        self::expectException(RideEventLifeCycleException::class);
         $this->appService->driverMarkRideAs($ride, RideEventType::asCompleted());
     }
 
     public function testOutOfSequenceRejectedThrows()
     {
         $ride = $this->getAcceptedPassengerRide();
-        $this->expectException(RideEventLifeCycleException::class);
+        self::expectException(RideEventLifeCycleException::class);
         $this->appService->driverMarkRideAs($ride, RideEventType::asRejected());
     }
 
