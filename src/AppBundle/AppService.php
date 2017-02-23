@@ -208,7 +208,7 @@ class AppService
         if (
             $type->equals(RideEventType::inProgress())
             &&
-            !$this->isRide($ride, RideEventType::asAccepted())
+            ! $this->isRide($ride, RideEventType::asDestination())
         ) {
             throw new RideEventLifeCycleException();
         }

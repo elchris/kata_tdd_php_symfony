@@ -169,6 +169,9 @@ class AppTest extends AppTestCase
         $this->appService->driverMarkRideAs($ride, RideEventType::asAccepted());
         self::assertTrue($this->appService->isRide($ride, RideEventType::asAccepted()));
 
+        $this->appService->passengerMarkRideAs($ride, RideEventType::asDestination());
+        self::assertTrue($this->appService->isRide($ride, RideEventType::asDestination()));
+
         $this->appService->driverMarkRideAs($ride, RideEventType::inProgress());
         self::assertTrue($this->appService->isRide($ride, RideEventType::inProgress()));
         
@@ -187,6 +190,7 @@ class AppTest extends AppTestCase
     public function testOutOfSequenceDestinationAssignmentThrows()
     {
         $ride = $this->getAcceptedPassengerRide();
+        $this->appService->passengerMarkRideAs($ride, RideEventType::asDestination());
         $this->appService->driverMarkRideAs($ride, RideEventType::inProgress());
         self::expectException(RideEventLifeCycleException::class);
         $this->appService->passengerMarkRideAs($ride, RideEventType::asDestination());
@@ -221,6 +225,7 @@ class AppTest extends AppTestCase
         $ride = $this->makePassengerRide();
         $this->appService->passengerMarkRideAs($ride, RideEventType::asRequested());
         $this->assignDriverToRide($ride);
+        $this->appService->driverMarkRideAs($ride, RideEventType::asAccepted());
         self::expectException(RideEventLifeCycleException::class);
         $this->appService->driverMarkRideAs($ride, RideEventType::inProgress());
     }
@@ -228,6 +233,7 @@ class AppTest extends AppTestCase
     public function testOutOfSequenceCancelledEventThrows()
     {
         $ride = $this->getAcceptedPassengerRide();
+        $this->appService->passengerMarkRideAs($ride, RideEventType::asDestination());
         $this->appService->driverMarkRideAs($ride, RideEventType::inProgress());
         self::expectException(RideEventLifeCycleException::class);
         $this->appService->driverMarkRideAs($ride, RideEventType::asCancelled());
