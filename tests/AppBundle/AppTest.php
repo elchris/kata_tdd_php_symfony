@@ -180,7 +180,16 @@ class AppTest extends AppTestCase
     {
         $ride = $this->getAcceptedPassengerRide();
         $this->appService->passengerMarkRideAs($ride, RideEventType::asDestination());
+        $this->appService->assignDestinationToRide($ride, $this->work);
         self::assertTrue($this->appService->isRide($ride, RideEventType::asDestination()));
+    }
+
+    public function testOutOfSequenceDestinationAssignmentThrows()
+    {
+        $ride = $this->getAcceptedPassengerRide();
+        $this->appService->driverMarkRideAs($ride, RideEventType::inProgress());
+        self::expectException(RideEventLifeCycleException::class);
+        $this->appService->passengerMarkRideAs($ride, RideEventType::asDestination());
     }
 
     public function testOutOfSequenceRequestedEventThrows()

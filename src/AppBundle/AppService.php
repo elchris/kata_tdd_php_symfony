@@ -270,11 +270,13 @@ class AppService
     /**
      * @param Ride $ride
      * @param RideEventType $type
+     * @throws RideEventLifeCycleException
      */
     private function validateRideLifecycle(Ride $ride, RideEventType $type)
     {
         $this->validateRequestedLifecycle($ride, $type);
         $this->validateAcceptedLifecycle($ride, $type);
+        $this->validateDestinationLifeCycle($ride, $type);
         $this->validateInProgressLifeCycle($ride, $type);
         $this->validateCancelledLifeCycle($ride, $type);
         $this->validateCompletedLifeCycle($ride, $type);
@@ -291,5 +293,28 @@ class AppService
     {
         $this->prospectiveDriverMarkRideAs($ride, RideEventType::asAccepted(), $driver);
         $this->assignDriverToRide($ride, $driver);
+    }
+
+    /**
+     * @param Ride $ride
+     * @param RideEventType $type
+     * @throws RideEventLifeCycleException
+     */
+    private function validateDestinationLifeCycle(Ride $ride, RideEventType $type)
+    {
+        if (
+            $type->equals(RideEventType::asDestination())
+            &&
+            (
+            !
+            (
+                $this->isRide($ride, RideEventType::asRequested())
+                ||
+                $this->isRide($ride, RideEventType::asAccepted())
+            )
+            )
+        ) {
+            throw new RideEventLifeCycleException();
+        }
     }
 }
