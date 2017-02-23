@@ -234,19 +234,32 @@ class AppTest extends AppTestCase
      *
      * passenger: requestRide
      * driver: accept ride
+     * passenger: set destination
      * driver: start ride
      * driver: complete ride
      */
 
     public function testRequestRideHasProperStateAndAttributes()
     {
-        $this->makeUserOnePassenger();
-        $this->appService->requestRide($this->userOne, $this->home);
-        $firstRide = $this->getFirstRideForUserOne();
+        $ride = $this->getRequestedPassengerRide();
 
-        self::assertEquals('Chris', $firstRide->getPassenger()->getFirstName());
-        self::assertTrue($this->appService->isRide($firstRide, RideEventType::asRequested()));
+        self::assertEquals('Chris', $ride->getPassenger()->getFirstName());
+        self::assertTrue($this->appService->isRide($ride, RideEventType::asRequested()));
     }
+
+    public function testAcceptRideHasProperStateAndAttributes()
+    {
+        $ride = $this->getRequestedPassengerRide();
+        $this->appService->assignRoleToUser($this->userTwo, AppRole::asDriver());
+        $this->appService->driverAcceptRide($ride, $this->userTwo);
+
+        $ride = $this->getFirstRideForUserOne();
+
+        self::assertTrue($ride->hasDriver());
+        self::assertTrue($this->appService->isRide($ride, RideEventType::asAccepted()));
+    }
+
+
 
     /**
      * @return Ride
@@ -300,6 +313,18 @@ class AppTest extends AppTestCase
         $ridesForUser = $this->appService->getRidesForPassenger($this->userOne);
         self::assertCount(1, $ridesForUser);
         $firstRide = $ridesForUser[0];
+
+        return $firstRide;
+    }
+
+    /**
+     * @return Ride
+     */
+    private function getRequestedPassengerRide()
+    {
+        $this->makeUserOnePassenger();
+        $this->appService->requestRide($this->userOne, $this->home);
+        $firstRide = $this->getFirstRideForUserOne();
 
         return $firstRide;
     }

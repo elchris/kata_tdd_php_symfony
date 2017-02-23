@@ -86,9 +86,18 @@ class Ride
 
     public function getDriver()
     {
-        if (is_null($this->driver)) {
+        if (! $this->hasDriver()) {
             throw new UnassignedDriverException();
         }
         return $this->driver;
     }
+
+    /**
+     * @return bool
+     */
+    public function hasDriver()
+    {
+        return ! is_null($this->driver);
+    }
+
 }

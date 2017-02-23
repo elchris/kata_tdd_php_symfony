@@ -281,4 +281,10 @@ class AppService
         $newRide = $this->createRide($passenger, $departure);
         $this->passengerMarkRideAs($newRide, RideEventType::asRequested());
     }
+
+    public function driverAcceptRide(Ride $ride, AppUser $driver)
+    {
+        $this->assignDriverToRide($ride, $driver);
+        $this->driverMarkRideAs($ride, RideEventType::asAccepted());
+    }
 }
