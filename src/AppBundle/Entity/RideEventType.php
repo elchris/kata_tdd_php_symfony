@@ -66,6 +66,11 @@ class RideEventType
         return new self(6, 'Rejected');
     }
 
+    public static function asDestination()
+    {
+        return new self(7, 'Destination Assigned');
+    }
+
     public function getName()
     {
         return $this->name;

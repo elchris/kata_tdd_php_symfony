@@ -70,6 +70,7 @@ class AppTest extends AppTestCase
         $this->save(RideEventType::asCancelled());
         $this->save(RideEventType::asCompleted());
         $this->save(RideEventType::asRejected());
+        $this->save(RideEventType::asDestination());
     }
 
     public function testCreateAndRetrieveUser()
@@ -173,6 +174,13 @@ class AppTest extends AppTestCase
         
         $this->appService->driverMarkRideAs($ride, RideEventType::asCompleted());
         self::assertTrue($this->appService->isRide($ride, RideEventType::asCompleted()));
+    }
+
+    public function testMarkRideAsAssignedDestination()
+    {
+        $ride = $this->getAcceptedPassengerRide();
+        $this->appService->passengerMarkRideAs($ride, RideEventType::asDestination());
+        self::assertTrue($this->appService->isRide($ride, RideEventType::asDestination()));
     }
 
     public function testOutOfSequenceRequestedEventThrows()
