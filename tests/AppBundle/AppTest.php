@@ -35,6 +35,8 @@ class AppTest extends AppTestCase
 
     /** @var  AppUser */
     private $prospectiveDriver;
+    /** @var AppLocation */
+    private $work;
 
     public function setUp()
     {
@@ -50,6 +52,11 @@ class AppTest extends AppTestCase
         $this->home = $this->appService->getLocation(
             37.773160,
             -122.432444
+        );
+
+        $this->work = $this->appService->getLocation(
+            37.7721718,
+            -122.4310872
         );
 
         $this->save(AppRole::asPassenger());
@@ -112,6 +119,15 @@ class AppTest extends AppTestCase
         $firstRide = $this->makePassengerRide();
         self::assertEquals($this->userOne->getFullName(), $firstRide->getPassenger()->getFullName());
         self::assertTrue($this->home->equals($firstRide->getDeparture()));
+    }
+
+    public function testAssignDestinationToRide()
+    {
+        $ride = $this->makePassengerRide();
+        $this->appService->assignDestinationToRide($ride, $this->work);
+
+        $ride = $this->getFirstRideForUserOne();
+        self::assertTrue($ride->getDestination()->equals($this->work));
     }
 
     public function testMarkRideAsRequested()

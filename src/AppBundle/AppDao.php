@@ -198,4 +198,10 @@ class AppDao
         $ride->assignDriver($driver);
         $this->save($ride);
     }
+
+    public function assignDestinationToRide(Ride $ride, AppLocation $destination)
+    {
+        $ride->assignDestination($destination);
+        $this->save($ride);
+    }
 }

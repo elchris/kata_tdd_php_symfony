@@ -44,6 +44,14 @@ class Ride
     private $departure;
 
     /**
+     * @var AppLocation
+     * @ORM\ManyToOne(targetEntity="AppLocation", fetch="EAGER")
+     * @ORM\JoinColumn(name="destinationId", referencedColumnName="id")
+     */
+    private $destination;
+
+
+    /**
      * @var \DateTime
      * @ORM\Column(name="created", type="datetime", nullable=false)
      */
@@ -100,4 +108,16 @@ class Ride
         return ! is_null($this->driver);
     }
 
+    /**
+     * @return AppLocation
+     */
+    public function getDestination()
+    {
+        return $this->destination;
+    }
+
+    public function assignDestination(AppLocation $destination)
+    {
+        $this->destination = $destination;
+    }
 }

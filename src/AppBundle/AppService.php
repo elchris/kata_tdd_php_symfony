@@ -144,6 +144,11 @@ class AppService
         $this->dao->assignDriverToRide($ride, $driver);
     }
 
+    public function assignDestinationToRide(Ride $ride, AppLocation $destination)
+    {
+        $this->dao->assignDestinationToRide($ride, $destination);
+    }
+
     /**
      * @param Ride $ride
      * @param RideEventType $type
