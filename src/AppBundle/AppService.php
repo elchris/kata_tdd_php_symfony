@@ -149,6 +149,34 @@ class AppService
         $this->dao->assignDestinationToRide($ride, $destination);
     }
 
+    public function requestRide(AppUser $passenger, AppLocation $departure)
+    {
+        $newRide = $this->createRide($passenger, $departure);
+        $this->passengerMarkRideAs($newRide, RideEventType::asRequested());
+    }
+
+    public function driverAcceptRide(Ride $ride, AppUser $driver)
+    {
+        $this->prospectiveDriverMarkRideAs($ride, RideEventType::asAccepted(), $driver);
+        $this->assignDriverToRide($ride, $driver);
+    }
+
+    public function setDestinationForRide(Ride $ride, AppLocation $destination)
+    {
+        $this->passengerMarkRideAs($ride, RideEventType::asDestination());
+        $this->assignDestinationToRide($ride, $destination);
+    }
+
+    public function startRide(Ride $ride)
+    {
+        $this->driverMarkRideAs($ride, RideEventType::inProgress());
+    }
+
+    public function completeRide(Ride $ride)
+    {
+        $this->driverMarkRideAs($ride, RideEventType::asCompleted());
+    }
+
     /**
      * @param Ride $ride
      * @param RideEventType $type
@@ -272,34 +300,6 @@ class AppService
      * @param RideEventType $type
      * @throws RideEventLifeCycleException
      */
-    private function validateRideLifecycle(Ride $ride, RideEventType $type)
-    {
-        $this->validateRequestedLifecycle($ride, $type);
-        $this->validateAcceptedLifecycle($ride, $type);
-        $this->validateDestinationLifeCycle($ride, $type);
-        $this->validateInProgressLifeCycle($ride, $type);
-        $this->validateCancelledLifeCycle($ride, $type);
-        $this->validateCompletedLifeCycle($ride, $type);
-        $this->validateRejectedLifecycle($ride, $type);
-    }
-
-    public function requestRide(AppUser $passenger, AppLocation $departure)
-    {
-        $newRide = $this->createRide($passenger, $departure);
-        $this->passengerMarkRideAs($newRide, RideEventType::asRequested());
-    }
-
-    public function driverAcceptRide(Ride $ride, AppUser $driver)
-    {
-        $this->prospectiveDriverMarkRideAs($ride, RideEventType::asAccepted(), $driver);
-        $this->assignDriverToRide($ride, $driver);
-    }
-
-    /**
-     * @param Ride $ride
-     * @param RideEventType $type
-     * @throws RideEventLifeCycleException
-     */
     private function validateDestinationLifeCycle(Ride $ride, RideEventType $type)
     {
         if (
@@ -318,19 +318,19 @@ class AppService
         }
     }
 
-    public function setDestinationForRide(Ride $ride, AppLocation $destination)
+    /**
+     * @param Ride $ride
+     * @param RideEventType $type
+     * @throws RideEventLifeCycleException
+     */
+    private function validateRideLifecycle(Ride $ride, RideEventType $type)
     {
-        $this->passengerMarkRideAs($ride, RideEventType::asDestination());
-        $this->assignDestinationToRide($ride, $destination);
-    }
-
-    public function startRide(Ride $ride)
-    {
-        $this->driverMarkRideAs($ride, RideEventType::inProgress());
-    }
-
-    public function completeRide(Ride $ride)
-    {
-        $this->driverMarkRideAs($ride, RideEventType::asCompleted());
+        $this->validateRequestedLifecycle($ride, $type);
+        $this->validateAcceptedLifecycle($ride, $type);
+        $this->validateDestinationLifeCycle($ride, $type);
+        $this->validateInProgressLifeCycle($ride, $type);
+        $this->validateCancelledLifeCycle($ride, $type);
+        $this->validateCompletedLifeCycle($ride, $type);
+        $this->validateRejectedLifecycle($ride, $type);
     }
 }
