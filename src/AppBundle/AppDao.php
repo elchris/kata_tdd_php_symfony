@@ -39,6 +39,7 @@ class AppDao
     {
         $this->em->persist($entity);
         $this->em->flush();
+        return $entity;
     }
 
     /**
@@ -114,12 +115,18 @@ class AppDao
         return $matchingLocation;
     }
 
+    /**
+     * @param AppUser $passenger
+     * @param AppLocation $departure
+     * @return Ride
+     */
     public function createRide(AppUser $passenger, AppLocation $departure)
     {
-        $this->save(new Ride(
+        $savedRide = $this->save(new Ride(
             $passenger,
             $departure
         ));
+        return $savedRide;
     }
 
     /**

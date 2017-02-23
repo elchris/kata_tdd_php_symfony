@@ -80,9 +80,14 @@ class AppService
         );
     }
 
+    /**
+     * @param AppUser $passenger
+     * @param AppLocation $departure
+     * @return Ride
+     */
     public function createRide(AppUser $passenger, AppLocation $departure)
     {
-        $this->dao->createRide($passenger, $departure);
+        return $this->dao->createRide($passenger, $departure);
     }
 
     /**
@@ -269,5 +274,11 @@ class AppService
         $this->validateCancelledLifeCycle($ride, $type);
         $this->validateCompletedLifeCycle($ride, $type);
         $this->validateRejectedLifecycle($ride, $type);
+    }
+
+    public function requestRide(AppUser $passenger, AppLocation $departure)
+    {
+        $newRide = $this->createRide($passenger, $departure);
+        $this->passengerMarkRideAs($newRide, RideEventType::asRequested());
     }
 }
