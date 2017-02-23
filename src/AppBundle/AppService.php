@@ -284,7 +284,7 @@ class AppService
 
     public function driverAcceptRide(Ride $ride, AppUser $driver)
     {
+        $this->prospectiveDriverMarkRideAs($ride, RideEventType::asAccepted(), $driver);
         $this->assignDriverToRide($ride, $driver);
-        $this->driverMarkRideAs($ride, RideEventType::asAccepted());
     }
 }
