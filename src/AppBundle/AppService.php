@@ -323,4 +323,14 @@ class AppService
         $this->passengerMarkRideAs($ride, RideEventType::asDestination());
         $this->assignDestinationToRide($ride, $destination);
     }
+
+    public function startRide(Ride $ride)
+    {
+        $this->driverMarkRideAs($ride, RideEventType::inProgress());
+    }
+
+    public function completeRide(Ride $ride)
+    {
+        $this->driverMarkRideAs($ride, RideEventType::asCompleted());
+    }
 }
