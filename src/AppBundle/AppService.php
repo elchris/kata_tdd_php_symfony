@@ -317,4 +317,10 @@ class AppService
             throw new RideEventLifeCycleException();
         }
     }
+
+    public function setDestinationForRide(Ride $ride, AppLocation $destination)
+    {
+        $this->passengerMarkRideAs($ride, RideEventType::asDestination());
+        $this->assignDestinationToRide($ride, $destination);
+    }
 }

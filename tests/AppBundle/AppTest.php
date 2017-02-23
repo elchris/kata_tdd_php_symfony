@@ -288,14 +288,21 @@ class AppTest extends AppTestCase
 
     public function testAcceptRideHasProperStateAndAttributes()
     {
-        $ride = $this->getRequestedPassengerRide();
-        $this->appService->assignRoleToUser($this->userTwo, AppRole::asDriver());
-        $this->appService->driverAcceptRide($ride, $this->userTwo);
-
-        $ride = $this->getFirstRideForUserOne();
+        $ride = $this->getAcceptedRequestedPassengerRide();
 
         self::assertTrue($ride->hasDriver());
         self::assertTrue($this->appService->isRide($ride, RideEventType::asAccepted()));
+    }
+
+    public function testSetDestinationHasProperStateAndAttributes()
+    {
+        $ride = $this->getAcceptedRequestedPassengerRide();
+        $this->appService->setDestinationForRide($ride, $this->work);
+
+        $ride = $this->getFirstRideForUserOne();
+
+        self::assertTrue($ride->getDestination()->equals($this->work));
+        self::assertTrue($this->appService->isRide($ride, RideEventType::asDestination()));
     }
 
 
@@ -366,5 +373,19 @@ class AppTest extends AppTestCase
         $firstRide = $this->getFirstRideForUserOne();
 
         return $firstRide;
+    }
+
+    /**
+     * @return Ride
+     */
+    private function getAcceptedRequestedPassengerRide()
+    {
+        $ride = $this->getRequestedPassengerRide();
+        $this->appService->assignRoleToUser($this->userTwo, AppRole::asDriver());
+        $this->appService->driverAcceptRide($ride, $this->userTwo);
+
+        $ride = $this->getFirstRideForUserOne();
+
+        return $ride;
     }
 }
