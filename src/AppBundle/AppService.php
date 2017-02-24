@@ -300,9 +300,7 @@ class AppService
         if (
             $type->equals(RideEventType::asDestination())
             &&
-            (
             $this->rideIsAlreadyCommitted($ride)
-            )
         ) {
             throw new RideEventLifeCycleException();
         }
