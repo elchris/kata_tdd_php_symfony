@@ -252,12 +252,7 @@ class AppService
         if (
             $type->equals(RideEventType::asCancelled())
             &&
-            !
-            (
-                $this->isRide($ride, RideEventType::asRequested())
-                ||
-                $this->isRide($ride, RideEventType::asAccepted())
-            )
+            $this->rideIsAlreadyCommitted($ride)
         ) {
             throw new RideEventLifeCycleException();
         }
@@ -306,12 +301,7 @@ class AppService
             $type->equals(RideEventType::asDestination())
             &&
             (
-            !
-            (
-                $this->isRide($ride, RideEventType::asRequested())
-                ||
-                $this->isRide($ride, RideEventType::asAccepted())
-            )
+            $this->rideIsAlreadyCommitted($ride)
             )
         ) {
             throw new RideEventLifeCycleException();
@@ -332,5 +322,19 @@ class AppService
         $this->validateCancelledLifeCycle($ride, $type);
         $this->validateCompletedLifeCycle($ride, $type);
         $this->validateRejectedLifecycle($ride, $type);
+    }
+
+    /**
+     * @param Ride $ride
+     * @return bool
+     */
+    private function rideIsAlreadyCommitted(Ride $ride)
+    {
+        return !
+        (
+            $this->isRide($ride, RideEventType::asRequested())
+            ||
+            $this->isRide($ride, RideEventType::asAccepted())
+        );
     }
 }

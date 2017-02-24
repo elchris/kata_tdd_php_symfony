@@ -179,7 +179,15 @@ class AppTest extends AppTestCase
         self::assertTrue($this->appService->isRide($ride, RideEventType::asCompleted()));
     }
 
-    public function testMarkRideAsAssignedDestination()
+    public function testMarkRideAsAssignedDestinationFromRequested() {
+
+        $ride = $this->getRequestedPassengerRide();
+        $this->appService->passengerMarkRideAs($ride, RideEventType::asDestination());
+        $this->appService->assignDestinationToRide($ride, $this->work);
+        self::assertTrue($this->appService->isRide($ride, RideEventType::asDestination()));
+    }
+
+    public function testMarkRideAsAssignedDestinationFromAccepted()
     {
         $ride = $this->getAcceptedPassengerRide();
         $this->appService->passengerMarkRideAs($ride, RideEventType::asDestination());
