@@ -111,7 +111,7 @@ class AppService
         $this->markRideAsForActor($ride, $type, $actor);
     }
 
-    public function prospectiveDriverMarkRideAs($ride, $type, $prospectiveDriver)
+    public function prospectiveDriverMarkRideAs(Ride $ride, RideEventType $type, AppUser $prospectiveDriver)
     {
         $this->markRideAsForActor($ride, $type, $prospectiveDriver);
     }
