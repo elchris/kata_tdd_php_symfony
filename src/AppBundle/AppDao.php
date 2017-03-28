@@ -166,12 +166,17 @@ class AppDao
      */
     public function getLastEventForRide(Ride $ride)
     {
-        return $this->em->createQuery(
-        'select e from E:RideEvent e where e.ride = :ride order by e.created desc, e.id desc'
-        )
-        ->setMaxResults(1)
-        ->setParameter('ride', $ride)
-        ->getSingleResult();
+        return $this->qb()
+            ->select('e')
+            ->from(RideEvent::class, 'e')
+            ->where('e.ride = :ride')
+            ->orderBy('e.created', 'desc')
+            ->orderBy('e.id', 'desc')
+            ->getQuery()
+            ->setMaxResults(1)
+            ->setParameter('ride', $ride)
+            ->getSingleResult()
+        ;
     }
 
     /**
@@ -203,5 +208,14 @@ class AppDao
     {
         $ride->assignDestination($destination);
         $this->save($ride);
+    }
+
+    /**
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    private function qb()
+    {
+        return $this->em
+            ->createQueryBuilder();
     }
 }
