@@ -7,18 +7,19 @@ use AppBundle\Repository\UserRepository;
 use AppBundle\Entity\AppLocation;
 use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
+use AppBundle\Repository\UserRepositoryInterface;
 
 class AppUserService
 {
     /**
-     * @var UserRepository
+     * @var UserRepositoryInterface
      */
     private $userDao;
 
     /**
-     * @param UserRepository $dao
+     * @param UserRepositoryInterface $dao
      */
-    public function __construct(UserRepository $dao)
+    public function __construct(UserRepositoryInterface $dao)
     {
         $this->userDao = $dao;
     }

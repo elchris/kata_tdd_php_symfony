@@ -10,7 +10,7 @@ use AppBundle\Entity\Ride;
 use AppBundle\Entity\UserRole;
 use AppBundle\Exception\RoleLifeCycleException;
 
-class UserRepository extends AppRepository
+class UserRepository extends AppRepository implements UserRepositoryInterface
 {
     /**
      * @param AppRole $role
