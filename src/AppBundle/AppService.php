@@ -9,25 +9,44 @@ use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
 use AppBundle\Entity\RideEvent;
 use AppBundle\Entity\RideEventType;
+use AppBundle\Repository\LocationRepository;
+use AppBundle\Repository\RideRepository;
+use AppBundle\Repository\UserRepository;
 
 class AppService
 {
     /**
-     * @var AppDao
+     * @var UserRepository
      */
-    private $dao;
+    private $userRepository;
+    /**
+     * @var LocationRepository
+     */
+    private $locationRepository;
+    /**
+     * @var RideRepository
+     */
+    private $rideRepository;
 
     /**
-     * @param AppDao $dao
+     * @param UserRepository $userRepository
+     * @param LocationRepository $locationRepository
+     * @param RideRepository $rideRepository
      */
-    public function __construct(AppDao $dao)
+    public function __construct(
+        UserRepository $userRepository,
+        LocationRepository $locationRepository,
+        RideRepository $rideRepository
+    )
     {
-        $this->dao = $dao;
+        $this->userRepository = $userRepository;
+        $this->locationRepository = $locationRepository;
+        $this->rideRepository = $rideRepository;
     }
 
     public function newUser($firstName, $lastName)
     {
-        $this->dao->newUser($firstName, $lastName);
+        $this->userRepository->newUser($firstName, $lastName);
     }
 
     /**
@@ -36,13 +55,13 @@ class AppService
      */
     public function getUserById($userId)
     {
-        return $this->dao->getUserById($userId);
+        return $this->userRepository->getUserById($userId);
     }
 
     public function assignRoleToUser(AppUser $user, AppRole $role)
     {
-        if (!$this->dao->isUserInRole($user, $role)) {
-            $this->dao->assignRoleToUser($user, $role);
+        if (!$this->userRepository->isUserInRole($user, $role)) {
+            $this->userRepository->assignRoleToUser($user, $role);
         } else {
             throw new RoleLifeCycleException(
                 'User: '
@@ -59,12 +78,12 @@ class AppService
      */
     public function isUserPassenger(AppUser $user)
     {
-        return $this->dao->isUserInRole($user, AppRole::asPassenger());
+        return $this->userRepository->isUserInRole($user, AppRole::asPassenger());
     }
 
     public function isUserDriver(AppUser $user)
     {
-        return $this->dao->isUserInRole($user, AppRole::asDriver());
+        return $this->userRepository->isUserInRole($user, AppRole::asDriver());
     }
 
     /**
@@ -74,7 +93,7 @@ class AppService
      */
     public function getLocation($lat, $long)
     {
-        return $this->dao->getOrCreateLocation(
+        return $this->locationRepository->getOrCreateLocation(
             $lat,
             $long
         );
@@ -87,7 +106,7 @@ class AppService
      */
     public function createRide(AppUser $passenger, AppLocation $departure)
     {
-        return $this->dao->createRide($passenger, $departure);
+        return $this->rideRepository->createRide($passenger, $departure);
     }
 
     /**
@@ -96,7 +115,7 @@ class AppService
      */
     public function getRidesForPassenger(AppUser $passenger)
     {
-        return $this->dao->getRidesForPassenger($passenger);
+        return $this->rideRepository->getRidesForPassenger($passenger);
     }
 
     public function passengerMarkRideAs(Ride $ride, RideEventType $type)
@@ -122,7 +141,7 @@ class AppService
      */
     public function getRideStatus(Ride $ride)
     {
-        return $this->dao->getLastEventForRide($ride);
+        return $this->rideRepository->getLastEventForRide($ride);
     }
 
     /**
@@ -132,7 +151,7 @@ class AppService
      */
     public function isRide(Ride $ride, RideEventType $eventType)
     {
-        return $this->dao->isRideStatus($ride, $eventType);
+        return $this->rideRepository->isRideStatus($ride, $eventType);
     }
 
     /**
@@ -141,12 +160,12 @@ class AppService
      */
     public function assignDriverToRide(Ride $ride, AppUser $driver)
     {
-        $this->dao->assignDriverToRide($ride, $driver);
+        $this->rideRepository->assignDriverToRide($ride, $driver);
     }
 
     public function assignDestinationToRide(Ride $ride, AppLocation $destination)
     {
-        $this->dao->assignDestinationToRide($ride, $destination);
+        $this->rideRepository->assignDestinationToRide($ride, $destination);
     }
 
     public function requestRide(AppUser $passenger, AppLocation $departure)
@@ -187,11 +206,11 @@ class AppService
     {
         $this->validateRideLifecycle($ride, $type);
         $event = new RideEvent(
-            $this->dao->getEventType($type),
+            $this->rideRepository->getEventType($type),
             $ride,
             $actor
         );
-        $this->dao->saveRideEvent($event);
+        $this->rideRepository->saveRideEvent($event);
     }
 
     /**

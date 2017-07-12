@@ -3,8 +3,10 @@
 
 namespace Tests\AppBundle;
 
-use AppBundle\AppDao;
 use AppBundle\AppService;
+use AppBundle\Repository\LocationRepository;
+use AppBundle\Repository\RideRepository;
+use AppBundle\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -24,7 +26,11 @@ abstract class AppTestCase extends WebTestCase
         self::bootKernel();
         $this->em = static::$kernel->getContainer()->get('doctrine')->getManager();
         $this->setUpEntityManager();
-        $this->appService = new AppService(new AppDao($this->em()));
+        $this->appService = new AppService(
+            new UserRepository($this->em()),
+            new LocationRepository($this->em()),
+            new RideRepository($this->em())
+        );
     }
 
     protected function em()
