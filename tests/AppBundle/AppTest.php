@@ -41,20 +41,20 @@ class AppTest extends AppTestCase
     public function setUp()
     {
         parent::setUp();
-        $this->appService->newUser('Chris', 'Holland');
-        $this->appService->newUser('Scott', 'Sims');
-        $this->appService->newUser('Prospective', 'Driver');
+        $this->userService->newUser('Chris', 'Holland');
+        $this->userService->newUser('Scott', 'Sims');
+        $this->userService->newUser('Prospective', 'Driver');
         /** @var AppUser $user */
-        $this->userTwo = $this->appService->getUserById(2);
-        $this->userOne = $this->appService->getUserById(1);
-        $this->prospectiveDriver = $this->appService->getUserById(3);
+        $this->userTwo = $this->userService->getUserById(2);
+        $this->userOne = $this->userService->getUserById(1);
+        $this->prospectiveDriver = $this->userService->getUserById(3);
 
-        $this->home = $this->appService->getLocation(
+        $this->home = $this->locationService->getLocation(
             37.773160,
             -122.432444
         );
 
-        $this->work = $this->appService->getLocation(
+        $this->work = $this->locationService->getLocation(
             37.7721718,
             -122.4310872
         );
@@ -62,7 +62,7 @@ class AppTest extends AppTestCase
         $this->save(AppRole::asPassenger());
         $this->save(AppRole::asDriver());
 
-        $this->appService->assignRoleToUser($this->prospectiveDriver, AppRole::asDriver());
+        $this->userService->assignRoleToUser($this->prospectiveDriver, AppRole::asDriver());
 
         $this->save(RideEventType::asRequested());
         $this->save(RideEventType::asAccepted());
@@ -81,29 +81,29 @@ class AppTest extends AppTestCase
 
     public function testMakeUserPassenger()
     {
-        $this->appService->assignRoleToUser($this->userOne, AppRole::asPassenger());
-        self::assertTrue($this->appService->isUserPassenger($this->userOne));
+        $this->userService->assignRoleToUser($this->userOne, AppRole::asPassenger());
+        self::assertTrue($this->userService->isUserPassenger($this->userOne));
     }
 
     public function testMakeUserDriver()
     {
-        $this->appService->assignRoleToUser($this->userOne, AppRole::asDriver());
-        self::assertTrue($this->appService->isUserDriver($this->userOne));
+        $this->userService->assignRoleToUser($this->userOne, AppRole::asDriver());
+        self::assertTrue($this->userService->isUserDriver($this->userOne));
     }
 
     public function testUserHasBothRoles()
     {
-        $this->appService->assignRoleToUser($this->userOne, AppRole::asPassenger());
-        $this->appService->assignRoleToUser($this->userOne, AppRole::asDriver());
-        self::assertTrue($this->appService->isUserPassenger($this->userOne));
-        self::assertTrue($this->appService->isUserDriver($this->userOne));
+        $this->userService->assignRoleToUser($this->userOne, AppRole::asPassenger());
+        $this->userService->assignRoleToUser($this->userOne, AppRole::asDriver());
+        self::assertTrue($this->userService->isUserPassenger($this->userOne));
+        self::assertTrue($this->userService->isUserDriver($this->userOne));
     }
 
     public function testDuplicateRoleAssignmentThrowsException()
     {
-        $this->appService->assignRoleToUser($this->userOne, AppRole::asPassenger());
+        $this->userService->assignRoleToUser($this->userOne, AppRole::asPassenger());
         self::expectException(RoleLifeCycleException::class);
-        $this->appService->assignRoleToUser($this->userOne, AppRole::asPassenger());
+        $this->userService->assignRoleToUser($this->userOne, AppRole::asPassenger());
     }
     /*
      * home: 37.773160, -122.432444
@@ -155,7 +155,7 @@ class AppTest extends AppTestCase
 
         $this->assignDriverToRide($ride);
 
-        self::assertTrue($this->appService->isUserDriver($ride->getDriver()));
+        self::assertTrue($this->userService->isUserDriver($ride->getDriver()));
     }
 
     public function testRideEventLifeCycles()
@@ -351,7 +351,7 @@ class AppTest extends AppTestCase
      */
     private function assignDriverToRide($ride)
     {
-        $this->appService->assignRoleToUser($this->userTwo, AppRole::asDriver());
+        $this->userService->assignRoleToUser($this->userTwo, AppRole::asDriver());
         $this->appService->assignDriverToRide($ride, $this->userTwo);
     }
 
@@ -370,7 +370,7 @@ class AppTest extends AppTestCase
 
     private function makeUserOnePassenger()
     {
-        $this->appService->assignRoleToUser($this->userOne, AppRole::asPassenger());
+        $this->userService->assignRoleToUser($this->userOne, AppRole::asPassenger());
     }
 
     /**
@@ -403,7 +403,7 @@ class AppTest extends AppTestCase
     private function getAcceptedRequestedPassengerRide()
     {
         $ride = $this->getRequestedPassengerRide();
-        $this->appService->assignRoleToUser($this->userTwo, AppRole::asDriver());
+        $this->userService->assignRoleToUser($this->userTwo, AppRole::asDriver());
         $this->appService->driverAcceptRide($ride, $this->userTwo);
 
         $ride = $this->getFirstRideForUserOne();

@@ -7,6 +7,8 @@ use AppBundle\AppService;
 use AppBundle\Repository\LocationRepository;
 use AppBundle\Repository\RideRepository;
 use AppBundle\Repository\UserRepository;
+use AppBundle\Service\LocationService;
+use AppBundle\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -20,6 +22,12 @@ abstract class AppTestCase extends WebTestCase
     /** @var  AppService */
     protected $appService;
 
+    /** @var UserService $userService */
+    protected $userService;
+
+    /** @var LocationService $locationService */
+    protected $locationService;
+
     protected function setUp()
     {
         parent::setUp();
@@ -30,6 +38,12 @@ abstract class AppTestCase extends WebTestCase
             new UserRepository($this->em()),
             new LocationRepository($this->em()),
             new RideRepository($this->em())
+        );
+        $this->userService = new UserService(
+            new UserRepository($this->em())
+        );
+        $this->locationService = new LocationService(
+            new LocationRepository($this->em())
         );
     }
 
