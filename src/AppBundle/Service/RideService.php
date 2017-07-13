@@ -1,45 +1,28 @@
 <?php
 
 
-namespace AppBundle;
+namespace AppBundle\Service;
 
 use AppBundle\Entity\AppLocation;
 use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
 use AppBundle\Entity\RideEvent;
 use AppBundle\Entity\RideEventType;
-use AppBundle\Repository\LocationRepository;
 use AppBundle\Repository\RideRepository;
-use AppBundle\Repository\UserRepository;
+use AppBundle\RideEventLifeCycleException;
 
-class AppService
+class RideService
 {
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
-    /**
-     * @var LocationRepository
-     */
-    private $locationRepository;
     /**
      * @var RideRepository
      */
     private $rideRepository;
 
     /**
-     * @param UserRepository $userRepository
-     * @param LocationRepository $locationRepository
      * @param RideRepository $rideRepository
      */
-    public function __construct(
-        UserRepository $userRepository,
-        LocationRepository $locationRepository,
-        RideRepository $rideRepository
-    )
+    public function __construct($rideRepository)
     {
-        $this->userRepository = $userRepository;
-        $this->locationRepository = $locationRepository;
         $this->rideRepository = $rideRepository;
     }
 

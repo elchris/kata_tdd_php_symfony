@@ -3,11 +3,11 @@
 
 namespace Tests\AppBundle;
 
-use AppBundle\AppService;
 use AppBundle\Repository\LocationRepository;
 use AppBundle\Repository\RideRepository;
 use AppBundle\Repository\UserRepository;
 use AppBundle\Service\LocationService;
+use AppBundle\Service\RideService;
 use AppBundle\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
@@ -19,14 +19,14 @@ abstract class AppTestCase extends WebTestCase
     /** @var  EntityManagerInterface */
     private $em;
 
-    /** @var  AppService */
-    protected $appService;
-
     /** @var UserService $userService */
     protected $userService;
 
     /** @var LocationService $locationService */
     protected $locationService;
+
+    /** @var RideService $rideService */
+    protected $rideService;
 
     protected function setUp()
     {
@@ -34,16 +34,14 @@ abstract class AppTestCase extends WebTestCase
         self::bootKernel();
         $this->em = static::$kernel->getContainer()->get('doctrine')->getManager();
         $this->setUpEntityManager();
-        $this->appService = new AppService(
-            new UserRepository($this->em()),
-            new LocationRepository($this->em()),
-            new RideRepository($this->em())
-        );
         $this->userService = new UserService(
             new UserRepository($this->em())
         );
         $this->locationService = new LocationService(
             new LocationRepository($this->em())
+        );
+        $this->rideService = new RideService(
+            new RideRepository($this->em())
         );
     }
 
