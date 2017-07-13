@@ -237,7 +237,6 @@ class RideServiceTest extends AppTestCase
             $this->home
         );
 
-        /** @var Ride[] $ridesForUser */
         $firstRide = $this->getFirstRideForUserOne();
 
         return $firstRide;
