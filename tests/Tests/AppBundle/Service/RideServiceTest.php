@@ -1,33 +1,17 @@
 <?php
 
-namespace Tests\AppBundle;
 
+namespace Tests\AppBundle\Service;
+
+use Tests\AppBundle\AppTestCase;
 use AppBundle\Entity\AppRole;
 use AppBundle\Entity\Ride;
 use AppBundle\Entity\RideEventType;
 use AppBundle\RideEventLifeCycleException;
 use AppBundle\UnassignedDriverException;
 
-/**
- * Consult ride-hailing.svg to digest some key application concepts.
- *
- * Consult Kata-Tasks.rtf to get an idea of the various tests you'll be writing
- * and help shape your sequencing.
- *
- * With this said, you do not have to follow the sequencing outlined.
- * In fact, you will likely arrive at a more optimal sequencing.
- *
- *
- * Class AppTest
- * @package Tests\AppBundle
- */
-class AppTest extends AppTestCase
+class RideServiceTest extends AppTestCase
 {
-    public function setUp()
-    {
-        parent::setUp();
-    }
-
     public function testCreateRideForPassengerAndDeparture()
     {
         $firstRide = $this->makePassengerRide();
@@ -87,7 +71,7 @@ class AppTest extends AppTestCase
 
         $this->rideService->driverMarkRideAs($ride, RideEventType::inProgress());
         self::assertTrue($this->rideService->isRide($ride, RideEventType::inProgress()));
-        
+
         $this->rideService->driverMarkRideAs($ride, RideEventType::asCompleted());
         self::assertTrue($this->rideService->isRide($ride, RideEventType::asCompleted()));
     }

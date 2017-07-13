@@ -50,16 +50,31 @@ abstract class AppTestCase extends WebTestCase
         self::bootKernel();
         $this->em = static::$kernel->getContainer()->get('doctrine')->getManager();
         $this->setUpEntityManager();
-        $this->userService = new UserService(
-            new UserRepository($this->em())
-        );
-        $this->locationService = new LocationService(
-            new LocationRepository($this->em())
-        );
-        $this->rideService = new RideService(
-            new RideRepository($this->em())
-        );
+        $this->bootStrapServices();
+        $this->hydrateTestData();
+    }
 
+    protected function em()
+    {
+        return $this->em;
+    }
+
+    protected function save($entity)
+    {
+        $this->em->persist($entity);
+        $this->em->flush();
+    }
+
+    private function setUpEntityManager()
+    {
+        $classes = $this->em()->getMetadataFactory()->getAllMetadata();
+        $tool = new SchemaTool($this->em);
+        $tool->dropSchema($classes);
+        $tool->createSchema($classes);
+    }
+
+    protected function hydrateTestData()
+    {
         $this->userService->newUser('Chris', 'Holland');
         $this->userService->newUser('Scott', 'Sims');
         $this->userService->newUser('Prospective', 'Driver');
@@ -92,22 +107,16 @@ abstract class AppTestCase extends WebTestCase
         $this->save(RideEventType::asDestination());
     }
 
-    protected function em()
+    protected function bootStrapServices()
     {
-        return $this->em;
-    }
-
-    protected function save($entity)
-    {
-        $this->em->persist($entity);
-        $this->em->flush();
-    }
-
-    private function setUpEntityManager()
-    {
-        $classes = $this->em()->getMetadataFactory()->getAllMetadata();
-        $tool = new SchemaTool($this->em);
-        $tool->dropSchema($classes);
-        $tool->createSchema($classes);
+        $this->userService = new UserService(
+            new UserRepository($this->em())
+        );
+        $this->locationService = new LocationService(
+            new LocationRepository($this->em())
+        );
+        $this->rideService = new RideService(
+            new RideRepository($this->em())
+        );
     }
 }
