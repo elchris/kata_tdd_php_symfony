@@ -10,7 +10,7 @@ use AppBundle\Entity\RideEvent;
 use AppBundle\Entity\RideEventType;
 use Doctrine\ORM\NoResultException;
 
-class RideRepository extends AppRepository
+class RideRepository extends AppRepository implements RideRepositoryInterface
 {
     /**
      * @param AppUser $passenger

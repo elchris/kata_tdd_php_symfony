@@ -7,7 +7,7 @@ use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
 use AppBundle\Entity\UserRole;
 
-class UserRepository extends AppRepository
+class UserRepository extends AppRepository implements UserRepositoryInterface
 {
     public function newUser($firstName, $lastName)
     {

@@ -5,18 +5,18 @@ namespace AppBundle\Service;
 
 use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
-use AppBundle\Repository\UserRepository;
+use AppBundle\Repository\UserRepositoryInterface;
 use AppBundle\RoleLifeCycleException;
 
 class UserService
 {
     /**
-     * @var UserRepository
+     * @var UserRepositoryInterface
      */
     private $userRepository;
 
     /**
-     * @param UserRepository $userRepository
+     * @param UserRepositoryInterface $userRepository
      */
     public function __construct($userRepository)
     {

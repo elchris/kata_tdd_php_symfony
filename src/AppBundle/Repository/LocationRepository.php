@@ -6,7 +6,7 @@ namespace AppBundle\Repository;
 use AppBundle\Entity\AppLocation;
 use Doctrine\ORM\NoResultException;
 
-class LocationRepository extends AppRepository
+class LocationRepository extends AppRepository implements LocationRepositoryInterface
 {
     /**
      * @param float $lat

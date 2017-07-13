@@ -8,18 +8,18 @@ use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
 use AppBundle\Entity\RideEvent;
 use AppBundle\Entity\RideEventType;
-use AppBundle\Repository\RideRepository;
+use AppBundle\Repository\RideRepositoryInterface;
 use AppBundle\RideEventLifeCycleException;
 
 class RideService
 {
     /**
-     * @var RideRepository
+     * @var RideRepositoryInterface
      */
     private $rideRepository;
 
     /**
-     * @param RideRepository $rideRepository
+     * @param RideRepositoryInterface $rideRepository
      */
     public function __construct($rideRepository)
     {

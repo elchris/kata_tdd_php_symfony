@@ -4,19 +4,19 @@
 namespace AppBundle\Service;
 
 use AppBundle\Entity\AppLocation;
-use AppBundle\Repository\LocationRepository;
+use AppBundle\Repository\LocationRepositoryInterface;
 
 class LocationService
 {
     /**
-     * @var LocationRepository
+     * @var LocationRepositoryInterface
      */
     private $locationRepository;
 
     /**
-     * @param LocationRepository $locationRepository
+     * @param LocationRepositoryInterface $locationRepository
      */
-    public function __construct(LocationRepository $locationRepository)
+    public function __construct(LocationRepositoryInterface $locationRepository)
     {
         $this->locationRepository = $locationRepository;
     }
