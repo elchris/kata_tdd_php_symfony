@@ -3,6 +3,10 @@
 
 namespace Tests\AppBundle;
 
+use AppBundle\Entity\AppLocation;
+use AppBundle\Entity\AppRole;
+use AppBundle\Entity\AppUser;
+use AppBundle\Entity\RideEventType;
 use AppBundle\Repository\LocationRepository;
 use AppBundle\Repository\RideRepository;
 use AppBundle\Repository\UserRepository;
@@ -28,6 +32,18 @@ abstract class AppTestCase extends WebTestCase
     /** @var RideService $rideService */
     protected $rideService;
 
+    /** @var  AppLocation */
+    protected $home;
+    /** @var  AppUser */
+    protected $userOne;
+    /** @var  AppUser */
+    protected $userTwo;
+
+    /** @var  AppUser */
+    protected $prospectiveDriver;
+    /** @var AppLocation */
+    protected $work;
+
     protected function setUp()
     {
         parent::setUp();
@@ -43,6 +59,37 @@ abstract class AppTestCase extends WebTestCase
         $this->rideService = new RideService(
             new RideRepository($this->em())
         );
+
+        $this->userService->newUser('Chris', 'Holland');
+        $this->userService->newUser('Scott', 'Sims');
+        $this->userService->newUser('Prospective', 'Driver');
+        /** @var AppUser $user */
+        $this->userTwo = $this->userService->getUserById(2);
+        $this->userOne = $this->userService->getUserById(1);
+        $this->prospectiveDriver = $this->userService->getUserById(3);
+
+        $this->home = $this->locationService->getLocation(
+            37.773160,
+            -122.432444
+        );
+
+        $this->work = $this->locationService->getLocation(
+            37.7721718,
+            -122.4310872
+        );
+
+        $this->save(AppRole::asPassenger());
+        $this->save(AppRole::asDriver());
+
+        $this->userService->assignRoleToUser($this->prospectiveDriver, AppRole::asDriver());
+
+        $this->save(RideEventType::asRequested());
+        $this->save(RideEventType::asAccepted());
+        $this->save(RideEventType::inProgress());
+        $this->save(RideEventType::asCancelled());
+        $this->save(RideEventType::asCompleted());
+        $this->save(RideEventType::asRejected());
+        $this->save(RideEventType::asDestination());
     }
 
     protected function em()

@@ -2,13 +2,10 @@
 
 namespace Tests\AppBundle;
 
-use AppBundle\Entity\AppLocation;
 use AppBundle\Entity\AppRole;
-use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
 use AppBundle\Entity\RideEventType;
 use AppBundle\RideEventLifeCycleException;
-use AppBundle\RoleLifeCycleException;
 use AppBundle\UnassignedDriverException;
 
 /**
@@ -26,85 +23,11 @@ use AppBundle\UnassignedDriverException;
  */
 class AppTest extends AppTestCase
 {
-    /** @var  AppLocation */
-    private $home;
-    /** @var  AppUser */
-    private $userOne;
-    /** @var  AppUser */
-    private $userTwo;
-
-    /** @var  AppUser */
-    private $prospectiveDriver;
-    /** @var AppLocation */
-    private $work;
-
     public function setUp()
     {
         parent::setUp();
-        $this->userService->newUser('Chris', 'Holland');
-        $this->userService->newUser('Scott', 'Sims');
-        $this->userService->newUser('Prospective', 'Driver');
-        /** @var AppUser $user */
-        $this->userTwo = $this->userService->getUserById(2);
-        $this->userOne = $this->userService->getUserById(1);
-        $this->prospectiveDriver = $this->userService->getUserById(3);
-
-        $this->home = $this->locationService->getLocation(
-            37.773160,
-            -122.432444
-        );
-
-        $this->work = $this->locationService->getLocation(
-            37.7721718,
-            -122.4310872
-        );
-
-        $this->save(AppRole::asPassenger());
-        $this->save(AppRole::asDriver());
-
-        $this->userService->assignRoleToUser($this->prospectiveDriver, AppRole::asDriver());
-
-        $this->save(RideEventType::asRequested());
-        $this->save(RideEventType::asAccepted());
-        $this->save(RideEventType::inProgress());
-        $this->save(RideEventType::asCancelled());
-        $this->save(RideEventType::asCompleted());
-        $this->save(RideEventType::asRejected());
-        $this->save(RideEventType::asDestination());
     }
 
-    public function testCreateAndRetrieveUser()
-    {
-        self::assertEquals('Scott', $this->userTwo->getFirstName());
-        self::assertEquals('Chris', $this->userOne->getFirstName());
-    }
-
-    public function testMakeUserPassenger()
-    {
-        $this->userService->assignRoleToUser($this->userOne, AppRole::asPassenger());
-        self::assertTrue($this->userService->isUserPassenger($this->userOne));
-    }
-
-    public function testMakeUserDriver()
-    {
-        $this->userService->assignRoleToUser($this->userOne, AppRole::asDriver());
-        self::assertTrue($this->userService->isUserDriver($this->userOne));
-    }
-
-    public function testUserHasBothRoles()
-    {
-        $this->userService->assignRoleToUser($this->userOne, AppRole::asPassenger());
-        $this->userService->assignRoleToUser($this->userOne, AppRole::asDriver());
-        self::assertTrue($this->userService->isUserPassenger($this->userOne));
-        self::assertTrue($this->userService->isUserDriver($this->userOne));
-    }
-
-    public function testDuplicateRoleAssignmentThrowsException()
-    {
-        $this->userService->assignRoleToUser($this->userOne, AppRole::asPassenger());
-        self::expectException(RoleLifeCycleException::class);
-        $this->userService->assignRoleToUser($this->userOne, AppRole::asPassenger());
-    }
     /*
      * home: 37.773160, -122.432444
      * work: 37.7721718,-122.4310872
