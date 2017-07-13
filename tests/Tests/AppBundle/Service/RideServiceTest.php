@@ -243,10 +243,7 @@ class RideServiceTest extends AppTestCase
         return $firstRide;
     }
 
-    /**
-     * @param $ride
-     */
-    private function assignDriverToRide($ride)
+    private function assignDriverToRide(Ride $ride)
     {
         $this->userService->assignRoleToUser($this->userTwo, AppRole::asDriver());
         $this->rideService->assignDriverToRide($ride, $this->userTwo);
