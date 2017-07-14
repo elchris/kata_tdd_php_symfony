@@ -56,8 +56,7 @@ class UserRepositoryTest extends AppTestCase
 
     public function testSaveUserWithDriverRole()
     {
-        $role = AppRole::driver();
-        $user = $this->getSavedUserWithRole($role);
+        $user = $this->getSavedUserWithRole($this->driverRole);
 
         $savedUser = $this->userRepository->getUserById(1);
 
@@ -73,7 +72,7 @@ class UserRepositoryTest extends AppTestCase
 
     public function testUserAlreadyHasRoleThrows()
     {
-        $user = $this->getSavedUserWithRole(AppRole::driver());
+        $user = $this->getSavedUserWithRole($this->driverRole);
 
         self::expectException(RoleLifeCycleException::class);
         $user->addRole($user->getRoles()->first());
@@ -116,7 +115,6 @@ class UserRepositoryTest extends AppTestCase
      */
     private function getSavedUserWithRole($role)
     {
-        $this->save($role);
         $user = $this->makeSavedUser();
         $user->addRole($role);
         $this->userRepository->save($user);
