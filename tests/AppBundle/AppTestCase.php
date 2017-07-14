@@ -15,16 +15,12 @@ abstract class AppTestCase extends WebTestCase
     /** @var  EntityManagerInterface */
     private $em;
 
-    /** @var  AppService */
-    protected $appService;
-
     protected function setUp()
     {
         parent::setUp();
         self::bootKernel();
         $this->em = static::$kernel->getContainer()->get('doctrine')->getManager();
         $this->setUpEntityManager();
-        $this->appService = new AppService(new AppDao($this->em()));
     }
 
     protected function em()
