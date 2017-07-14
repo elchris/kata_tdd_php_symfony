@@ -33,9 +33,23 @@ class AppUser
      */
     private $roles;
 
-    public function __construct()
+    /**
+     * @var string $firstName
+     * @ORM\Column(name="firstName", type="string", nullable=false)
+     */
+    private $firstName;
+
+    /**
+     * @var string $lastName
+     * @ORM\Column(name="lastName", type="string", nullable=false)
+     */
+    private $lastName;
+
+    public function __construct($firstName, $lastName)
     {
         $this->roles = new ArrayCollection();
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
     }
 
 
@@ -60,5 +74,15 @@ class AppUser
     public function getRoles()
     {
         return $this->roles;
+    }
+
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    public function getLastName()
+    {
+        return $this->lastName;
     }
 }

@@ -103,7 +103,7 @@ class UserRepositoryTest extends AppTestCase
      */
     private function makeSavedUser()
     {
-        $user = new AppUser();
+        $user = new AppUser('chris', 'holland');
         $this->userRepository->save($user);
 
         return $user;
