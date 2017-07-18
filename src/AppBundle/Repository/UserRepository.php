@@ -5,7 +5,6 @@ namespace AppBundle\Repository;
 
 use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
-use AppBundle\Entity\UserRole;
 
 class UserRepository extends AppRepository implements UserRepositoryInterface
 {
@@ -30,8 +29,8 @@ class UserRepository extends AppRepository implements UserRepositoryInterface
 
     public function assignRoleToUser(AppUser $user, AppRole $role)
     {
-        $storedRole = $this->getStoredRole($role);
-        $this->save(new UserRole($user, $storedRole));
+        $user->addRole($this->getStoredRole($role));
+        $this->save($user);
     }
 
     private function getStoredRole(AppRole $role)
@@ -45,13 +44,6 @@ class UserRepository extends AppRepository implements UserRepositoryInterface
 
     public function isUserInRole(AppUser $user, AppRole $role)
     {
-        $matchingRoleCount = $this->em->createQuery(
-            'select count(distinct ur.id) from E:UserRole ur where ur.user = :user and ur.role = :role'
-        )
-            ->setParameter('user', $user)
-            ->setParameter('role', $role)
-            ->getSingleScalarResult();
-
-        return ((int)$matchingRoleCount) === 1;
+        return $user->hasRole($this->getStoredRole($role));
     }
 }
