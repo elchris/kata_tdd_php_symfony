@@ -3,8 +3,6 @@
 
 namespace Tests\AppBundle;
 
-use AppBundle\AppDao;
-use AppBundle\AppService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
