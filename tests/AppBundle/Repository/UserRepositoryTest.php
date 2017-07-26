@@ -74,7 +74,7 @@ class UserRepositoryTest extends AppTestCase
     {
         $user = $this->getSavedUserWithRole($this->driverRole);
 
-        self::expectException(RoleLifeCycleException::class);
+        $this->expectException(RoleLifeCycleException::class);
         $user->addRole($user->getRoles()->first());
     }
 
