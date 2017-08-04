@@ -10,7 +10,7 @@ abstract class AppRepository
     /**
      * @var EntityManagerInterface
      */
-    protected $em;
+    private $em;
 
     /**
      * @param EntityManagerInterface $entityManager
@@ -34,5 +34,9 @@ abstract class AppRepository
     {
         return $this->em
             ->createQueryBuilder();
+    }
+
+    protected function query($dql) {
+        return $this->em->createQuery($dql);
     }
 }

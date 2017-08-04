@@ -32,7 +32,7 @@ class RideRepository extends AppRepository implements RideRepositoryInterface
      */
     public function getRidesForPassenger(AppUser $passenger)
     {
-        return $this->em->createQuery(
+        return $this->query(
             'select r from E:Ride r where r.passenger = :passenger'
         )
             ->setParameter('passenger', $passenger)
@@ -45,7 +45,7 @@ class RideRepository extends AppRepository implements RideRepositoryInterface
      */
     public function getEventType(RideEventType $type)
     {
-        return $this->em->createQuery(
+        return $this->query(
             'select t from E:RideEventType t where t = :type'
         )
             ->setParameter('type', $type)

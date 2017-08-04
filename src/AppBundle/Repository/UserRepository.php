@@ -20,7 +20,7 @@ class UserRepository extends AppRepository implements UserRepositoryInterface
      */
     public function getUserById($userId)
     {
-        return $this->em->createQuery(
+        return $this->query(
             'select u from E:AppUser u where u.id = :userId'
         )
             ->setParameter('userId', $userId)
@@ -35,7 +35,7 @@ class UserRepository extends AppRepository implements UserRepositoryInterface
 
     private function getStoredRole(AppRole $role)
     {
-        return $this->em->createQuery(
+        return $this->query(
             'select r from E:AppRole r where r = :role'
         )
             ->setParameter('role', $role)
