@@ -4,6 +4,7 @@
 namespace AppBundle\Repository;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query;
 
 abstract class AppRepository
 {
@@ -28,15 +29,49 @@ abstract class AppRepository
     }
 
     /**
-     * @return \Doctrine\ORM\QueryBuilder
+     * @param $dql
+     * @return Query
      */
-    protected function qb()
-    {
-        return $this->em
-            ->createQueryBuilder();
+    private function query($dql) {
+        return $this->em->createQuery($dql);
     }
 
-    protected function query($dql) {
-        return $this->em->createQuery($dql);
+    /**
+     * @param string $dql
+     * @param array $params
+     * @return mixed
+     */
+    protected function singleResultQuery($dql, $params)
+    {
+        $q = $this->query($dql);
+        $this->setParameters($params, $q);
+
+        return $q->getSingleResult();
+    }
+
+    protected function multipleResultsQuery($dql, $params)
+    {
+        $q = $this->query($dql);
+        $this->setParameters($params, $q);
+        return $q->getResult();
+    }
+
+    protected function firstSingleResultQuery($dql, $params)
+    {
+        $q = $this->query($dql);
+        $this->setParameters($params, $q);
+        $q->setMaxResults(1);
+        return $q->getSingleResult();
+    }
+
+    /**
+     * @param $params
+     * @param $q
+     */
+    private function setParameters($params, Query $q)
+    {
+        foreach ($params as $key => $value) {
+            $q->setParameter($key, $value);
+        }
     }
 }

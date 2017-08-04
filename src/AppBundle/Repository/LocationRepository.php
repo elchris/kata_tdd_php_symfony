@@ -30,14 +30,12 @@ class LocationRepository extends AppRepository implements LocationRepositoryInte
      */
     private function getExistingLocation($lat, $long)
     {
-        $matchingLocation =
-            $this->query(
-                'select l from E:AppLocation l where l.lat = :lat and l.long = :long'
-            )
-                ->setParameter('lat', $lat)
-                ->setParameter('long', $long)
-                ->getSingleResult();
-
-        return $matchingLocation;
+        return $this->singleResultQuery(
+            'select l from E:AppLocation l where l.lat = :lat and l.long = :long',
+            [
+                'lat' => $lat,
+                'long' => $long
+            ]
+        );
     }
 }

@@ -20,11 +20,12 @@ class UserRepository extends AppRepository implements UserRepositoryInterface
      */
     public function getUserById($userId)
     {
-        return $this->query(
-            'select u from E:AppUser u where u.id = :userId'
-        )
-            ->setParameter('userId', $userId)
-            ->getSingleResult();
+        return $this->singleResultQuery(
+            'select u from E:AppUser u where u.id = :userId',
+            [
+                'userId' => $userId
+            ]
+        );
     }
 
     public function assignRoleToUser(AppUser $user, AppRole $role)
@@ -35,11 +36,12 @@ class UserRepository extends AppRepository implements UserRepositoryInterface
 
     private function getStoredRole(AppRole $role)
     {
-        return $this->query(
-            'select r from E:AppRole r where r = :role'
-        )
-            ->setParameter('role', $role)
-            ->getSingleResult();
+        return $this->singleResultQuery(
+            'select r from E:AppRole r where r = :role',
+            [
+                'role' => $role
+            ]
+        );
     }
 
     public function isUserInRole(AppUser $user, AppRole $role)

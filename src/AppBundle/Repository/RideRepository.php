@@ -32,11 +32,10 @@ class RideRepository extends AppRepository implements RideRepositoryInterface
      */
     public function getRidesForPassenger(AppUser $passenger)
     {
-        return $this->query(
-            'select r from E:Ride r where r.passenger = :passenger'
-        )
-            ->setParameter('passenger', $passenger)
-            ->getResult();
+        return $this->multipleResultsQuery(
+            'select r from E:Ride r where r.passenger = :passenger',
+            ['passenger' => $passenger]
+        );
     }
 
     /**
@@ -45,11 +44,10 @@ class RideRepository extends AppRepository implements RideRepositoryInterface
      */
     public function getEventType(RideEventType $type)
     {
-        return $this->query(
-            'select t from E:RideEventType t where t = :type'
-        )
-            ->setParameter('type', $type)
-            ->getSingleResult();
+        return $this->singleResultQuery(
+            'select t from E:RideEventType t where t = :type',
+            ['type' => $type]
+        );
     }
 
     public function saveRideEvent(RideEvent $event)
@@ -63,17 +61,11 @@ class RideRepository extends AppRepository implements RideRepositoryInterface
      */
     public function getLastEventForRide(Ride $ride)
     {
-        return $this->qb()
-            ->select('e')
-            ->from(RideEvent::class, 'e')
-            ->where('e.ride = :ride')
-            ->orderBy('e.created', 'desc')
-            ->orderBy('e.id', 'desc')
-            ->getQuery()
-            ->setMaxResults(1)
-            ->setParameter('ride', $ride)
-            ->getSingleResult()
-            ;
+
+        return $this->firstSingleResultQuery(
+            'select e from E:RideEvent e where e.ride = :ride order by e.created desc, e.id desc',
+            ['ride' => $ride]
+        );
     }
 
     /**
