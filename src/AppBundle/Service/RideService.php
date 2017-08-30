@@ -21,7 +21,7 @@ class RideService
     /**
      * @param RideRepositoryInterface $rideRepository
      */
-    public function __construct($rideRepository)
+    public function __construct(RideRepositoryInterface $rideRepository)
     {
         $this->rideRepository = $rideRepository;
     }
