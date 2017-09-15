@@ -26,4 +26,17 @@ class UserRepository
         $this->em->persist($newUser);
         $this->em->flush();
     }
+
+    /**
+     * @param $userId
+     * @return AppUser
+     */
+    public function getUserById($userId)
+    {
+        return $this->em->createQuery(
+            'select u from E:AppUser u where u.id = :userId'
+        )
+        ->setParameter('userId', $userId)
+        ->getSingleResult();
+    }
 }
