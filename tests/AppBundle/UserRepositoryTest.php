@@ -13,6 +13,17 @@ class UserRepositoryTest extends AppTestCase
     /** @var  UserRepository */
     private $userRepository;
 
+    /** @var  AppRole $editoriallySavedDriverRole */
+    private $editoriallySavedDriverRole;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->editoriallySavedDriverRole = AppRole::driver();
+        $this->save($this->editoriallySavedDriverRole);
+    }
+
     public function testSaveNewUser()
     {
         $newUser = $this->getSavedUser();
@@ -31,20 +42,16 @@ class UserRepositoryTest extends AppTestCase
 
     public function testAssignDriverRoleToUser()
     {
-        $editoriallySavedDriverRole = AppRole::driver();
-        $this->em()->persist($editoriallySavedDriverRole);
-        $this->em()->flush();
-
         //Given
         $savedUser = $this->getSavedUser();
 
         //When
-        $savedUser->assignRole($editoriallySavedDriverRole);
+        $savedUser->assignRole($this->editoriallySavedDriverRole);
         $this->userRepository->save($savedUser);
         $retrievedUserWithDriverRole = $this->userRepository->getUserById($savedUser->getId());
 
         //Then
-        self::assertTrue($retrievedUserWithDriverRole->hasRole($editoriallySavedDriverRole));
+        self::assertTrue($retrievedUserWithDriverRole->hasRole($this->editoriallySavedDriverRole));
     }
 
     /**
