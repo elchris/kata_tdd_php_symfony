@@ -16,12 +16,17 @@ class UserRepositoryTest extends AppTestCase
     /** @var  AppRole $editoriallySavedDriverRole */
     private $editoriallySavedDriverRole;
 
+    /** @var  AppRole $editoriallySavedPassengerRole */
+    private $editoriallySavedPassengerRole;
+
     public function setUp()
     {
         parent::setUp();
 
         $this->editoriallySavedDriverRole = AppRole::driver();
+        $this->editoriallySavedPassengerRole = AppRole::passenger();
         $this->save($this->editoriallySavedDriverRole);
+        $this->save($this->editoriallySavedPassengerRole);
     }
 
     public function testSaveNewUser()
@@ -42,16 +47,12 @@ class UserRepositoryTest extends AppTestCase
 
     public function testAssignDriverRoleToUser()
     {
-        //Given
-        $savedUser = $this->getSavedUser();
+        $this->assertAssignedRoleToUser($this->editoriallySavedDriverRole);
+    }
 
-        //When
-        $savedUser->assignRole($this->editoriallySavedDriverRole);
-        $this->userRepository->save($savedUser);
-        $retrievedUserWithDriverRole = $this->userRepository->getUserById($savedUser->getId());
-
-        //Then
-        self::assertTrue($retrievedUserWithDriverRole->hasRole($this->editoriallySavedDriverRole));
+    public function testAssignPassengerRoleToUser()
+    {
+        $this->assertAssignedRoleToUser($this->editoriallySavedPassengerRole);
     }
 
     /**
@@ -66,5 +67,22 @@ class UserRepositoryTest extends AppTestCase
         $this->userRepository->save($newUser);
 
         return $newUser;
+    }
+
+    /**
+     * @param AppRole $roleToTest
+     */
+    protected function assertAssignedRoleToUser(AppRole $roleToTest)
+    {
+        //Given
+        $savedUser = $this->getSavedUser();
+
+        //When
+        $savedUser->assignRole($roleToTest);
+        $this->userRepository->save($savedUser);
+        $retrievedUserWithDriverRole = $this->userRepository->getUserById($savedUser->getId());
+
+        //Then
+        self::assertTrue($retrievedUserWithDriverRole->hasRole($roleToTest));
     }
 }
