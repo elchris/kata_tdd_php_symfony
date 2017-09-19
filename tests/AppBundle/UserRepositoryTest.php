@@ -80,9 +80,9 @@ class UserRepositoryTest extends AppTestCase
         //When
         $savedUser->assignRole($roleToTest);
         $this->userRepository->save($savedUser);
-        $retrievedUserWithDriverRole = $this->userRepository->getUserById($savedUser->getId());
+        $retrievedUserWithAssignedRole = $this->userRepository->getUserById($savedUser->getId());
 
         //Then
-        self::assertTrue($retrievedUserWithDriverRole->hasRole($roleToTest));
+        self::assertTrue($retrievedUserWithAssignedRole->hasRole($roleToTest));
     }
 }
