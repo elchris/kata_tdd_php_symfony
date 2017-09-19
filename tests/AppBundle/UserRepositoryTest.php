@@ -55,6 +55,11 @@ class UserRepositoryTest extends AppTestCase
         $this->assertAssignedRoleToUser($this->editoriallySavedPassengerRole);
     }
 
+    public function testAssignUnattachedRoleToUser()
+    {
+        $this->assertAssignedRoleToUser(AppRole::driver());
+    }
+
     /**
      * @return AppUser
      */
@@ -83,6 +88,6 @@ class UserRepositoryTest extends AppTestCase
         $retrievedUserWithAssignedRole = $this->userRepository->getUserById($savedUser->getId());
 
         //Then
-        self::assertTrue($retrievedUserWithAssignedRole->hasRole($roleToTest));
+        self::assertTrue($this->userRepository->hasRole($retrievedUserWithAssignedRole, $roleToTest));
     }
 }

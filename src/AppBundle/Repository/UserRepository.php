@@ -43,7 +43,26 @@ class UserRepository
 
     public function assignRoleToUser(AppUser $user, AppRole $role)
     {
+        $role = $this->getReferenceRole($role);
         $user->assignRole($role);
         $this->save($user);
+    }
+
+    public function hasRole(AppUser $user, AppRole $role)
+    {
+        $role = $this->getReferenceRole($role);
+        return $user->hasRole($role);
+    }
+
+    /**
+     * @param AppRole $role
+     * @return AppRole
+     */
+    protected function getReferenceRole(AppRole $role)
+    {
+        /** @var AppRole $role */
+        $role = $this->em->getReference(AppRole::class, $role->getId());
+
+        return $role;
     }
 }

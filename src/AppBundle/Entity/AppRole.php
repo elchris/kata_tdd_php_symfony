@@ -42,4 +42,9 @@ class AppRole
     {
         return new self(2, 'Passenger');
     }
+
+    public function getId()
+    {
+        return $this->id;
+    }
 }
