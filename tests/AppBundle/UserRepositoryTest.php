@@ -78,8 +78,8 @@ class UserRepositoryTest extends AppTestCase
         $savedUser = $this->getSavedUser();
 
         //When
-        $savedUser->assignRole($roleToTest);
-        $this->userRepository->save($savedUser);
+
+        $this->userRepository->assignRoleToUser($savedUser, $roleToTest);
         $retrievedUserWithAssignedRole = $this->userRepository->getUserById($savedUser->getId());
 
         //Then

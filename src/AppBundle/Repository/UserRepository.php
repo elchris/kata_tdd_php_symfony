@@ -3,6 +3,7 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -38,5 +39,11 @@ class UserRepository
         )
         ->setParameter('userId', $userId)
         ->getSingleResult();
+    }
+
+    public function assignRoleToUser(AppUser $user, AppRole $role)
+    {
+        $user->assignRole($role);
+        $this->save($user);
     }
 }
