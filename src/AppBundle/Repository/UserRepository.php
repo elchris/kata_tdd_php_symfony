@@ -62,7 +62,7 @@ class UserRepository
      * @param AppRole $role
      * @return AppRole
      */
-    protected function getReferenceRole(AppRole $role)
+    private function getReferenceRole(AppRole $role)
     {
         /** @var AppRole $role */
         $role = $this->em->getReference(AppRole::class, $role->getId());

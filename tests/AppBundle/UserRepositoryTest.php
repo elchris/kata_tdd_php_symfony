@@ -24,6 +24,8 @@ class UserRepositoryTest extends AppTestCase
     {
         parent::setUp();
 
+        $this->userRepository = new UserRepository($this->em());
+
         $this->editoriallySavedDriverRole = AppRole::driver();
         $this->editoriallySavedPassengerRole = AppRole::passenger();
         $this->save($this->editoriallySavedDriverRole);
@@ -88,8 +90,6 @@ class UserRepositoryTest extends AppTestCase
     protected function getSavedUser()
     {
         $newUser = new AppUser('chris', 'holland');
-
-        $this->userRepository = new UserRepository($this->em());
 
         $this->userRepository->save($newUser);
 
