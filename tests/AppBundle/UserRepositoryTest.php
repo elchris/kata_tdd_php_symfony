@@ -5,6 +5,7 @@ namespace AppBundle;
 
 use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
+use AppBundle\Exception\DuplicateRoleAssignmentException;
 use AppBundle\Repository\UserRepository;
 use Tests\AppBundle\AppTestCase;
 
@@ -58,6 +59,27 @@ class UserRepositoryTest extends AppTestCase
     public function testAssignUnattachedRoleToUser()
     {
         $this->assertAssignedRoleToUser(AppRole::driver());
+    }
+
+    public function testUserIsBothDriverAndPassenger()
+    {
+        $user = $this->getSavedUser();
+
+        $this->userRepository->assignRoleToUser($user, AppRole::driver());
+        $this->userRepository->assignRoleToUser($user, AppRole::passenger());
+
+        self::assertTrue($this->userRepository->hasRole($user, AppRole::driver()));
+        self::assertTrue($this->userRepository->hasRole($user, AppRole::passenger()));
+    }
+
+    public function testSettingDuplicateRoleThrowsException()
+    {
+        $user = $this->getSavedUser();
+
+        $this->userRepository->assignRoleToUser($user, AppRole::driver());
+        $this->expectException(DuplicateRoleAssignmentException::class);
+
+        $this->userRepository->assignRoleToUser($user, AppRole::driver());
     }
 
     /**
