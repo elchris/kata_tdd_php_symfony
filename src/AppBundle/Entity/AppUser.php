@@ -70,4 +70,14 @@ class AppUser
     {
         return $this->roles->contains($role);
     }
+
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
 }
