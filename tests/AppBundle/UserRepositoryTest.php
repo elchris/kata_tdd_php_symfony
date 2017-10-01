@@ -46,6 +46,19 @@ class UserRepositoryTest extends AppTestCase
         $this->assertUserHasExpectedRole(AppRole::passenger());
     }
 
+    public function testUserCanHaveBothRoles()
+    {
+        $savedUser = $this->getSavedUser();
+
+        $this->userRepository->assignRoleToUser($savedUser, AppRole::driver());
+        $this->userRepository->assignRoleToUser($savedUser, AppRole::passenger());
+
+        $retrievedUser = $this->userRepository->getUserById($savedUser->getId());
+
+        self::assertTrue($this->userRepository->userHasRole($retrievedUser, AppRole::driver()));
+        self::assertTrue($this->userRepository->userHasRole($retrievedUser, AppRole::passenger()));
+    }
+
     /**
      * @return AppUser
      */
