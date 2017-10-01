@@ -4,6 +4,7 @@ namespace AppBundle\Repository;
 
 use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
+use AppBundle\Exception\DuplicateRoleAssignmentException;
 use Doctrine\ORM\EntityManagerInterface;
 
 class UserRepository
@@ -43,6 +44,9 @@ class UserRepository
 
     public function assignRoleToUser(AppUser $user, AppRole $role)
     {
+        if ($this->userHasRole($user, $role)) {
+            throw new DuplicateRoleAssignmentException();
+        }
         $role = $this->getRoleReference($role);
         $user->addRole($role);
         $this->save($user);
