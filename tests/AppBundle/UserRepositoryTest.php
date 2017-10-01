@@ -38,12 +38,12 @@ class UserRepositoryTest extends AppTestCase
 
     public function testAssignDriverRoleToUser()
     {
-        $savedUser = $this->getSavedUser();
+        $this->assertUserHasExpectedRole(AppRole::driver());
+    }
 
-        $this->userRepository->assignRoleToUser($savedUser, AppRole::driver());
-        $retrievedUser = $this->userRepository->getUserById($savedUser->getId());
-
-        self::assertTrue($this->userRepository->userHasRole($retrievedUser, AppRole::driver()));
+    public function testAssignPassengerRoleToUser()
+    {
+        $this->assertUserHasExpectedRole(AppRole::passenger());
     }
 
     /**
@@ -56,5 +56,18 @@ class UserRepositoryTest extends AppTestCase
         $this->userRepository->save($user);
 
         return $user;
+    }
+
+    /**
+     * @param $role
+     */
+    private function assertUserHasExpectedRole($role)
+    {
+        $savedUser = $this->getSavedUser();
+
+        $this->userRepository->assignRoleToUser($savedUser, $role);
+        $retrievedUser = $this->userRepository->getUserById($savedUser->getId());
+
+        self::assertTrue($this->userRepository->userHasRole($retrievedUser, $role));
     }
 }
