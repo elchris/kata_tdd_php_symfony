@@ -80,10 +80,7 @@ class UserRepositoryTest extends AppTestCase
         return $user;
     }
 
-    /**
-     * @param $role
-     */
-    private function assertUserHasExpectedRole($role)
+    private function assertUserHasExpectedRole(AppRole $role)
     {
         $savedUser = $this->getSavedUser();
 
