@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -34,6 +35,17 @@ class AppUser
     private $id;
 
     /**
+     * @var ArrayCollection $roles
+     * @ORM\ManyToMany(targetEntity="AppRole")
+     * @ORM\JoinTable(
+     *     name="users_roles",
+     *     joinColumns={@ORM\JoinColumn(name="userId", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="roleId", referencedColumnName="id")}
+     * )
+     */
+    private $roles;
+
+    /**
      * AppUser constructor.
      * @param string $firstName
      * @param string $lastName
@@ -42,10 +54,21 @@ class AppUser
     {
         $this->firstName = $firstName;
         $this->lastName = $lastName;
+        $this->roles = new ArrayCollection();
     }
 
     public function getId()
     {
         return $this->id;
+    }
+
+    public function addRole(AppRole $role)
+    {
+        $this->roles->add($role);
+    }
+
+    public function hasRole(AppRole $role)
+    {
+        return $this->roles->contains($role);
     }
 }

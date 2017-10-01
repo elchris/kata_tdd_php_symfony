@@ -2,6 +2,7 @@
 
 namespace Tests\AppBundle;
 
+use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
 use AppBundle\Repository\UserRepository;
 
@@ -15,6 +16,8 @@ class UserRepositoryTest extends AppTestCase
     {
         parent::setUp();
         $this->userRepository = new UserRepository($this->em());
+
+        $this->save(AppRole::driver());
     }
 
     public function testCreateAndSaveNewUser()
@@ -31,6 +34,16 @@ class UserRepositoryTest extends AppTestCase
         $retrievedUser = $this->userRepository->getUserById(1);
 
         self::assertSame($savedUser->getId(), $retrievedUser->getId());
+    }
+
+    public function testAssignDriverRoleToUser()
+    {
+        $savedUser = $this->getSavedUser();
+
+        $this->userRepository->assignRoleToUser($savedUser, AppRole::driver());
+        $retrievedUser = $this->userRepository->getUserById($savedUser->getId());
+
+        self::assertTrue($this->userRepository->userHasRole($retrievedUser, AppRole::driver()));
     }
 
     /**

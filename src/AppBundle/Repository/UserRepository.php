@@ -2,6 +2,7 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -38,5 +39,30 @@ class UserRepository
         )
         ->setParameter('userId', $userId)
         ->getSingleResult();
+    }
+
+    public function assignRoleToUser(AppUser $user, AppRole $role)
+    {
+        $role = $this->getRoleReference($role);
+        $user->addRole($role);
+        $this->save($user);
+    }
+
+    public function userHasRole(AppUser $user, AppRole $role)
+    {
+        $role = $this->getRoleReference($role);
+        return $user->hasRole($role);
+    }
+
+    /**
+     * @param AppRole $role
+     * @return AppRole
+     */
+    private function getRoleReference(AppRole $role)
+    {
+        /** @var AppRole $role */
+        $role = $this->em->getReference(AppRole::class, $role->getId());
+
+        return $role;
     }
 }
