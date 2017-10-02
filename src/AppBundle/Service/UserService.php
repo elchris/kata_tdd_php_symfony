@@ -46,4 +46,14 @@ class UserService
     {
         return $this->userRepository->userHasRole($user, AppRole::driver());
     }
+
+    public function makeUserPassenger(AppUser $user)
+    {
+        $this->userRepository->assignRoleToUser($user, AppRole::passenger());
+    }
+
+    public function isPassenger(AppUser $user)
+    {
+        return $this->userRepository->userHasRole($user, AppRole::passenger());
+    }
 }
