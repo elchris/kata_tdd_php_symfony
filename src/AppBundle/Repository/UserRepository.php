@@ -5,30 +5,9 @@ namespace AppBundle\Repository;
 use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
 use AppBundle\Exception\DuplicateRoleAssignmentException;
-use Doctrine\ORM\EntityManagerInterface;
 
-class UserRepository
+class UserRepository extends AppRepository
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
-
-    /**
-     * UserRepository constructor.
-     * @param EntityManagerInterface $em
-     */
-    public function __construct(EntityManagerInterface $em)
-    {
-        $this->em = $em;
-    }
-
-    public function save(AppUser $user)
-    {
-        $this->em->persist($user);
-        $this->em->flush();
-    }
-
     /**
      * @param $userId
      * @return AppUser
