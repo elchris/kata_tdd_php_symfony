@@ -17,7 +17,7 @@ class UserService
      * UserService constructor.
      * @param UserRepository $userRepository
      */
-    public function __construct($userRepository)
+    public function __construct(UserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
     }

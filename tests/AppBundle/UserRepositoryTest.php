@@ -63,7 +63,7 @@ class UserRepositoryTest extends AppTestCase
         $savedUser = $this->getSavedUser();
 
         $this->userRepository->assignRoleToUser($savedUser, AppRole::driver());
-        self::expectException(DuplicateRoleAssignmentException::class);
+        $this->expectException(DuplicateRoleAssignmentException::class);
 
         $this->userRepository->assignRoleToUser($savedUser, AppRole::driver());
     }
