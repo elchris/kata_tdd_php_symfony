@@ -47,4 +47,14 @@ class AppLocation
     {
         return $this->id;
     }
+
+    public function getLat()
+    {
+        return $this->lat;
+    }
+
+    public function getLong()
+    {
+        return $this->long;
+    }
 }

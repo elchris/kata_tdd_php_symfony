@@ -12,13 +12,39 @@ class LocationRepositoryTest extends AppTestCase
          * work: 37.7721718,-122.4310872
          */
 
+    public function setUp()
+    {
+        parent::setUp();
+        $this->locationRepository = new LocationRepository($this->em());
+    }
+
     /** @var  LocationRepository */
     private $locationRepository;
 
     public function testCreateLocation()
     {
-        $this->locationRepository = new LocationRepository($this->em());
+        $homeLocation = $this->getSavedLocation();
 
+        self::assertGreaterThan(0, $homeLocation->getId());
+    }
+
+    public function testGetExistingLocationByLatLong()
+    {
+        $savedLocation = $this->getSavedLocation();
+
+        $lookupLocation = new AppLocation(37.773160, -122.432444);
+
+        $retrievedLocation = $this->locationRepository->getLocation($lookupLocation);
+
+        self::assertSame($savedLocation->getLat(), $retrievedLocation->getLat());
+        self::assertSame($savedLocation->getLong(), $retrievedLocation->getLong());
+    }
+
+    /**
+     * @return AppLocation
+     */
+    private function getSavedLocation()
+    {
         $homeLocation = new AppLocation(
             37.773160,
             -122.432444
@@ -26,6 +52,7 @@ class LocationRepositoryTest extends AppTestCase
 
         $this->locationRepository->save($homeLocation);
 
-        self::assertGreaterThan(0, $homeLocation->getId());
+        return $homeLocation;
     }
+
 }
