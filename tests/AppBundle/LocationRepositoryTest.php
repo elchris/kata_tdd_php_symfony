@@ -41,7 +41,7 @@ class LocationRepositoryTest extends AppTestCase
     public function testCreateAndGetNewLocation()
     {
         $this->getSavedLocation();
-        $workLocation = new AppLocation(37.7721718, -122.4310872);
+        $workLocation = new AppLocation(self::WORK_LOCATION_LAT, self::WORK_LOCATION_LONG);
 
         $retrievedLocation = $this->locationRepository->getLocation($workLocation);
 
@@ -54,8 +54,8 @@ class LocationRepositoryTest extends AppTestCase
     private function getSavedLocation()
     {
         $homeLocation = new AppLocation(
-            37.773160,
-            -122.432444
+            self::HOME_LOCATION_LAT,
+            self::HOME_LOCATION_LONG
         );
 
         $this->locationRepository->save($homeLocation);
