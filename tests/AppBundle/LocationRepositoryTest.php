@@ -31,25 +31,21 @@ class LocationRepositoryTest extends AppTestCase
     public function testGetExistingLocationByLatLong()
     {
         $savedLocation = $this->getSavedLocation();
-
-        $lookupLocation = new AppLocation(37.773160, -122.432444);
+        $lookupLocation = new AppLocation($savedLocation->getLat(), $savedLocation->getLong());
 
         $retrievedLocation = $this->locationRepository->getLocation($lookupLocation);
 
-        self::assertSame($savedLocation->getLat(), $retrievedLocation->getLat());
-        self::assertSame($savedLocation->getLong(), $retrievedLocation->getLong());
+        self::assertTrue($retrievedLocation->equals($savedLocation));
     }
 
     public function testCreateAndGetNewLocation()
     {
-        $homeLocation = $this->getSavedLocation();
-
+        $this->getSavedLocation();
         $workLocation = new AppLocation(37.7721718, -122.4310872);
 
         $retrievedLocation = $this->locationRepository->getLocation($workLocation);
 
-        self::assertSame($workLocation->getLat(), $retrievedLocation->getLat());
-        self::assertSame($workLocation->getLong(), $retrievedLocation->getLong());
+        self::assertTrue($retrievedLocation->equals($workLocation));
     }
 
     /**
