@@ -3,6 +3,7 @@
 namespace AppBundle\Repository;
 
 use AppBundle\Entity\AppLocation;
+use Doctrine\ORM\NoResultException;
 
 class LocationRepository extends AppRepository
 {
@@ -13,13 +14,18 @@ class LocationRepository extends AppRepository
      */
     public function getLocation(AppLocation $lookupLocation)
     {
-       return $this
-               ->em
+        try {
+            return $this
+                ->em
                 ->createQuery(
-                    'select l from E:AppLocation l where l.lat = :lat and l.long = :long'
+                    'SELECT l FROM E:AppLocation l WHERE l.lat = :lat AND l.long = :long'
                 )
                 ->setParameter('lat', $lookupLocation->getLat())
                 ->setParameter('long', $lookupLocation->getLong())
                 ->getSingleResult();
+        } catch (NoResultException $e) {
+            $this->save($lookupLocation);
+            return $this->getLocation($lookupLocation);
+        }
     }
 }

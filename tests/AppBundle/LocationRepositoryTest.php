@@ -40,6 +40,18 @@ class LocationRepositoryTest extends AppTestCase
         self::assertSame($savedLocation->getLong(), $retrievedLocation->getLong());
     }
 
+    public function testCreateAndGetNewLocation()
+    {
+        $homeLocation = $this->getSavedLocation();
+
+        $workLocation = new AppLocation(37.7721718, -122.4310872);
+
+        $retrievedLocation = $this->locationRepository->getLocation($workLocation);
+
+        self::assertSame($workLocation->getLat(), $retrievedLocation->getLat());
+        self::assertSame($workLocation->getLong(), $retrievedLocation->getLong());
+    }
+
     /**
      * @return AppLocation
      */
