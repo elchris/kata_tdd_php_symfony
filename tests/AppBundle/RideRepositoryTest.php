@@ -2,6 +2,7 @@
 
 namespace Tests\AppBundle;
 
+use AppBundle\Entity\AppLocation;
 use AppBundle\Entity\Ride;
 use AppBundle\Repository\RideRepository;
 
@@ -32,6 +33,40 @@ class RideRepositoryTest extends AppTestCase
 
     public function testCreateRideWithDepartureAndPassenger()
     {
+        $ride = $this->getSavedRide();
+
+        $this->rideRepository->save($ride);
+
+        self::assertGreaterThan(0, $ride->getId());
+    }
+
+    public function testAssignDestinationToRide()
+    {
+        $ride = $this->getSavedRide();
+
+        $destinationWork = $this->locationService->getLocation(
+          self::WORK_LOCATION_LAT,
+          self::WORK_LOCATION_LONG
+        );
+
+        $this->rideRepository->assignDestinationToRide(
+            $ride,
+            $destinationWork
+        );
+
+        /** @var Ride $retrievedRide */
+        $retrievedRide = $this->rideRepository->getRideById($ride->getId());
+
+        self::assertTrue(
+            $retrievedRide->getDestination()->equals($destinationWork)
+        );
+    }
+
+    /**
+     * @return Ride
+     */
+    private function getSavedRide()
+    {
         $user = $this->getSavedUser();
         $this->userService->makeUserPassenger($user);
 
@@ -44,8 +79,6 @@ class RideRepositoryTest extends AppTestCase
 
         $ride = new Ride($passenger, $departure);
 
-        $this->rideRepository->save($ride);
-
-        self::assertGreaterThan(0, $ride->getId());
+        return $ride;
     }
 }

@@ -28,6 +28,13 @@ class Ride
     private $departure;
 
     /**
+     * @var AppLocation
+     * @ORM\ManyToOne(targetEntity="AppLocation", fetch="EAGER")
+     * @ORM\JoinColumn(name="destinationId", referencedColumnName="id")
+     */
+    private $destination;
+
+    /**
      * @var int $id
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -49,5 +56,15 @@ class Ride
     public function getId()
     {
         return $this->id;
+    }
+
+    public function setDestination(AppLocation $destination)
+    {
+        $this->destination = $destination;
+    }
+
+    public function getDestination()
+    {
+        return $this->destination;
     }
 }
