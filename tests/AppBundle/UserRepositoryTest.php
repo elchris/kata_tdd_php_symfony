@@ -3,9 +3,7 @@
 namespace Tests\AppBundle;
 
 use AppBundle\Entity\AppRole;
-use AppBundle\Entity\AppUser;
 use AppBundle\Exception\DuplicateRoleAssignmentException;
-use AppBundle\Repository\UserRepository;
 
 class UserRepositoryTest extends AppTestCase
 {
