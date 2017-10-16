@@ -9,14 +9,9 @@ use AppBundle\Repository\UserRepository;
 
 class UserRepositoryTest extends AppTestCase
 {
-
-    /** @var  UserRepository */
-    private $userRepository;
-
     public function setUp()
     {
         parent::setUp();
-        $this->userRepository = new UserRepository($this->em());
     }
 
     public function testCreateAndSaveNewUser()
@@ -66,18 +61,6 @@ class UserRepositoryTest extends AppTestCase
         $this->expectException(DuplicateRoleAssignmentException::class);
 
         $this->userRepository->assignRoleToUser($savedUser, AppRole::driver());
-    }
-
-    /**
-     * @return AppUser
-     */
-    private function getSavedUser()
-    {
-        $user = new AppUser('chris', 'holland');
-
-        $this->userRepository->save($user);
-
-        return $user;
     }
 
     private function assertUserHasExpectedRole(AppRole $role)

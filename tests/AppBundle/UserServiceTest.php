@@ -9,13 +9,9 @@ use Tests\AppBundle\AppTestCase;
 
 class UserServiceTest extends AppTestCase
 {
-    /** @var  UserService */
-    private $userService;
-
     public function setUp()
     {
         parent::setUp();
-        $this->userService = new UserService(new UserRepository($this->em()));
     }
 
     /**
@@ -27,7 +23,7 @@ class UserServiceTest extends AppTestCase
 
     public function testRegisterNewUser()
     {
-        $user = $this->getSavedUser();
+        $user = $this->getSavedUserFromName();
 
         self::assertSame('chris', $user->getFirstName());
         self::assertSame('holland', $user->getLastName());
@@ -35,7 +31,7 @@ class UserServiceTest extends AppTestCase
 
     public function testMakeUserDriver()
     {
-        $savedUser = $this->getSavedUser();
+        $savedUser = $this->getSavedUserFromName();
 
         $this->userService->makeUserDriver($savedUser);
         $retrievedUser = $this->userService->getUserById(1);
@@ -45,7 +41,7 @@ class UserServiceTest extends AppTestCase
 
     public function testMakeUserPassenger()
     {
-        $savedUser = $this->getSavedUser();
+        $savedUser = $this->getSavedUserFromName();
 
         $this->userService->makeUserPassenger($savedUser);
         $retrievedUser = $this->userService->getUserById(1);
@@ -56,7 +52,7 @@ class UserServiceTest extends AppTestCase
     /**
      * @return AppUser
      */
-    private function getSavedUser()
+    private function getSavedUserFromName()
     {
         $this->userService->newUser('chris', 'holland');
 
