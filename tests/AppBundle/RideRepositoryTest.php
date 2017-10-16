@@ -2,7 +2,6 @@
 
 namespace Tests\AppBundle;
 
-use AppBundle\Entity\AppLocation;
 use AppBundle\Entity\Ride;
 use AppBundle\Repository\RideRepository;
 
