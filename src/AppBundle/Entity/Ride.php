@@ -16,9 +16,16 @@ class Ride
     /**
      * @var AppUser
      * @ORM\ManyToOne(targetEntity="AppUser", fetch="EAGER")
-     * @ORM\JoinColumn(name="userId", referencedColumnName="id")
+     * @ORM\JoinColumn(name="passengerId", referencedColumnName="id")
      */
     private $passenger;
+
+    /**
+     * @var AppUser
+     * @ORM\ManyToOne(targetEntity="AppUser", fetch="EAGER")
+     * @ORM\JoinColumn(name="driverId", referencedColumnName="id")
+     */
+    private $driver;
 
     /**
      * @var AppLocation
@@ -66,5 +73,15 @@ class Ride
     public function getDestination()
     {
         return $this->destination;
+    }
+
+    public function setDriver(AppUser $driver)
+    {
+        $this->driver = $driver;
+    }
+
+    public function getDriver()
+    {
+        return $this->driver;
     }
 }

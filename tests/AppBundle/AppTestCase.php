@@ -67,7 +67,12 @@ abstract class AppTestCase extends WebTestCase
      */
     protected function getSavedUser()
     {
-        $user = new AppUser('chris', 'holland');
+        return $this->getSavedUserWithName('chris', 'holland');
+    }
+
+    protected function getSavedUserWithName($first, $last)
+    {
+        $user = new AppUser($first, $last);
 
         $this->userRepository->save($user);
 

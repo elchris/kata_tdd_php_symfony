@@ -3,6 +3,7 @@
 namespace AppBundle\Repository;
 
 use AppBundle\Entity\AppLocation;
+use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
 
 class RideRepository extends AppRepository
@@ -24,5 +25,11 @@ class RideRepository extends AppRepository
         )
         ->setParameter('id', $id)
         ->getSingleResult();
+    }
+
+    public function assignDriverToRide(Ride $ride, AppUser $driver)
+    {
+        $ride->setDriver($driver);
+        $this->save($ride);
     }
 }

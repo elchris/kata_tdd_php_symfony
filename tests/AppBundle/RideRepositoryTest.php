@@ -3,6 +3,7 @@
 namespace Tests\AppBundle;
 
 use AppBundle\Entity\AppLocation;
+use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
 use AppBundle\Repository\RideRepository;
 
@@ -22,6 +23,7 @@ use AppBundle\Repository\RideRepository;
 
 class RideRepositoryTest extends AppTestCase
 {
+    private $destinationWork;
     /** @var  RideRepository */
     private $rideRepository;
 
@@ -29,6 +31,11 @@ class RideRepositoryTest extends AppTestCase
     {
         parent::setUp();
         $this->rideRepository = new RideRepository($this->em());
+
+        $this->destinationWork = $this->locationService->getLocation(
+            self::WORK_LOCATION_LAT,
+            self::WORK_LOCATION_LONG
+        );
     }
 
     public function testCreateRideWithDepartureAndPassenger()
@@ -42,23 +49,27 @@ class RideRepositoryTest extends AppTestCase
 
     public function testAssignDestinationToRide()
     {
-        $ride = $this->getSavedRide();
-
-        $destinationWork = $this->locationService->getLocation(
-          self::WORK_LOCATION_LAT,
-          self::WORK_LOCATION_LONG
-        );
-
-        $this->rideRepository->assignDestinationToRide(
-            $ride,
-            $destinationWork
-        );
-
-        /** @var Ride $retrievedRide */
-        $retrievedRide = $this->rideRepository->getRideById($ride->getId());
+        $retrievedRide = $this->getRideWithDestination();
 
         self::assertTrue(
-            $retrievedRide->getDestination()->equals($destinationWork)
+            $retrievedRide->getDestination()->equals($this->destinationWork)
+        );
+    }
+
+    public function testAssignDriverToRide()
+    {
+        /** @var AppUser $driver */
+        $driver = $this->getSavedUserWithName('Jamie', 'Isaacs');
+
+        $rideWithDestination = $this->getRideWithDestination();
+
+        $this->rideRepository->assignDriverToRide($rideWithDestination, $driver);
+
+        $retrievedRide = $this->rideRepository->getRideById($rideWithDestination->getId());
+
+        self::assertSame(
+            $driver->getLastName(),
+            $retrievedRide->getDriver()->getLastName()
         );
     }
 
@@ -80,5 +91,23 @@ class RideRepositoryTest extends AppTestCase
         $ride = new Ride($passenger, $departure);
 
         return $ride;
+    }
+
+    /**
+     * @return Ride
+     */
+    private function getRideWithDestination()
+    {
+        $ride = $this->getSavedRide();
+
+        $this->rideRepository->assignDestinationToRide(
+            $ride,
+            $this->destinationWork
+        );
+
+        /** @var Ride $retrievedRide */
+        $retrievedRide = $this->rideRepository->getRideById($ride->getId());
+
+        return $retrievedRide;
     }
 }
