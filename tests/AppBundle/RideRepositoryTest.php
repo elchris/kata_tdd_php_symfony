@@ -23,13 +23,10 @@ use AppBundle\Repository\RideRepository;
 class RideRepositoryTest extends AppTestCase
 {
     private $destinationWork;
-    /** @var  RideRepository */
-    private $rideRepository;
 
     public function setUp()
     {
         parent::setUp();
-        $this->rideRepository = new RideRepository($this->em());
 
         $this->destinationWork = $this->locationService->getLocation(
             self::WORK_LOCATION_LAT,
@@ -40,8 +37,6 @@ class RideRepositoryTest extends AppTestCase
     public function testCreateRideWithDepartureAndPassenger()
     {
         $ride = $this->getSavedRide();
-
-        $this->rideRepository->save($ride);
 
         self::assertGreaterThan(0, $ride->getId());
     }
@@ -70,26 +65,6 @@ class RideRepositoryTest extends AppTestCase
             $driver->getLastName(),
             $retrievedRide->getDriver()->getLastName()
         );
-    }
-
-    /**
-     * @return Ride
-     */
-    private function getSavedRide()
-    {
-        $user = $this->getSavedUser();
-        $this->userService->makeUserPassenger($user);
-
-        $passenger = $this->userService->getUserById($user->getId());
-
-        $departure = $this->locationService->getLocation(
-            self::HOME_LOCATION_LAT,
-            self::HOME_LOCATION_LONG
-        );
-
-        $ride = new Ride($passenger, $departure);
-
-        return $ride;
     }
 
     /**

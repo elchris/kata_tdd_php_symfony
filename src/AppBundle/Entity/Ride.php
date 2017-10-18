@@ -84,4 +84,9 @@ class Ride
     {
         return $this->driver;
     }
+
+    public function getPassenger()
+    {
+        return $this->passenger;
+    }
 }

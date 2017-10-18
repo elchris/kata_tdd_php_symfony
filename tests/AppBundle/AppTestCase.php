@@ -4,7 +4,9 @@
 namespace Tests\AppBundle;
 
 use AppBundle\Entity\AppUser;
+use AppBundle\Entity\Ride;
 use AppBundle\Repository\LocationRepository;
+use AppBundle\Repository\RideRepository;
 use AppBundle\Repository\UserRepository;
 use AppBundle\Service\LocationService;
 use AppBundle\Service\UserService;
@@ -32,6 +34,7 @@ abstract class AppTestCase extends WebTestCase
         $this->userRepository = new UserRepository($this->em());
         $this->userService = new UserService(new UserRepository($this->em()));
         $this->locationService = new LocationService(new LocationRepository($this->em()));
+        $this->rideRepository = new RideRepository($this->em());
     }
 
     protected function em()
@@ -62,6 +65,9 @@ abstract class AppTestCase extends WebTestCase
     /** @var  LocationService */
     protected $locationService;
 
+    /** @var  RideRepository */
+    protected $rideRepository;
+
     /**
      * @return AppUser
      */
@@ -77,5 +83,27 @@ abstract class AppTestCase extends WebTestCase
         $this->userRepository->save($user);
 
         return $user;
+    }
+
+    /**
+     * @return Ride
+     */
+    protected function getSavedRide()
+    {
+        $user = $this->getSavedUser();
+        $this->userService->makeUserPassenger($user);
+
+        $passenger = $this->userService->getUserById($user->getId());
+
+        $departure = $this->locationService->getLocation(
+            self::HOME_LOCATION_LAT,
+            self::HOME_LOCATION_LONG
+        );
+
+        $ride = new Ride($passenger, $departure);
+
+        $this->rideRepository->save($ride);
+
+        return $ride;
     }
 }
