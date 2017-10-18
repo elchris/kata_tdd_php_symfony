@@ -67,8 +67,8 @@ class RideEvent
         return $this->id;
     }
 
-    public function is(RideEventType $eventTypeToAssert)
+    public function is(RideEventType $typeToCompare)
     {
-        return $this->type->equals($eventTypeToAssert);
+        return $this->type->equals($typeToCompare);
     }
 }

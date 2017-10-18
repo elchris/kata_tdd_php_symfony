@@ -69,9 +69,9 @@ class RideEventType
         return new self(self::REJECTED_ID, 'Rejected');
     }
 
-    public function equals(RideEventType $eventTypeToAssert)
+    public function equals(RideEventType $typeToCompare)
     {
-        return $this->id === $eventTypeToAssert->getId();
+        return $this->id === $typeToCompare->getId();
     }
 
     private function getId()
