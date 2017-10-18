@@ -4,7 +4,6 @@ namespace Tests\AppBundle;
 
 use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
-use AppBundle\Repository\RideRepository;
 
 /**
  * Class RideRepositoryTest
