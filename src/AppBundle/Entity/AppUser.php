@@ -3,6 +3,8 @@
 namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Expr\Expression;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -69,7 +71,13 @@ class AppUser
 
     public function hasRole(AppRole $role)
     {
-        return $this->roles->contains($role);
+        $hasRoleCriteria =
+        Criteria::create()->andWhere(
+            Criteria::expr()->eq(
+                'id', $role->getId()
+            )
+        );
+        return $this->roles->matching($hasRoleCriteria)->count() > 0;
     }
 
     public function getFirstName()

@@ -23,18 +23,12 @@ class UserRepository extends AppRepository
 
     public function assignRoleToUser(AppUser $user, AppRole $role)
     {
-        if ($this->userHasRole($user, $role)) {
+        if ($user->hasRole($role)) {
             throw new DuplicateRoleAssignmentException();
         }
         $role = $this->getRoleReference($role);
         $user->addRole($role);
         $this->save($user);
-    }
-
-    public function userHasRole(AppUser $user, AppRole $role)
-    {
-        $role = $this->getRoleReference($role);
-        return $user->hasRole($role);
     }
 
     /**

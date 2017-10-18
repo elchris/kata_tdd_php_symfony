@@ -47,8 +47,8 @@ class UserRepositoryTest extends AppTestCase
 
         $retrievedUser = $this->userRepository->getUserById($savedUser->getId());
 
-        self::assertTrue($this->userRepository->userHasRole($retrievedUser, AppRole::driver()));
-        self::assertTrue($this->userRepository->userHasRole($retrievedUser, AppRole::passenger()));
+        self::assertTrue($retrievedUser->hasRole(AppRole::driver()));
+        self::assertTrue($retrievedUser->hasRole(AppRole::passenger()));
     }
 
     public function testDuplicateRoleAssignmentThrows()
@@ -68,6 +68,6 @@ class UserRepositoryTest extends AppTestCase
         $this->userRepository->assignRoleToUser($savedUser, $role);
         $retrievedUser = $this->userRepository->getUserById($savedUser->getId());
 
-        self::assertTrue($this->userRepository->userHasRole($retrievedUser, $role));
+        self::assertTrue($retrievedUser->hasRole($role));
     }
 }

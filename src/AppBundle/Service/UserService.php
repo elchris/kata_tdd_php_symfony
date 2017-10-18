@@ -44,7 +44,7 @@ class UserService
 
     public function isDriver(AppUser $user)
     {
-        return $this->userRepository->userHasRole($user, AppRole::driver());
+        return $user->hasRole(AppRole::driver());
     }
 
     public function makeUserPassenger(AppUser $user)
@@ -54,6 +54,6 @@ class UserService
 
     public function isPassenger(AppUser $user)
     {
-        return $this->userRepository->userHasRole($user, AppRole::passenger());
+        return $user->hasRole(AppRole::passenger());
     }
 }
