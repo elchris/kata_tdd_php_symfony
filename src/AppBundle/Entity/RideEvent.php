@@ -76,4 +76,24 @@ class RideEvent
     {
         return $this->type->isAccepted();
     }
+
+    public function inProgress()
+    {
+        return $this->type->isInProgress();
+    }
+
+    public function isCancelled()
+    {
+        return $this->type->isCancelled();
+    }
+
+    public function isCompleted()
+    {
+        return $this->type->isCompleted();
+    }
+
+    public function isRejected()
+    {
+        return $this->type->isRejected();
+    }
 }

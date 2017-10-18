@@ -15,6 +15,18 @@ class RideEventRepositoryTest extends AppTestCase
     /** @var RideEventType $acceptedType */
     private $acceptedType;
 
+    /** @var RideEventType $inProgressType */
+    private $inProgressType;
+
+    /** @var RideEventType $cancelledType */
+    private $cancelledType;
+
+    /** @var RideEventType $completedType */
+    private $completedType;
+
+    /** @var RideEventType $rejectedType */
+    private $rejectedType;
+
     /** @var Ride $savedRide */
     private $savedRide;
 
@@ -29,8 +41,16 @@ class RideEventRepositoryTest extends AppTestCase
         $this->savedRide = $this->getSavedRide();
         $this->requestedType = RideEventType::requested();
         $this->acceptedType = RideEventType::accepted();
+        $this->inProgressType = RideEventType::inProgress();
+        $this->cancelledType = RideEventType::cancelled();
+        $this->completedType = RideEventType::completed();
+        $this->rejectedType = RideEventType::rejected();
         $this->save($this->requestedType);
         $this->save($this->acceptedType);
+        $this->save($this->inProgressType);
+        $this->save($this->cancelledType);
+        $this->save($this->completedType);
+        $this->save($this->rejectedType);
     }
 
     public function testSaveNewRideEvent()
@@ -53,22 +73,32 @@ class RideEventRepositoryTest extends AppTestCase
 
     public function testRideIsCurrentlyAccepted()
     {
-        $this->getSavedRequestedRideEvent();
-
-        $acceptedEvent = new RideEvent(
-            $this->savedRide,
-            $this->getSavedUserWithName('Jamie', 'Isaacs'),
-            $this->acceptedType
-        );
-
-        $this->rideEventRepository->save($acceptedEvent);
-
-        $lastEventForRide = $this->rideEventRepository->getLastEventForRide(
-            $this->savedRide
-        );
-
-        self::assertFalse($lastEventForRide->isRequested());
+        $lastEventForRide = $this->assertLastEventIsOfType($this->acceptedType);
         self::assertTrue($lastEventForRide->isAccepted());
+    }
+
+    public function testRideIsCurrentlyInProgress()
+    {
+        $lastEventForRide = $this->assertLastEventIsOfType($this->inProgressType);
+        self::assertTrue($lastEventForRide->inProgress());
+    }
+
+    public function testRideIsCurrentlyCancelled()
+    {
+        $lastEventForRide = $this->assertLastEventIsOfType($this->cancelledType);
+        self::assertTrue($lastEventForRide->isCancelled());
+    }
+
+    public function testRideIsCurrentlyCompleted()
+    {
+        $lastEventForRide = $this->assertLastEventIsOfType($this->completedType);
+        self::assertTrue($lastEventForRide->isCompleted());
+    }
+
+    public function testRideIsCurrentlyRejected()
+    {
+        $lastEventForRide = $this->assertLastEventIsOfType($this->rejectedType);
+        self::assertTrue($lastEventForRide->isRejected());
     }
 
     /**
@@ -87,5 +117,30 @@ class RideEventRepositoryTest extends AppTestCase
         $this->rideEventRepository->save($rideEvent);
 
         return $rideEvent;
+    }
+
+    /**
+     * @param RideEventType $eventTypeToAssert
+     * @return RideEvent
+     */
+    private function assertLastEventIsOfType(RideEventType $eventTypeToAssert)
+    {
+        $this->getSavedRequestedRideEvent();
+
+        $acceptedEvent = new RideEvent(
+            $this->savedRide,
+            $this->getSavedUserWithName('Jamie', 'Isaacs'),
+            $eventTypeToAssert
+        );
+
+        $this->rideEventRepository->save($acceptedEvent);
+
+        $lastEventForRide = $this->rideEventRepository->getLastEventForRide(
+            $this->savedRide
+        );
+
+        self::assertFalse($lastEventForRide->isRequested());
+
+        return $lastEventForRide;
     }
 }
