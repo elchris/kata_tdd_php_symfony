@@ -68,37 +68,32 @@ class RideEventRepositoryTest extends AppTestCase
             $this->savedRide
         );
 
-        self::assertTrue($lastEventForRide->isRequested());
+        self::assertTrue($lastEventForRide->is(RideEventType::requested()));
     }
 
     public function testRideIsCurrentlyAccepted()
     {
-        $lastEventForRide = $this->assertLastEventIsOfType($this->acceptedType);
-        self::assertTrue($lastEventForRide->isAccepted());
+        $this->assertLastEventIsOfType($this->acceptedType);
     }
 
     public function testRideIsCurrentlyInProgress()
     {
-        $lastEventForRide = $this->assertLastEventIsOfType($this->inProgressType);
-        self::assertTrue($lastEventForRide->inProgress());
+        $this->assertLastEventIsOfType($this->inProgressType);
     }
 
     public function testRideIsCurrentlyCancelled()
     {
-        $lastEventForRide = $this->assertLastEventIsOfType($this->cancelledType);
-        self::assertTrue($lastEventForRide->isCancelled());
+        $this->assertLastEventIsOfType($this->cancelledType);
     }
 
     public function testRideIsCurrentlyCompleted()
     {
-        $lastEventForRide = $this->assertLastEventIsOfType($this->completedType);
-        self::assertTrue($lastEventForRide->isCompleted());
+        $this->assertLastEventIsOfType($this->completedType);
     }
 
     public function testRideIsCurrentlyRejected()
     {
-        $lastEventForRide = $this->assertLastEventIsOfType($this->rejectedType);
-        self::assertTrue($lastEventForRide->isRejected());
+        $this->assertLastEventIsOfType($this->rejectedType);
     }
 
     /**
@@ -139,7 +134,8 @@ class RideEventRepositoryTest extends AppTestCase
             $this->savedRide
         );
 
-        self::assertFalse($lastEventForRide->isRequested());
+        self::assertFalse($lastEventForRide->is(RideEventType::requested()));
+        self::assertTrue($lastEventForRide->is($eventTypeToAssert));
 
         return $lastEventForRide;
     }

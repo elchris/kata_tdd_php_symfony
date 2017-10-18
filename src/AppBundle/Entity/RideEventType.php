@@ -69,33 +69,13 @@ class RideEventType
         return new self(self::REJECTED_ID, 'Rejected');
     }
 
-    public function isRequested()
+    public function equals(RideEventType $eventTypeToAssert)
     {
-        return $this->id === self::REQUESTED_ID;
+        return $this->id === $eventTypeToAssert->getId();
     }
 
-    public function isAccepted()
+    private function getId()
     {
-        return $this->id === self::ACCEPTED_ID;
-    }
-
-    public function isInProgress()
-    {
-        return $this->id === self::IN_PROGRESS_ID;
-    }
-
-    public function isCancelled()
-    {
-        return $this->id === self::CANCELLED_ID;
-    }
-
-    public function isCompleted()
-    {
-        return $this->id === self::COMPLETED_ID;
-    }
-
-    public function isRejected()
-    {
-        return $this->id === self::REJECTED_ID;
+        return $this->id;
     }
 }

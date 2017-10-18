@@ -67,33 +67,8 @@ class RideEvent
         return $this->id;
     }
 
-    public function isRequested()
+    public function is(RideEventType $eventTypeToAssert)
     {
-        return $this->type->isRequested();
-    }
-
-    public function isAccepted()
-    {
-        return $this->type->isAccepted();
-    }
-
-    public function inProgress()
-    {
-        return $this->type->isInProgress();
-    }
-
-    public function isCancelled()
-    {
-        return $this->type->isCancelled();
-    }
-
-    public function isCompleted()
-    {
-        return $this->type->isCompleted();
-    }
-
-    public function isRejected()
-    {
-        return $this->type->isRejected();
+        return $this->type->equals($eventTypeToAssert);
     }
 }
