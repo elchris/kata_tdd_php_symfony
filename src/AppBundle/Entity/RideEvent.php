@@ -71,4 +71,9 @@ class RideEvent
     {
         return $this->type->isRequested();
     }
+
+    public function isAccepted()
+    {
+        return $this->type->isAccepted();
+    }
 }

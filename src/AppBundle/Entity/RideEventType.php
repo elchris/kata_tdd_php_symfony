@@ -14,6 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class RideEventType
 {
     const REQUESTED_ID = 1;
+    const ACCEPTED_ID = 2;
 
     /**
      * @var int $id
@@ -39,8 +40,18 @@ class RideEventType
         return new self(self::REQUESTED_ID, 'Requested');
     }
 
+    public static function accepted()
+    {
+        return new self(self::ACCEPTED_ID, 'Accepted');
+    }
+
     public function isRequested()
     {
         return $this->id === self::REQUESTED_ID;
+    }
+
+    public function isAccepted()
+    {
+        return $this->id === self::ACCEPTED_ID;
     }
 }

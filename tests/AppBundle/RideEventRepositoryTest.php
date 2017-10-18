@@ -9,8 +9,15 @@ use AppBundle\Repository\RideEventRepository;
 
 class RideEventRepositoryTest extends AppTestCase
 {
+    /** @var RideEventType $requestedType */
+    private $requestedType;
+
+    /** @var RideEventType $acceptedType */
+    private $acceptedType;
+
     /** @var Ride $savedRide */
     private $savedRide;
+
     /** @var  RideEventRepository */
     private $rideEventRepository;
 
@@ -20,6 +27,10 @@ class RideEventRepositoryTest extends AppTestCase
         $this->rideEventRepository = new RideEventRepository($this->em());
 
         $this->savedRide = $this->getSavedRide();
+        $this->requestedType = RideEventType::requested();
+        $this->acceptedType = RideEventType::accepted();
+        $this->save($this->requestedType);
+        $this->save($this->acceptedType);
     }
 
     public function testSaveNewRideEvent()
@@ -40,19 +51,37 @@ class RideEventRepositoryTest extends AppTestCase
         self::assertTrue($lastEventForRide->isRequested());
     }
 
+    public function testRideIsCurrentlyAccepted()
+    {
+        $this->getSavedRequestedRideEvent();
+
+        $acceptedEvent = new RideEvent(
+            $this->savedRide,
+            $this->getSavedUserWithName('Jamie', 'Isaacs'),
+            $this->acceptedType
+        );
+
+        $this->rideEventRepository->save($acceptedEvent);
+
+        $lastEventForRide = $this->rideEventRepository->getLastEventForRide(
+            $this->savedRide
+        );
+
+        self::assertFalse($lastEventForRide->isRequested());
+        self::assertTrue($lastEventForRide->isAccepted());
+    }
+
     /**
      * @return RideEvent
      */
     private function getSavedRequestedRideEvent()
     {
         $actor = $this->savedRide->getPassenger();
-        $type = RideEventType::requested();
-        $this->save($type);
 
         $rideEvent = new RideEvent(
             $this->savedRide,
             $actor,
-            $type
+            $this->requestedType
         );
 
         $this->rideEventRepository->save($rideEvent);
