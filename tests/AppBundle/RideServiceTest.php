@@ -53,6 +53,23 @@ class RideServiceTest extends AppTestCase
         self::assertTrue(RideEventType::requested()->equals($rideStatus));
     }
 
+    public function testAcceptRideByProspectiveDriver()
+    {
+        //verify that the user is a driver role
+        //verify that the ride is in requested status
+        //mark the ride as accepted
+
+        $newRide = $this->getSavedNewRideWithPassengerAndDestination();
+        $driver = $this->getSavedUser();
+        $this->userService->makeUserDriver($driver);
+
+        $acceptedRide = $this->rideService->acceptRide($newRide, $driver);
+        $rideStatus = $this->rideService->getRideStatus($newRide);
+
+        self::assertTrue(RideEventType::accepted()->equals($rideStatus));
+        self::assertSame($driver->getLastName(), $acceptedRide->getDriver()->getLastName());
+    }
+
 
     /**
      * @return Ride

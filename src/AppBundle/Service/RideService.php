@@ -56,4 +56,20 @@ class RideService
         $lastEvent = $this->rideEventRepository->getLastEventForRide($ride);
         return $lastEvent->getStatus();
     }
+
+    public function acceptRide(Ride $ride, AppUser $driver)
+    {
+        $this->rideEventRepository->markRideStatusByActor(
+            $ride,
+            $driver,
+            RideEventType::accepted()
+        );
+
+        $this->rideRepository->assignDriverToRide(
+            $ride,
+            $driver
+        );
+
+        return $ride;
+    }
 }
