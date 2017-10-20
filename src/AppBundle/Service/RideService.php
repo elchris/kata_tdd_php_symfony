@@ -7,6 +7,7 @@ use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
 use AppBundle\Entity\RideEventType;
+use AppBundle\Exception\RideLifeCycleException;
 use AppBundle\Exception\UserNotPassengerException;
 use AppBundle\Repository\RideEventRepository;
 use AppBundle\Repository\RideRepository;
@@ -59,6 +60,12 @@ class RideService
 
     public function acceptRide(Ride $ride, AppUser $driver)
     {
+        if ( ! RideEventType::requested()->equals(
+            $this->getRideStatus($ride)
+        )) {
+            throw new RideLifeCycleException();
+        }
+
         $this->rideEventRepository->markRideStatusByActor(
             $ride,
             $driver,

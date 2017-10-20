@@ -4,6 +4,7 @@ namespace Tests\AppBundle;
 
 use AppBundle\Entity\Ride;
 use AppBundle\Entity\RideEventType;
+use AppBundle\Exception\RideLifeCycleException;
 use AppBundle\Exception\UserNotPassengerException;
 use AppBundle\Service\RideService;
 
@@ -68,6 +69,21 @@ class RideServiceTest extends AppTestCase
 
         self::assertTrue(RideEventType::accepted()->equals($rideStatus));
         self::assertSame($driver->getLastName(), $acceptedRide->getDriver()->getLastName());
+    }
+
+    public function testAcceptingNonRequestedRideThrowsException()
+    {
+        $newRide = $this->getSavedNewRideWithPassengerAndDestination();
+        $winningDriver = $this->getSavedUser();
+        $this->userService->makeUserDriver($winningDriver);
+
+        $losingDriver = $this->getSavedUserWithName('Losing', 'Driver');
+        $this->userService->makeUserDriver($losingDriver);
+
+        $this->rideService->acceptRide($newRide, $winningDriver);
+        $this->expectException(RideLifeCycleException::class);
+
+        $this->rideService->acceptRide($newRide, $losingDriver);
     }
 
 
