@@ -118,13 +118,11 @@ class RideEventRepositoryTest extends AppTestCase
     {
         $this->getSavedRequestedRideEvent();
 
-        $acceptedEvent = new RideEvent(
+        $this->rideEventRepository->save(new RideEvent(
             $this->savedRide,
             $this->getSavedUserWithName('Jamie', 'Isaacs'),
             $eventTypeToAssert
-        );
-
-        $this->rideEventRepository->save($acceptedEvent);
+        ));
 
         $lastEventForRide = $this->rideEventRepository->getLastEventForRide(
             $this->savedRide
