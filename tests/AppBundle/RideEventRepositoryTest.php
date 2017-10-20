@@ -30,13 +30,9 @@ class RideEventRepositoryTest extends AppTestCase
     /** @var Ride $savedRide */
     private $savedRide;
 
-    /** @var  RideEventRepository */
-    private $rideEventRepository;
-
     public function setUp()
     {
         parent::setUp();
-        $this->rideEventRepository = new RideEventRepository($this->em());
 
         $this->savedRide = $this->getSavedRide();
         $this->requestedType = RideEventType::requested();

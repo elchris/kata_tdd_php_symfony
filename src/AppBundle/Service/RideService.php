@@ -1,0 +1,39 @@
+<?php
+
+namespace AppBundle\Service;
+
+use AppBundle\Entity\AppLocation;
+use AppBundle\Entity\AppUser;
+use AppBundle\Entity\Ride;
+use AppBundle\Repository\RideEventRepository;
+use AppBundle\Repository\RideRepository;
+
+class RideService
+{
+    /**
+     * @var RideRepository
+     */
+    private $rideRepository;
+    /**
+     * @var RideEventRepository
+     */
+    private $rideEventRepository;
+
+    /**
+     * RideService constructor.
+     * @param RideRepository $rideRepository
+     * @param RideEventRepository $rideEventRepository
+     */
+    public function __construct(RideRepository $rideRepository, RideEventRepository $rideEventRepository)
+    {
+        $this->rideRepository = $rideRepository;
+        $this->rideEventRepository = $rideEventRepository;
+    }
+
+    public function newRide(AppUser $passenger, AppLocation $departure)
+    {
+        $newRide = new Ride($passenger, $departure);
+        $this->rideRepository->save($newRide);
+        return $newRide;
+    }
+}
