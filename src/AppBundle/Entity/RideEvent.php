@@ -71,4 +71,9 @@ class RideEvent
     {
         return $this->type->equals($typeToCompare);
     }
+
+    public function getStatus()
+    {
+        return $this->type;
+    }
 }

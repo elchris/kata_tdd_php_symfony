@@ -3,6 +3,7 @@
 namespace Tests\AppBundle;
 
 use AppBundle\Entity\Ride;
+use AppBundle\Entity\RideEventType;
 use AppBundle\Exception\UserNotPassengerException;
 use AppBundle\Service\RideService;
 
@@ -22,16 +23,7 @@ class RideServiceTest extends AppTestCase
 
     public function testCreateRide()
     {
-        $passenger = $this->getSavedUser();
-        $this->userService->makeUserPassenger($passenger);
-
-        $departure = $this->getSavedHomeLocation();
-
-        /** @var Ride $newRide */
-        $newRide = $this->rideService->newRide(
-            $passenger,
-            $departure
-        );
+        $newRide = $this->getSavedNewRideWithPassengerAndDestination();
 
         self::assertInstanceOf(Ride::class, $newRide);
         self::assertGreaterThan(0, $newRide->getId());
@@ -51,5 +43,33 @@ class RideServiceTest extends AppTestCase
         $this->expectException(UserNotPassengerException::class);
 
         $this->rideService->newRide($notPassengerUser, $departure);
+    }
+
+    public function testGetRideStatusIsRequestedWhenNew()
+    {
+        $newRide = $this->getSavedNewRideWithPassengerAndDestination();
+        $rideStatus = $this->rideService->getRideStatus($newRide);
+
+        self::assertTrue(RideEventType::requested()->equals($rideStatus));
+    }
+
+
+    /**
+     * @return Ride
+     */
+    protected function getSavedNewRideWithPassengerAndDestination()
+    {
+        $passenger = $this->getSavedUser();
+        $this->userService->makeUserPassenger($passenger);
+
+        $departure = $this->getSavedHomeLocation();
+
+        /** @var Ride $newRide */
+        $newRide = $this->rideService->newRide(
+            $passenger,
+            $departure
+        );
+
+        return $newRide;
     }
 }

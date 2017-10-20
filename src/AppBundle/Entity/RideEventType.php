@@ -74,7 +74,7 @@ class RideEventType
         return $this->id === $typeToCompare->getId();
     }
 
-    private function getId()
+    public function getId()
     {
         return $this->id;
     }

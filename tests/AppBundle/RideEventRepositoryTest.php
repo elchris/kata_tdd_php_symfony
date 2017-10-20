@@ -92,6 +92,23 @@ class RideEventRepositoryTest extends AppTestCase
         $this->assertLastEventIsOfType($this->rejectedType);
     }
 
+    public function testMarkRideAsStatus()
+    {
+        $status = RideEventType::requested();
+        $actor = $this->savedRide->getPassenger();
+
+        $this->rideEventRepository->markRideStatusByActor(
+            $this->savedRide,
+            $actor,
+            $status
+        );
+        $lastEventForRide = $this->rideEventRepository->getLastEventForRide(
+            $this->savedRide
+        );
+
+        self::assertTrue($lastEventForRide->is(RideEventType::requested()));
+    }
+
     /**
      * @return RideEvent
      */
@@ -99,13 +116,11 @@ class RideEventRepositoryTest extends AppTestCase
     {
         $actor = $this->savedRide->getPassenger();
 
-        $rideEvent = new RideEvent(
+        $rideEvent = $this->rideEventRepository->markRideStatusByActor(
             $this->savedRide,
             $actor,
             $this->requestedType
         );
-
-        $this->rideEventRepository->save($rideEvent);
 
         return $rideEvent;
     }

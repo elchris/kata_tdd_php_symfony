@@ -6,6 +6,7 @@ use AppBundle\Entity\AppLocation;
 use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
+use AppBundle\Entity\RideEventType;
 use AppBundle\Exception\UserNotPassengerException;
 use AppBundle\Repository\RideEventRepository;
 use AppBundle\Repository\RideRepository;
@@ -37,8 +38,22 @@ class RideService
         if (!$passenger->hasRole(AppRole::passenger())) {
             throw new UserNotPassengerException();
         }
+
         $newRide = new Ride($passenger, $departure);
         $this->rideRepository->save($newRide);
+
+        $this->rideEventRepository->markRideStatusByActor(
+            $newRide,
+            $newRide->getPassenger(),
+            RideEventType::requested()
+        );
+
         return $newRide;
+    }
+
+    public function getRideStatus(Ride $ride)
+    {
+        $lastEvent = $this->rideEventRepository->getLastEventForRide($ride);
+        return $lastEvent->getStatus();
     }
 }
