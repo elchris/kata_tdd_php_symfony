@@ -8,6 +8,7 @@ use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
 use AppBundle\Entity\RideEventType;
 use AppBundle\Exception\RideLifeCycleException;
+use AppBundle\Exception\UserNotDriverException;
 use AppBundle\Exception\UserNotPassengerException;
 use AppBundle\Repository\RideEventRepository;
 use AppBundle\Repository\RideRepository;
@@ -60,11 +61,8 @@ class RideService
 
     public function acceptRide(Ride $ride, AppUser $driver)
     {
-        if ( ! RideEventType::requested()->equals(
-            $this->getRideStatus($ride)
-        )) {
-            throw new RideLifeCycleException();
-        }
+        $this->validateUserIsDriver($driver);
+        $this->validateRideIsRequested($ride);
 
         $this->rideEventRepository->markRideStatusByActor(
             $ride,
@@ -78,5 +76,29 @@ class RideService
         );
 
         return $ride;
+    }
+
+    /**
+     * @param AppUser $driver
+     * @throws UserNotDriverException
+     */
+    protected function validateUserIsDriver(AppUser $driver)
+    {
+        if (!$driver->hasRole(AppRole::driver())) {
+            throw new UserNotDriverException();
+        }
+    }
+
+    /**
+     * @param Ride $ride
+     * @throws RideLifeCycleException
+     */
+    protected function validateRideIsRequested(Ride $ride)
+    {
+        if (!RideEventType::requested()->equals(
+            $this->getRideStatus($ride)
+        )) {
+            throw new RideLifeCycleException();
+        }
     }
 }
