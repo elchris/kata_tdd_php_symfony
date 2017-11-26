@@ -143,6 +143,16 @@ class RideServiceTest extends AppTestCase
         self::assertTrue(RideEventType::completed()->equals($rideStatus));
     }
 
+    public function testCompletingRideByDriverOtherThanAssignedDriverThrows()
+    {
+        $newDriver = $this->getNewDriver();
+        $rideInProgress= $this->getRideInProgress($newDriver);
+        $rogueDriver = $this->getNewDriverWithName('Rogue', 'Driver');
+
+        $this->expectException(ActingDriverIsNotAssignedDriverException::class);
+        $this->rideService->markRideCompleted($rideInProgress, $rogueDriver);
+    }
+
     /**
      * @return Ride
      */

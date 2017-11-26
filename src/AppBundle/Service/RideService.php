@@ -95,6 +95,8 @@ class RideService
 
     public function markRideCompleted(Ride $rideInProgress, AppUser $driver)
     {
+        $this->validateAttemptingDriverIsAssignedDriver($rideInProgress, $driver);
+
         $this->rideEventRepository->markRideStatusByActor(
             $rideInProgress,
             $driver,
