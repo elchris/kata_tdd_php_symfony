@@ -119,9 +119,7 @@ class RideServiceTest extends AppTestCase
 
     public function testMarkingRideInProgressByNonDriverThrowsException()
     {
-        $newRide = $this->getSavedNewRideWithPassengerAndDestination();
-        $newDriver = $this->getNewDriver();
-        $acceptedRide = $this->rideService->acceptRide($newRide, $newDriver);
+        $acceptedRide = $this->getAcceptedRide();
 
         $nonDriverUser = $this->getSavedUserWithName('Non', 'Driver');
 
@@ -131,9 +129,7 @@ class RideServiceTest extends AppTestCase
 
     public function testMarkingRideInProgressByDriverOtherThanAssignedDriverThrows()
     {
-        $newRide = $this->getSavedNewRideWithPassengerAndDestination();
-        $newDriver = $this->getNewDriver();
-        $acceptedRide = $this->rideService->acceptRide($newRide, $newDriver);
+        $acceptedRide = $this->getAcceptedRide();
 
         $rogueDriverUser = $this->getSavedUserWithName('Rogue', 'Driver');
         $this->userService->makeUserDriver($rogueDriverUser);
@@ -194,5 +190,17 @@ class RideServiceTest extends AppTestCase
         $rideInProgress = $this->rideService->markRideInProgress($acceptedRide, $driver);
 
         return $rideInProgress;
+    }
+
+    /**
+     * @return Ride
+     */
+    protected function getAcceptedRide()
+    {
+        $newDriver = $this->getNewDriver();
+        $newRide = $this->getSavedNewRideWithPassengerAndDestination();
+        $acceptedRide = $this->rideService->acceptRide($newRide, $newDriver);
+
+        return $acceptedRide;
     }
 }
