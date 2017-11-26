@@ -3,6 +3,7 @@
 namespace Tests\AppBundle;
 
 use AppBundle\Entity\Ride;
+use AppBundle\Entity\RideEvent;
 use AppBundle\Entity\RideEventType;
 use AppBundle\Exception\RideLifeCycleException;
 use AppBundle\Exception\UserNotDriverException;
@@ -62,14 +63,13 @@ class RideServiceTest extends AppTestCase
         //mark the ride as accepted
 
         $newRide = $this->getSavedNewRideWithPassengerAndDestination();
-        $driver = $this->getSavedUser();
-        $this->userService->makeUserDriver($driver);
+        $newDriver = $this->getNewDriver();
 
-        $acceptedRide = $this->rideService->acceptRide($newRide, $driver);
+        $acceptedRide = $this->rideService->acceptRide($newRide, $newDriver);
         $rideStatus = $this->rideService->getRideStatus($newRide);
 
         self::assertTrue(RideEventType::accepted()->equals($rideStatus));
-        self::assertTrue($acceptedRide->isDrivenBy($driver));
+        self::assertTrue($acceptedRide->isDrivenBy($newDriver));
     }
 
     public function testAcceptingNonRequestedRideThrowsException()
@@ -98,6 +98,18 @@ class RideServiceTest extends AppTestCase
         $this->rideService->acceptRide($newRide, $attemptingDriver);
     }
 
+    public function testMarkRideInProgressByDriver()
+    {
+        $newRide = $this->getSavedNewRideWithPassengerAndDestination();
+        $newDriver = $this->getNewDriver();
+        $acceptedRide = $this->rideService->acceptRide($newRide, $newDriver);
+
+        $rideInProgress = $this->rideService->markRideInProgress($acceptedRide, $newDriver);
+        $rideStatus = $this->rideService->getRideStatus($rideInProgress);
+
+        self::assertTrue(RideEventType::inProgress()->equals($rideStatus));
+    }
+
 
     /**
      * @return Ride
@@ -116,5 +128,16 @@ class RideServiceTest extends AppTestCase
         );
 
         return $newRide;
+    }
+
+    /**
+     * @return \AppBundle\Entity\AppUser
+     */
+    protected function getNewDriver()
+    {
+        $driver = $this->getSavedUser();
+        $this->userService->makeUserDriver($driver);
+
+        return $driver;
     }
 }

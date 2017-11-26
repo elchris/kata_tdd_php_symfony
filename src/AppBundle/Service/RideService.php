@@ -78,6 +78,16 @@ class RideService
         return $ride;
     }
 
+    public function markRideInProgress(Ride $acceptedRide, AppUser $driver)
+    {
+        $this->rideEventRepository->markRideStatusByActor(
+            $acceptedRide,
+            $driver,
+            RideEventType::inProgress()
+        );
+        return $acceptedRide;
+    }
+
     /**
      * @param AppUser $driver
      * @throws UserNotDriverException
