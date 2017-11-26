@@ -26,6 +26,7 @@ class UserRepositoryTest extends AppTestCase
         $retrievedUser = $this->userRepository->getUserById(1);
 
         self::assertSame($savedUser->getId(), $retrievedUser->getId());
+        self::assertTrue($savedUser->is($retrievedUser));
     }
 
     public function testAssignDriverRoleToUser()
