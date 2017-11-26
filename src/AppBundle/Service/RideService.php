@@ -96,6 +96,7 @@ class RideService
     public function markRideCompleted(Ride $rideInProgress, AppUser $driver)
     {
         $this->validateAttemptingDriverIsAssignedDriver($rideInProgress, $driver);
+        $this->validateRideIsInProgress($rideInProgress);
 
         $this->rideEventRepository->markRideStatusByActor(
             $rideInProgress,
@@ -151,6 +152,17 @@ class RideService
     {
         if (!$acceptedRide->isDrivenBy($driver)) {
             throw new ActingDriverIsNotAssignedDriverException();
+        }
+    }
+
+    /**
+     * @param Ride $rideInProgress
+     * @throws RideLifeCycleException
+     */
+    protected function validateRideIsInProgress(Ride $rideInProgress)
+    {
+        if (!RideEventType::inProgress()->equals($this->getRideStatus($rideInProgress))) {
+            throw new RideLifeCycleException();
         }
     }
 }

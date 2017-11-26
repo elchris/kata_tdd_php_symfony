@@ -153,6 +153,15 @@ class RideServiceTest extends AppTestCase
         $this->rideService->markRideCompleted($rideInProgress, $rogueDriver);
     }
 
+    public function testCompletingRideIfNotInProgressThrowsException()
+    {
+        $newDriver = $this->getNewDriver();
+        $acceptedRide = $this->getAcceptedRideWithDriver($newDriver);
+
+        $this->expectException(RideLifeCycleException::class);
+        $this->rideService->markRideCompleted($acceptedRide, $newDriver);
+    }
+
     /**
      * @return Ride
      */
@@ -207,8 +216,13 @@ class RideServiceTest extends AppTestCase
     protected function getAcceptedRide()
     {
         $newDriver = $this->getNewDriver();
+        return $this->getAcceptedRideWithDriver($newDriver);
+    }
+
+    protected function getAcceptedRideWithDriver(AppUser $driver)
+    {
         $newRide = $this->getSavedNewRideWithPassengerAndDestination();
-        $acceptedRide = $this->rideService->acceptRide($newRide, $newDriver);
+        $acceptedRide = $this->rideService->acceptRide($newRide, $driver);
 
         return $acceptedRide;
     }
