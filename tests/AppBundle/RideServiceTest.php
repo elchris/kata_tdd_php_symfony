@@ -2,8 +2,8 @@
 
 namespace Tests\AppBundle;
 
+use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
-use AppBundle\Entity\RideEvent;
 use AppBundle\Entity\RideEventType;
 use AppBundle\Exception\ActingDriverIsNotAssignedDriverException;
 use AppBundle\Exception\RideLifeCycleException;
@@ -101,11 +101,8 @@ class RideServiceTest extends AppTestCase
 
     public function testMarkRideInProgressByDriver()
     {
-        $newRide = $this->getSavedNewRideWithPassengerAndDestination();
         $newDriver = $this->getNewDriver();
-        $acceptedRide = $this->rideService->acceptRide($newRide, $newDriver);
-
-        $rideInProgress = $this->rideService->markRideInProgress($acceptedRide, $newDriver);
+        $rideInProgress = $this->getRideInProgress($newDriver);
         $rideStatus = $this->rideService->getRideStatus($rideInProgress);
 
         self::assertTrue(RideEventType::inProgress()->equals($rideStatus));
@@ -145,6 +142,17 @@ class RideServiceTest extends AppTestCase
         $this->rideService->markRideInProgress($acceptedRide, $rogueDriverUser);
     }
 
+    public function testMarkRideAsCompletedByDriver()
+    {
+        $newDriver = $this->getNewDriver();
+        $rideInProgress = $this->getRideInProgress($newDriver);
+
+        $completedRide = $this->rideService->markRideCompleted($rideInProgress, $newDriver);
+        $rideStatus = $this->rideService->getRideStatus($completedRide);
+
+        self::assertTrue(RideEventType::completed()->equals($rideStatus));
+    }
+
     /**
      * @return Ride
      */
@@ -173,5 +181,18 @@ class RideServiceTest extends AppTestCase
         $this->userService->makeUserDriver($driver);
 
         return $driver;
+    }
+
+    /**
+     * @return Ride
+     */
+    protected function getRideInProgress(AppUser $driver)
+    {
+        $newRide = $this->getSavedNewRideWithPassengerAndDestination();
+        $acceptedRide = $this->rideService->acceptRide($newRide, $driver);
+
+        $rideInProgress = $this->rideService->markRideInProgress($acceptedRide, $driver);
+
+        return $rideInProgress;
     }
 }
