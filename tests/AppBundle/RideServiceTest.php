@@ -76,11 +76,8 @@ class RideServiceTest extends AppTestCase
     public function testAcceptingNonRequestedRideThrowsException()
     {
         $newRide = $this->getSavedNewRideWithPassengerAndDestination();
-        $winningDriver = $this->getSavedUser();
-        $this->userService->makeUserDriver($winningDriver);
-
-        $losingDriver = $this->getSavedUserWithName('Losing', 'Driver');
-        $this->userService->makeUserDriver($losingDriver);
+        $winningDriver = $this->getNewDriverWithName('Winning', 'Driver');
+        $losingDriver = $this->getNewDriverWithName('Losing', 'Driver');
 
         $this->rideService->acceptRide($newRide, $winningDriver);
         $this->expectException(RideLifeCycleException::class);
@@ -181,6 +178,7 @@ class RideServiceTest extends AppTestCase
     }
 
     /**
+     * @param AppUser $driver
      * @return Ride
      */
     protected function getRideInProgress(AppUser $driver)
