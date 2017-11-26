@@ -5,7 +5,6 @@ namespace Tests\AppBundle;
 use AppBundle\Entity\Ride;
 use AppBundle\Entity\RideEvent;
 use AppBundle\Entity\RideEventType;
-use AppBundle\Repository\RideEventRepository;
 
 class RideEventRepositoryTest extends AppTestCase
 {

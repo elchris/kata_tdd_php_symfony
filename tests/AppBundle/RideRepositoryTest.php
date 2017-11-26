@@ -60,10 +60,7 @@ class RideRepositoryTest extends AppTestCase
 
         $retrievedRide = $this->rideRepository->getRideById($rideWithDestination->getId());
 
-        self::assertSame(
-            $driver->getLastName(),
-            $retrievedRide->getDriver()->getLastName()
-        );
+        self::assertTrue($retrievedRide->isDrivenBy($driver));
     }
 
     /**

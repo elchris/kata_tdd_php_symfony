@@ -73,7 +73,8 @@ class AppUser
         $hasRoleCriteria =
         Criteria::create()->andWhere(
             Criteria::expr()->eq(
-                'id', $role->getId()
+                'id',
+                $role->getId()
             )
         );
         return $this->roles->matching($hasRoleCriteria)->count() > 0;
@@ -87,5 +88,10 @@ class AppUser
     public function getLastName()
     {
         return $this->lastName;
+    }
+
+    public function is(AppUser $userToCompare)
+    {
+        return $this->getId() === $userToCompare->getId();
     }
 }

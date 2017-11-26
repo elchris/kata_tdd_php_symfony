@@ -69,7 +69,7 @@ class RideServiceTest extends AppTestCase
         $rideStatus = $this->rideService->getRideStatus($newRide);
 
         self::assertTrue(RideEventType::accepted()->equals($rideStatus));
-        self::assertSame($driver->getLastName(), $acceptedRide->getDriver()->getLastName());
+        self::assertTrue($acceptedRide->isDrivenBy($driver));
     }
 
     public function testAcceptingNonRequestedRideThrowsException()

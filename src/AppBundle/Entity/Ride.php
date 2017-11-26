@@ -80,13 +80,13 @@ class Ride
         $this->driver = $driver;
     }
 
-    public function getDriver()
-    {
-        return $this->driver;
-    }
-
     public function getPassenger()
     {
         return $this->passenger;
+    }
+
+    public function isDrivenBy(AppUser $driver)
+    {
+        return $this->driver->is($driver);
     }
 }

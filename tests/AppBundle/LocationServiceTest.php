@@ -14,7 +14,10 @@ class LocationServiceTest extends AppTestCase
         );
 
         /** @var AppLocation $retrievedLocation */
-        $retrievedLocation = $this->locationService->getLocation($referenceLocation->getLat(), $referenceLocation->getLong());
+        $retrievedLocation = $this->locationService->getLocation(
+            $referenceLocation->getLat(),
+            $referenceLocation->getLong()
+        );
 
         self::assertTrue($retrievedLocation->equals($referenceLocation));
     }
