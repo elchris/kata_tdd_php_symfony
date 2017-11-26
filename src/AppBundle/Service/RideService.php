@@ -80,6 +80,8 @@ class RideService
 
     public function markRideInProgress(Ride $acceptedRide, AppUser $driver)
     {
+        $this->validateRideIsAccepted($acceptedRide);
+
         $this->rideEventRepository->markRideStatusByActor(
             $acceptedRide,
             $driver,
@@ -107,6 +109,19 @@ class RideService
     {
         if (!RideEventType::requested()->equals(
             $this->getRideStatus($ride)
+        )) {
+            throw new RideLifeCycleException();
+        }
+    }
+
+    /**
+     * @param Ride $acceptedRide
+     * @throws RideLifeCycleException
+     */
+    protected function validateRideIsAccepted(Ride $acceptedRide)
+    {
+        if (!RideEventType::accepted()->equals(
+            $this->getRideStatus($acceptedRide)
         )) {
             throw new RideLifeCycleException();
         }

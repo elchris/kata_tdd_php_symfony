@@ -110,6 +110,14 @@ class RideServiceTest extends AppTestCase
         self::assertTrue(RideEventType::inProgress()->equals($rideStatus));
     }
 
+    public function testMarkingRideInProgressIfNotAcceptedThrowsException()
+    {
+        $newRide = $this->getSavedNewRideWithPassengerAndDestination();
+        $newDriver = $this->getNewDriver();
+
+        $this->expectException(RideLifeCycleException::class);
+        $this->rideService->markRideInProgress($newRide, $newDriver);
+    }
 
     /**
      * @return Ride
