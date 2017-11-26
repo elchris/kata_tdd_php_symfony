@@ -81,6 +81,7 @@ class RideService
     public function markRideInProgress(Ride $acceptedRide, AppUser $driver)
     {
         $this->validateRideIsAccepted($acceptedRide);
+        $this->validateUserIsDriver($driver);
 
         $this->rideEventRepository->markRideStatusByActor(
             $acceptedRide,

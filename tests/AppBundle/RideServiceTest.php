@@ -119,6 +119,17 @@ class RideServiceTest extends AppTestCase
         $this->rideService->markRideInProgress($newRide, $newDriver);
     }
 
+    public function testMarkingRideInProgressByNonDriverThrowsException()
+    {
+        $newRide = $this->getSavedNewRideWithPassengerAndDestination();
+        $newDriver = $this->getNewDriver();
+        $this->rideService->acceptRide($newRide, $newDriver);
+        $nonDriverUser = $this->getSavedUserWithName('Non', 'Driver');
+
+        $this->expectException(UserNotDriverException::class);
+        $this->rideService->markRideInProgress($newRide, $nonDriverUser);
+    }
+
     /**
      * @return Ride
      */
