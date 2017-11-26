@@ -5,8 +5,9 @@ namespace Tests\AppBundle;
 use AppBundle\Entity\Ride;
 use AppBundle\Entity\RideEvent;
 use AppBundle\Entity\RideEventType;
+use AppBundle\Exception\ActingDriverIsNotAssignedDriverException;
 use AppBundle\Exception\RideLifeCycleException;
-use AppBundle\Exception\UserNotDriverException;
+use AppBundle\Exception\UserNotInDriverRoleException;
 use AppBundle\Exception\UserNotPassengerException;
 use AppBundle\Service\RideService;
 
@@ -93,7 +94,7 @@ class RideServiceTest extends AppTestCase
         $attemptingDriver = $this->getSavedUser();
         $this->userService->makeUserPassenger($attemptingDriver);
 
-        $this->expectException(UserNotDriverException::class);
+        $this->expectException(UserNotInDriverRoleException::class);
 
         $this->rideService->acceptRide($newRide, $attemptingDriver);
     }
@@ -123,11 +124,25 @@ class RideServiceTest extends AppTestCase
     {
         $newRide = $this->getSavedNewRideWithPassengerAndDestination();
         $newDriver = $this->getNewDriver();
-        $this->rideService->acceptRide($newRide, $newDriver);
+        $acceptedRide = $this->rideService->acceptRide($newRide, $newDriver);
+
         $nonDriverUser = $this->getSavedUserWithName('Non', 'Driver');
 
-        $this->expectException(UserNotDriverException::class);
-        $this->rideService->markRideInProgress($newRide, $nonDriverUser);
+        $this->expectException(UserNotInDriverRoleException::class);
+        $this->rideService->markRideInProgress($acceptedRide, $nonDriverUser);
+    }
+
+    public function testMarkingRideInProgressByDriverOtherThanAssignedDriverThrows()
+    {
+        $newRide = $this->getSavedNewRideWithPassengerAndDestination();
+        $newDriver = $this->getNewDriver();
+        $acceptedRide = $this->rideService->acceptRide($newRide, $newDriver);
+
+        $rogueDriverUser = $this->getSavedUserWithName('Rogue', 'Driver');
+        $this->userService->makeUserDriver($rogueDriverUser);
+
+        $this->expectException(ActingDriverIsNotAssignedDriverException::class);
+        $this->rideService->markRideInProgress($acceptedRide, $rogueDriverUser);
     }
 
     /**

@@ -7,8 +7,9 @@ use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
 use AppBundle\Entity\RideEventType;
+use AppBundle\Exception\ActingDriverIsNotAssignedDriverException;
 use AppBundle\Exception\RideLifeCycleException;
-use AppBundle\Exception\UserNotDriverException;
+use AppBundle\Exception\UserNotInDriverRoleException;
 use AppBundle\Exception\UserNotPassengerException;
 use AppBundle\Repository\RideEventRepository;
 use AppBundle\Repository\RideRepository;
@@ -61,7 +62,7 @@ class RideService
 
     public function acceptRide(Ride $ride, AppUser $driver)
     {
-        $this->validateUserIsDriver($driver);
+        $this->validateUserHasDriverRole($driver);
         $this->validateRideIsRequested($ride);
 
         $this->rideEventRepository->markRideStatusByActor(
@@ -81,7 +82,8 @@ class RideService
     public function markRideInProgress(Ride $acceptedRide, AppUser $driver)
     {
         $this->validateRideIsAccepted($acceptedRide);
-        $this->validateUserIsDriver($driver);
+        $this->validateUserHasDriverRole($driver);
+        $this->validateAttemptingDriverIsAssignedDriver($acceptedRide, $driver);
 
         $this->rideEventRepository->markRideStatusByActor(
             $acceptedRide,
@@ -93,12 +95,12 @@ class RideService
 
     /**
      * @param AppUser $driver
-     * @throws UserNotDriverException
+     * @throws UserNotInDriverRoleException
      */
-    protected function validateUserIsDriver(AppUser $driver)
+    protected function validateUserHasDriverRole(AppUser $driver)
     {
         if (!$driver->hasRole(AppRole::driver())) {
-            throw new UserNotDriverException();
+            throw new UserNotInDriverRoleException();
         }
     }
 
@@ -125,6 +127,18 @@ class RideService
             $this->getRideStatus($acceptedRide)
         )) {
             throw new RideLifeCycleException();
+        }
+    }
+
+    /**
+     * @param Ride $acceptedRide
+     * @param AppUser $driver
+     * @throws ActingDriverIsNotAssignedDriverException
+     */
+    protected function validateAttemptingDriverIsAssignedDriver(Ride $acceptedRide, AppUser $driver)
+    {
+        if (!$acceptedRide->isDrivenBy($driver)) {
+            throw new ActingDriverIsNotAssignedDriverException();
         }
     }
 }
