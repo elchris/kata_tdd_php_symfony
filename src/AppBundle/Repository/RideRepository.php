@@ -10,7 +10,7 @@ class RideRepository extends AppRepository
 {
     public function assignDestinationToRide(Ride $ride, AppLocation $destination)
     {
-        $ride->setDestination($destination);
+        $ride->assignDestination($destination);
         $this->save($ride);
     }
 
@@ -29,7 +29,7 @@ class RideRepository extends AppRepository
 
     public function assignDriverToRide(Ride $ride, AppUser $driver)
     {
-        $ride->setDriver($driver);
+        $ride->assignDriver($driver);
         $this->save($ride);
     }
 }

@@ -27,7 +27,7 @@ class UserRepository extends AppRepository
             throw new DuplicateRoleAssignmentException();
         }
         $role = $this->getRoleReference($role);
-        $user->addRole($role);
+        $user->assignRole($role);
         $this->save($user);
     }
 

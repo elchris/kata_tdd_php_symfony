@@ -65,17 +65,12 @@ class Ride
         return $this->id;
     }
 
-    public function setDestination(AppLocation $destination)
+    public function assignDestination(AppLocation $destination)
     {
         $this->destination = $destination;
     }
 
-    public function getDestination()
-    {
-        return $this->destination;
-    }
-
-    public function setDriver(AppUser $driver)
+    public function assignDriver(AppUser $driver)
     {
         $this->driver = $driver;
     }
@@ -88,5 +83,10 @@ class Ride
     public function isDrivenBy(AppUser $driver)
     {
         return $this->driver->is($driver);
+    }
+
+    public function isDestinedFor(AppLocation $destinationLocation)
+    {
+        return $this->destination->equals($destinationLocation);
     }
 }

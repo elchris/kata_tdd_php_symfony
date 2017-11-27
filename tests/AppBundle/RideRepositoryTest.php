@@ -44,9 +44,7 @@ class RideRepositoryTest extends AppTestCase
     {
         $retrievedRide = $this->getRideWithDestination();
 
-        self::assertTrue(
-            $retrievedRide->getDestination()->equals($this->destinationWork)
-        );
+        self::assertTrue($retrievedRide->isDestinedFor($this->destinationWork));
     }
 
     public function testAssignDriverToRide()

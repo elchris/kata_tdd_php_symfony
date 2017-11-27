@@ -63,7 +63,7 @@ class AppUser
         return $this->id;
     }
 
-    public function addRole(AppRole $role)
+    public function assignRole(AppRole $role)
     {
         $this->roles->add($role);
     }
