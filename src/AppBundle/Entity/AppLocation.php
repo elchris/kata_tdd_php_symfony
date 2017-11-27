@@ -43,6 +43,11 @@ class AppLocation
         $this->long = $long;
     }
 
+    public static function cloneFrom(AppLocation $savedLocation)
+    {
+        return new self($savedLocation->getLat(), $savedLocation->getLong());
+    }
+
     public function getId()
     {
         return $this->id;

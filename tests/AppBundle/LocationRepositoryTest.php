@@ -31,7 +31,7 @@ class LocationRepositoryTest extends AppTestCase
     public function testGetExistingLocationByLatLong()
     {
         $savedLocation = $this->getSavedLocation();
-        $lookupLocation = new AppLocation($savedLocation->getLat(), $savedLocation->getLong());
+        $lookupLocation = AppLocation::cloneFrom($savedLocation);
 
         $retrievedLocation = $this->locationRepository->getLocation($lookupLocation);
 
