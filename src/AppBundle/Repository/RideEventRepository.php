@@ -29,20 +29,36 @@ class RideEventRepository extends AppRepository
         AppUser $actor,
         RideEventType $status
     ) {
+        $newEvent = new RideEvent(
+            $ride,
+            $actor,
+            $this->getStatusReference($status)
+        );
+
+        $this->save($newEvent);
+
+        return $newEvent;
+    }
+
+    public function markRideStatusByPassenger(Ride $ride, RideEventType $status)
+    {
+        $passengerEvent = $ride->getPassengerTransaction($this->getStatusReference($status));
+        $this->save($passengerEvent);
+        return $passengerEvent;
+    }
+
+    /**
+     * @param RideEventType $status
+     * @return RideEventType
+     */
+    private function getStatusReference(RideEventType $status)
+    {
         /** @var RideEventType $status */
         $status = $this->em->getReference(
             RideEventType::class,
             $status->getId()
         );
 
-        $newEvent = new RideEvent(
-            $ride,
-            $actor,
-            $status
-        );
-
-        $this->save($newEvent);
-
-        return $newEvent;
+        return $status;
     }
 }

@@ -75,11 +75,6 @@ class Ride
         $this->driver = $driver;
     }
 
-    public function getPassenger()
-    {
-        return $this->passenger;
-    }
-
     public function isDrivenBy(AppUser $driver)
     {
         return $this->driver->is($driver);
@@ -88,5 +83,14 @@ class Ride
     public function isDestinedFor(AppLocation $destinationLocation)
     {
         return $this->destination->equals($destinationLocation);
+    }
+
+    public function getPassengerTransaction(RideEventType $status)
+    {
+        return new RideEvent(
+            $this,
+            $this->passenger,
+            $status
+        );
     }
 }

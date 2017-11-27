@@ -3,6 +3,7 @@
 
 namespace Tests\AppBundle;
 
+use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
 use AppBundle\Repository\LocationRepository;
@@ -90,6 +91,9 @@ abstract class AppTestCase extends WebTestCase
         return $user;
     }
 
+    /** @var AppUser $savedPassenger */
+    protected $savedPassenger;
+
     /**
      * @return Ride
      */
@@ -97,15 +101,10 @@ abstract class AppTestCase extends WebTestCase
     {
         $user = $this->getSavedUser();
         $this->userService->makeUserPassenger($user);
-
-        $passenger = $this->userService->getUserById($user->getId());
-
+        $this->savedPassenger = $this->userService->getUserById($user->getId());
         $departure = $this->getSavedHomeLocation();
-
-        $ride = new Ride($passenger, $departure);
-
+        $ride = new Ride($this->savedPassenger, $departure);
         $this->rideRepository->save($ride);
-
         return $ride;
     }
 

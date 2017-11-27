@@ -93,13 +93,10 @@ class RideEventRepositoryTest extends AppTestCase
 
     public function testMarkRideAsStatus()
     {
-        $status = RideEventType::requested();
-        $actor = $this->savedRide->getPassenger();
-
         $this->rideEventRepository->markRideStatusByActor(
             $this->savedRide,
-            $actor,
-            $status
+            $this->savedPassenger,
+            RideEventType::requested()
         );
         $lastEventForRide = $this->rideEventRepository->getLastEventForRide(
             $this->savedRide
@@ -113,11 +110,9 @@ class RideEventRepositoryTest extends AppTestCase
      */
     private function getSavedRequestedRideEvent()
     {
-        $actor = $this->savedRide->getPassenger();
-
         $rideEvent = $this->rideEventRepository->markRideStatusByActor(
             $this->savedRide,
-            $actor,
+            $this->savedPassenger,
             $this->requestedType
         );
 

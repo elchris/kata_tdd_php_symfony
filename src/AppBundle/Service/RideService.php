@@ -45,9 +45,8 @@ class RideService
         $newRide = new Ride($passenger, $departure);
         $this->rideRepository->save($newRide);
 
-        $this->rideEventRepository->markRideStatusByActor(
+        $this->rideEventRepository->markRideStatusByPassenger(
             $newRide,
-            $newRide->getPassenger(),
             RideEventType::requested()
         );
 
