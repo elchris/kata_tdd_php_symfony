@@ -29,10 +29,10 @@ class LocationService
     public function getLocation($lat, $long)
     {
         return $this->locationRepository->getLocation(
-          new AppLocation(
-              $lat,
-              $long
-          )
+            new AppLocation(
+                $lat,
+                $long
+            )
         );
     }
 }

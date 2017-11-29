@@ -3,7 +3,7 @@
 
 namespace Tests\AppBundle;
 
-use AppBundle\Entity\AppRole;
+use AppBundle\Entity\AppLocation;
 use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
 use AppBundle\Repository\LocationRepository;
@@ -74,6 +74,9 @@ abstract class AppTestCase extends WebTestCase
     /** @var  RideEventRepository */
     protected $rideEventRepository;
 
+    /** @var AppUser $savedPassenger */
+    protected $savedPassenger;
+
     /**
      * @return AppUser
      */
@@ -84,24 +87,66 @@ abstract class AppTestCase extends WebTestCase
 
     protected function getSavedUserWithName($first, $last)
     {
-        $user = new AppUser($first, $last);
-
-        $this->userRepository->save($user);
-
-        return $user;
+        return $this->userService->newUser($first, $last);
     }
 
-    /** @var AppUser $savedPassenger */
-    protected $savedPassenger;
+    /**
+     * @return AppUser
+     */
+    protected function getNewPassenger()
+    {
+        $passenger = $this->getSavedUser();
+        $this->makeUserPassenger($passenger);
+        return $passenger;
+    }
+
+    /**
+     * @param $passenger
+     */
+    protected function makeUserPassenger(AppUser $passenger)
+    {
+        $this->userService->makeUserPassenger($passenger);
+    }
+
+    /**
+     * @param $driver
+     */
+    protected function makeUserDriver(AppUser $driver)
+    {
+        $this->userService->makeUserDriver($driver);
+    }
+
+    /**
+     * @param $notPassengerUser
+     * @return bool
+     */
+    protected function isPassenger(AppUser $notPassengerUser)
+    {
+        return $this->userService->isPassenger($notPassengerUser);
+    }
+
+    /**
+     * @return AppUser
+     */
+    protected function getNewDriver()
+    {
+        return $this->getNewDriverWithName('new', 'driver');
+    }
+
+    protected function getNewDriverWithName($first, $last)
+    {
+        $driver = $this->getSavedUserWithName($first, $last);
+        $this->makeUserDriver($driver);
+        return $driver;
+    }
 
     /**
      * @return Ride
      */
     protected function getSavedRide()
     {
-        $user = $this->getSavedUser();
-        $this->userService->makeUserPassenger($user);
-        $this->savedPassenger = $this->userService->getUserById($user->getId());
+        $ridePassenger = $this->getNewPassenger();
+        $this->savedPassenger = $this->getUserById($ridePassenger);
         $departure = $this->getSavedHomeLocation();
         $ride = new Ride($this->savedPassenger, $departure);
         $this->rideRepository->save($ride);
@@ -109,15 +154,22 @@ abstract class AppTestCase extends WebTestCase
     }
 
     /**
-     * @return \AppBundle\Entity\AppLocation
+     * @return AppLocation
      */
     protected function getSavedHomeLocation()
     {
-        $departure = $this->locationService->getLocation(
+        return $this->locationService->getLocation(
             self::HOME_LOCATION_LAT,
             self::HOME_LOCATION_LONG
         );
+    }
 
-        return $departure;
+    /**
+     * @param $userId
+     * @return AppUser
+     */
+    protected function getUserById($userId)
+    {
+        return $this->userService->getUserById($userId);
     }
 }

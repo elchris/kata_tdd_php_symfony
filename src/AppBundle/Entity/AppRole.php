@@ -13,7 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class AppRole
 {
-
     /**
      * @var integer $id
      * @ORM\Id()

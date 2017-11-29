@@ -26,6 +26,7 @@ class UserService
     {
         $newUser = new AppUser($firstName, $lastName);
         $this->userRepository->save($newUser);
+        return $newUser;
     }
 
     /**

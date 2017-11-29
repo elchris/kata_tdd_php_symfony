@@ -109,7 +109,7 @@ class RideService
      * @param AppUser $driver
      * @throws UserNotInDriverRoleException
      */
-    protected function validateUserHasDriverRole(AppUser $driver)
+    private function validateUserHasDriverRole(AppUser $driver)
     {
         if (!$driver->hasRole(AppRole::driver())) {
             throw new UserNotInDriverRoleException();
@@ -120,7 +120,7 @@ class RideService
      * @param Ride $ride
      * @throws RideLifeCycleException
      */
-    protected function validateRideIsRequested(Ride $ride)
+    private function validateRideIsRequested(Ride $ride)
     {
         if (!RideEventType::requested()->equals(
             $this->getRideStatus($ride)
@@ -133,7 +133,7 @@ class RideService
      * @param Ride $acceptedRide
      * @throws RideLifeCycleException
      */
-    protected function validateRideIsAccepted(Ride $acceptedRide)
+    private function validateRideIsAccepted(Ride $acceptedRide)
     {
         if (!RideEventType::accepted()->equals(
             $this->getRideStatus($acceptedRide)
@@ -147,7 +147,7 @@ class RideService
      * @param AppUser $driver
      * @throws ActingDriverIsNotAssignedDriverException
      */
-    protected function validateAttemptingDriverIsAssignedDriver(Ride $acceptedRide, AppUser $driver)
+    private function validateAttemptingDriverIsAssignedDriver(Ride $acceptedRide, AppUser $driver)
     {
         if (!$acceptedRide->isDrivenBy($driver)) {
             throw new ActingDriverIsNotAssignedDriverException();
@@ -158,7 +158,7 @@ class RideService
      * @param Ride $rideInProgress
      * @throws RideLifeCycleException
      */
-    protected function validateRideIsInProgress(Ride $rideInProgress)
+    private function validateRideIsInProgress(Ride $rideInProgress)
     {
         if (!RideEventType::inProgress()->equals($this->getRideStatus($rideInProgress))) {
             throw new RideLifeCycleException();
