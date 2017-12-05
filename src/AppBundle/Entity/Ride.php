@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Uuid;
 
 /**
  * Class Ride
@@ -42,10 +43,9 @@ class Ride
     private $destination;
 
     /**
-     * @var int $id
+     * @var Uuid $id
      * @ORM\Id()
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Column(name="id", type="guid", nullable=false)
      */
     private $id;
 
@@ -56,6 +56,7 @@ class Ride
      */
     public function __construct(AppUser $passenger, AppLocation $departure)
     {
+        $this->id = Uuid::uuid4();
         $this->passenger = $passenger;
         $this->departure = $departure;
     }

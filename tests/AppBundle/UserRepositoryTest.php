@@ -16,14 +16,14 @@ class UserRepositoryTest extends AppTestCase
     {
         $user = $this->getSavedUser();
 
-        self::assertGreaterThan(0, $user->getId());
+        self::assertNotEmpty($user->getId());
     }
 
     public function testGetUserById()
     {
         $savedUser = $this->getSavedUser();
 
-        $retrievedUser = $this->userRepository->getUserById(1);
+        $retrievedUser = $this->userRepository->getUserById($savedUser->getId());
 
         self::assertSame($savedUser->getId(), $retrievedUser->getId());
         self::assertTrue($savedUser->is($retrievedUser));

@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Uuid;
 
 /**
  * Class AppUser
@@ -28,10 +29,9 @@ class AppUser
     private $lastName;
 
     /**
-     * @var int $id
+     * @var Uuid $id
      * @ORM\Id()
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Column(name="id", type="guid", nullable=false)
      */
     private $id;
 
@@ -53,6 +53,7 @@ class AppUser
      */
     public function __construct($firstName, $lastName)
     {
+        $this->id = Uuid::uuid4();
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->roles = new ArrayCollection();

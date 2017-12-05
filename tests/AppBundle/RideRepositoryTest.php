@@ -37,7 +37,7 @@ class RideRepositoryTest extends AppTestCase
     {
         $ride = $this->getSavedRide();
 
-        self::assertGreaterThan(0, $ride->getId());
+        self::assertNotEmpty($ride->getId());
     }
 
     public function testAssignDestinationToRide()

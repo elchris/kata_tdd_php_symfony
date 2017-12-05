@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Uuid;
 
 /**
  * Class AppLocation
@@ -25,10 +26,9 @@ class AppLocation
     private $long;
 
     /**
-     * @var int $id
+     * @var Uuid $id
      * @ORM\Id()
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Column(name="id", type="guid", nullable=false)
      */
     private $id;
 
@@ -39,6 +39,7 @@ class AppLocation
      */
     public function __construct($lat, $long)
     {
+        $this->id = Uuid::uuid4();
         $this->lat = $lat;
         $this->long = $long;
     }

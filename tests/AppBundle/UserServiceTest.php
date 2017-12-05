@@ -17,7 +17,7 @@ class UserServiceTest extends AppTestCase
     {
         $savedUser = $this->getSavedUser();
         $this->makeUserDriver($savedUser);
-        $retrievedUser = $this->getUserById(1);
+        $retrievedUser = $this->getUserById($savedUser->getId());
 
         self::assertTrue($this->userService->isDriver($retrievedUser));
     }
@@ -26,7 +26,7 @@ class UserServiceTest extends AppTestCase
     {
         $savedUser = $this->getSavedUser();
         $this->makeUserPassenger($savedUser);
-        $retrievedUser = $this->getUserById(1);
+        $retrievedUser = $this->getUserById($savedUser->getId());
 
         self::assertTrue($this->isPassenger($retrievedUser));
     }

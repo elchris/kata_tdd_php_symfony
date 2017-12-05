@@ -25,7 +25,7 @@ class LocationRepositoryTest extends AppTestCase
     {
         $homeLocation = $this->getSavedLocation();
 
-        self::assertGreaterThan(0, $homeLocation->getId());
+        self::assertNotEmpty($homeLocation->getId());
     }
 
     public function testGetExistingLocationByLatLong()

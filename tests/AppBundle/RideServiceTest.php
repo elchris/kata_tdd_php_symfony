@@ -31,7 +31,7 @@ class RideServiceTest extends AppTestCase
         $newRide = $this->getSavedNewRideWithPassengerAndDestination();
 
         self::assertInstanceOf(Ride::class, $newRide);
-        self::assertGreaterThan(0, $newRide->getId());
+        self::assertNotEmpty($newRide->getId());
     }
 
     /**
