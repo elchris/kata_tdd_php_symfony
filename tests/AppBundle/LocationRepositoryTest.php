@@ -33,7 +33,7 @@ class LocationRepositoryTest extends AppTestCase
         $savedLocation = $this->getSavedLocation();
         $lookupLocation = AppLocation::cloneFrom($savedLocation);
 
-        $retrievedLocation = $this->locationRepository->getLocation($lookupLocation);
+        $retrievedLocation = $this->getOrCreateLocation($lookupLocation);
 
         self::assertTrue($retrievedLocation->equals($savedLocation));
     }
@@ -43,7 +43,7 @@ class LocationRepositoryTest extends AppTestCase
         $this->getSavedLocation();
         $workLocation = new AppLocation(self::WORK_LOCATION_LAT, self::WORK_LOCATION_LONG);
 
-        $retrievedLocation = $this->locationRepository->getLocation($workLocation);
+        $retrievedLocation = $this->getOrCreateLocation($workLocation);
 
         self::assertTrue($retrievedLocation->equals($workLocation));
     }
@@ -63,4 +63,8 @@ class LocationRepositoryTest extends AppTestCase
         return $homeLocation;
     }
 
+    protected function getOrCreateLocation(AppLocation $lookupLocation)
+    {
+        return $this->locationRepository->getLocation($lookupLocation);
+    }
 }

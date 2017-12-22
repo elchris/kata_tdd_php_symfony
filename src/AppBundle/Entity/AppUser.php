@@ -59,6 +59,9 @@ class AppUser
         $this->roles = new ArrayCollection();
     }
 
+    /**
+     * @return Uuid
+     */
     public function getId()
     {
         return $this->id;

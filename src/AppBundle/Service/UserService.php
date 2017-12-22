@@ -5,6 +5,7 @@ namespace AppBundle\Service;
 use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
 use AppBundle\Repository\UserRepository;
+use Ramsey\Uuid\Uuid;
 
 class UserService
 {
@@ -30,17 +31,17 @@ class UserService
     }
 
     /**
-     * @param int $userId
+     * @param Uuid $userId
      * @return AppUser
      */
-    public function getUserById($userId)
+    public function getUserById(Uuid $userId)
     {
         return $this->userRepository->getUserById($userId);
     }
 
     public function makeUserDriver(AppUser $user)
     {
-        $this->userRepository->assignRoleToUser($user, AppRole::driver());
+        $this->assignRole($user, AppRole::driver());
     }
 
     public function isDriver(AppUser $user)
@@ -50,11 +51,20 @@ class UserService
 
     public function makeUserPassenger(AppUser $user)
     {
-        $this->userRepository->assignRoleToUser($user, AppRole::passenger());
+        $this->assignRole($user, AppRole::passenger());
     }
 
     public function isPassenger(AppUser $user)
     {
         return $user->hasRole(AppRole::passenger());
+    }
+
+    /**
+     * @param AppUser $user
+     * @param $role
+     */
+    protected function assignRole(AppUser $user, AppRole $role)
+    {
+        $this->userRepository->assignRoleToUser($user, $role);
     }
 }

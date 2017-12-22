@@ -64,11 +64,7 @@ class RideService
         $this->validateUserHasDriverRole($driver);
         $this->validateRideIsRequested($ride);
 
-        $this->rideEventRepository->markRideStatusByActor(
-            $ride,
-            $driver,
-            RideEventType::accepted()
-        );
+        $this->markRide($ride, $driver, RideEventType::accepted());
 
         $this->rideRepository->assignDriverToRide(
             $ride,
@@ -84,7 +80,7 @@ class RideService
         $this->validateUserHasDriverRole($driver);
         $this->validateAttemptingDriverIsAssignedDriver($acceptedRide, $driver);
 
-        $this->rideEventRepository->markRideStatusByActor(
+        $this->markRide(
             $acceptedRide,
             $driver,
             RideEventType::inProgress()
@@ -97,7 +93,7 @@ class RideService
         $this->validateAttemptingDriverIsAssignedDriver($rideInProgress, $driver);
         $this->validateRideIsInProgress($rideInProgress);
 
-        $this->rideEventRepository->markRideStatusByActor(
+        $this->markRide(
             $rideInProgress,
             $driver,
             RideEventType::completed()
@@ -163,5 +159,14 @@ class RideService
         if (!RideEventType::inProgress()->equals($this->getRideStatus($rideInProgress))) {
             throw new RideLifeCycleException();
         }
+    }
+
+    private function markRide(Ride $ride, AppUser $driver, RideEventType $status)
+    {
+        $this->rideEventRepository->markRideStatusByActor(
+            $ride,
+            $driver,
+            $status
+        );
     }
 }

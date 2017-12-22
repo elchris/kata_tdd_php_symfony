@@ -5,14 +5,15 @@ namespace AppBundle\Repository;
 use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
 use AppBundle\Exception\DuplicateRoleAssignmentException;
+use Ramsey\Uuid\Uuid;
 
 class UserRepository extends AppRepository
 {
     /**
-     * @param $userId
+     * @param Uuid $userId
      * @return AppUser
      */
-    public function getUserById($userId)
+    public function getUserById(Uuid $userId)
     {
         return $this->em->createQuery(
             'select u from E:AppUser u where u.id = :userId'

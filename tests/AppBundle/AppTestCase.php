@@ -146,7 +146,7 @@ abstract class AppTestCase extends WebTestCase
     protected function getSavedRide()
     {
         $ridePassenger = $this->getNewPassenger();
-        $this->savedPassenger = $this->getUserById($ridePassenger);
+        $this->savedPassenger = $this->getServiceUserById($ridePassenger->getId());
         $departure = $this->getSavedHomeLocation();
         $ride = new Ride($this->savedPassenger, $departure);
         $this->rideRepository->save($ride);
@@ -168,7 +168,7 @@ abstract class AppTestCase extends WebTestCase
      * @param $userId
      * @return AppUser
      */
-    protected function getUserById($userId)
+    protected function getServiceUserById($userId)
     {
         return $this->userService->getUserById($userId);
     }

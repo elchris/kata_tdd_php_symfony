@@ -5,6 +5,7 @@ namespace AppBundle\Repository;
 use AppBundle\Entity\AppLocation;
 use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
+use Ramsey\Uuid\Uuid;
 
 class RideRepository extends AppRepository
 {
@@ -15,10 +16,10 @@ class RideRepository extends AppRepository
     }
 
     /**
-     * @param $id
+     * @param Uuid $id
      * @return Ride
      */
-    public function getRideById($id)
+    public function getRideById(Uuid $id)
     {
         return $this->em->createQuery(
             'select r from E:Ride r where r.id = :id'

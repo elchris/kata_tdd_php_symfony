@@ -4,6 +4,7 @@ namespace Tests\AppBundle;
 
 use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
+use Ramsey\Uuid\Uuid;
 
 /**
  * Class RideRepositoryTest
@@ -51,12 +52,10 @@ class RideRepositoryTest extends AppTestCase
     {
         /** @var AppUser $driver */
         $driver = $this->getSavedUserWithName('Jamie', 'Isaacs');
-
         $rideWithDestination = $this->getRideWithDestination();
 
         $this->rideRepository->assignDriverToRide($rideWithDestination, $driver);
-
-        $retrievedRide = $this->rideRepository->getRideById($rideWithDestination->getId());
+        $retrievedRide = $this->getRideById($rideWithDestination->getId());
 
         self::assertTrue($retrievedRide->isDrivenBy($driver));
     }
@@ -64,7 +63,7 @@ class RideRepositoryTest extends AppTestCase
     /**
      * @return Ride
      */
-    private function getRideWithDestination()
+    protected function getRideWithDestination()
     {
         $ride = $this->getSavedRide();
 
@@ -74,8 +73,17 @@ class RideRepositoryTest extends AppTestCase
         );
 
         /** @var Ride $retrievedRide */
-        $retrievedRide = $this->rideRepository->getRideById($ride->getId());
+        $retrievedRide = $this->getRideById($ride->getId());
 
         return $retrievedRide;
+    }
+
+    /**
+     * @param Uuid $id
+     * @return Ride
+     */
+    protected function getRideById(Uuid $id)
+    {
+        return $this->rideRepository->getRideById($id);
     }
 }

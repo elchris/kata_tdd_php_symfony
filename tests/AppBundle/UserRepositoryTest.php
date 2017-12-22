@@ -3,6 +3,7 @@
 namespace Tests\AppBundle;
 
 use AppBundle\Entity\AppRole;
+use AppBundle\Entity\AppUser;
 use AppBundle\Exception\DuplicateRoleAssignmentException;
 
 class UserRepositoryTest extends AppTestCase
@@ -23,7 +24,7 @@ class UserRepositoryTest extends AppTestCase
     {
         $savedUser = $this->getSavedUser();
 
-        $retrievedUser = $this->userRepository->getUserById($savedUser->getId());
+        $retrievedUser = $this->getServiceUserById($savedUser->getId());
 
         self::assertSame($savedUser->getId(), $retrievedUser->getId());
         self::assertTrue($savedUser->is($retrievedUser));
@@ -43,10 +44,10 @@ class UserRepositoryTest extends AppTestCase
     {
         $savedUser = $this->getSavedUser();
 
-        $this->userRepository->assignRoleToUser($savedUser, AppRole::driver());
-        $this->userRepository->assignRoleToUser($savedUser, AppRole::passenger());
+        $this->assignRoleToUser($savedUser, AppRole::driver());
+        $this->assignRoleToUser($savedUser, AppRole::passenger());
 
-        $retrievedUser = $this->userRepository->getUserById($savedUser->getId());
+        $retrievedUser = $this->getServiceUserById($savedUser->getId());
 
         self::assertTrue($retrievedUser->hasRole(AppRole::driver()));
         self::assertTrue($retrievedUser->hasRole(AppRole::passenger()));
@@ -56,19 +57,24 @@ class UserRepositoryTest extends AppTestCase
     {
         $savedUser = $this->getSavedUser();
 
-        $this->userRepository->assignRoleToUser($savedUser, AppRole::driver());
+        $this->assignRoleToUser($savedUser, AppRole::driver());
         $this->expectException(DuplicateRoleAssignmentException::class);
 
-        $this->userRepository->assignRoleToUser($savedUser, AppRole::driver());
+        $this->assignRoleToUser($savedUser, AppRole::driver());
     }
 
     private function assertUserHasExpectedRole(AppRole $role)
     {
         $savedUser = $this->getSavedUser();
 
-        $this->userRepository->assignRoleToUser($savedUser, $role);
+        $this->assignRoleToUser($savedUser, $role);
         $retrievedUser = $this->userRepository->getUserById($savedUser->getId());
 
         self::assertTrue($retrievedUser->hasRole($role));
+    }
+
+    protected function assignRoleToUser(AppUser $user, AppRole $role)
+    {
+        $this->userRepository->assignRoleToUser($user, $role);
     }
 }

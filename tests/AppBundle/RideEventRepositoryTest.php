@@ -2,6 +2,7 @@
 
 namespace Tests\AppBundle;
 
+use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
 use AppBundle\Entity\RideEvent;
 use AppBundle\Entity\RideEventType;
@@ -59,9 +60,7 @@ class RideEventRepositoryTest extends AppTestCase
     {
         $this->getSavedRequestedRideEvent();
 
-        $lastEventForRide = $this->rideEventRepository->getLastEventForRide(
-            $this->savedRide
-        );
+        $lastEventForRide = $this->getLastEvent($this->savedRide);
 
         self::assertTrue($lastEventForRide->is(RideEventType::requested()));
     }
@@ -93,14 +92,12 @@ class RideEventRepositoryTest extends AppTestCase
 
     public function testMarkRideAsStatus()
     {
-        $this->rideEventRepository->markRideStatusByActor(
+        $this->markRide(
             $this->savedRide,
             $this->savedPassenger,
             RideEventType::requested()
         );
-        $lastEventForRide = $this->rideEventRepository->getLastEventForRide(
-            $this->savedRide
-        );
+        $lastEventForRide = $this->getLastEvent($this->savedRide);
 
         self::assertTrue($lastEventForRide->is(RideEventType::requested()));
     }
@@ -110,13 +107,11 @@ class RideEventRepositoryTest extends AppTestCase
      */
     private function getSavedRequestedRideEvent()
     {
-        $rideEvent = $this->rideEventRepository->markRideStatusByActor(
+        return $this->markRide(
             $this->savedRide,
             $this->savedPassenger,
             $this->requestedType
         );
-
-        return $rideEvent;
     }
 
     /**
@@ -133,13 +128,25 @@ class RideEventRepositoryTest extends AppTestCase
             $eventTypeToAssert
         ));
 
-        $lastEventForRide = $this->rideEventRepository->getLastEventForRide(
-            $this->savedRide
-        );
+        $lastEventForRide = $this->getLastEvent($this->savedRide);
 
         self::assertFalse($lastEventForRide->is(RideEventType::requested()));
         self::assertTrue($lastEventForRide->is($eventTypeToAssert));
 
         return $lastEventForRide;
+    }
+
+    protected function getLastEvent(Ride $ride)
+    {
+        return $this->rideEventRepository->getLastEventForRide($ride);
+    }
+
+    protected function markRide(Ride $ride, AppUser $passenger, RideEventType $status)
+    {
+        return $this->rideEventRepository->markRideStatusByActor(
+            $ride,
+            $passenger,
+            $status
+        );
     }
 }
