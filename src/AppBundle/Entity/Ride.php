@@ -61,6 +61,9 @@ class Ride
         $this->departure = $departure;
     }
 
+    /**
+     * @return Uuid
+     */
     public function getId()
     {
         return $this->id;

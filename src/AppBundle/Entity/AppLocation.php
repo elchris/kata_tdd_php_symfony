@@ -49,6 +49,9 @@ class AppLocation
         return new self($savedLocation->getLat(), $savedLocation->getLong());
     }
 
+    /**
+     * @return Uuid
+     */
     public function getId()
     {
         return $this->id;

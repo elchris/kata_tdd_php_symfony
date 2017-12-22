@@ -96,6 +96,6 @@ class AppUser
 
     public function is(AppUser $userToCompare)
     {
-        return $this->getId() === $userToCompare->getId();
+        return $this->getId()->equals($userToCompare->getId());
     }
 }
