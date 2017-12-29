@@ -6,14 +6,17 @@ namespace Tests\AppBundle;
 use AppBundle\Entity\AppLocation;
 use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
+use AppBundle\Entity\RideEventType;
 use AppBundle\Repository\LocationRepository;
 use AppBundle\Repository\RideEventRepository;
 use AppBundle\Repository\RideRepository;
 use AppBundle\Repository\UserRepository;
 use AppBundle\Service\LocationService;
+use AppBundle\Service\RideService;
 use AppBundle\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
+use Doctrine\ORM\Tools\ToolsException;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 abstract class AppTestCase extends WebTestCase
@@ -38,6 +41,10 @@ abstract class AppTestCase extends WebTestCase
         $this->locationService = new LocationService(new LocationRepository($this->em()));
         $this->rideRepository = new RideRepository($this->em());
         $this->rideEventRepository = new RideEventRepository($this->em());
+        $this->rideService = new RideService(
+            $this->rideRepository,
+            $this->rideEventRepository
+        );
     }
 
     protected function em()
@@ -56,7 +63,10 @@ abstract class AppTestCase extends WebTestCase
         $classes = $this->em()->getMetadataFactory()->getAllMetadata();
         $tool = new SchemaTool($this->em);
         $tool->dropSchema($classes);
-        $tool->createSchema($classes);
+        try {
+            $tool->createSchema($classes);
+        } catch (ToolsException $e) {
+        }
     }
 
     /** @var  UserRepository */
@@ -73,6 +83,9 @@ abstract class AppTestCase extends WebTestCase
 
     /** @var  RideEventRepository */
     protected $rideEventRepository;
+
+    /** @var  RideService */
+    protected $rideService;
 
     /** @var AppUser $savedPassenger */
     protected $savedPassenger;
@@ -96,16 +109,16 @@ abstract class AppTestCase extends WebTestCase
     protected function getNewPassenger()
     {
         $passenger = $this->getSavedUser();
-        $this->makeUserPassenger($passenger);
+        $this->makeUserPassenger($this->getSavedUser());
         return $passenger;
     }
 
     /**
-     * @param $passenger
+     * @param $user
      */
-    protected function makeUserPassenger(AppUser $passenger)
+    protected function makeUserPassenger(AppUser $user)
     {
-        $this->userService->makeUserPassenger($passenger);
+        $this->userService->makeUserPassenger($user);
     }
 
     /**
@@ -117,12 +130,12 @@ abstract class AppTestCase extends WebTestCase
     }
 
     /**
-     * @param $notPassengerUser
+     * @param $user
      * @return bool
      */
-    protected function isPassenger(AppUser $notPassengerUser)
+    protected function isPassenger(AppUser $user)
     {
-        return $this->userService->isPassenger($notPassengerUser);
+        return $this->userService->isPassenger($user);
     }
 
     /**
@@ -171,5 +184,108 @@ abstract class AppTestCase extends WebTestCase
     protected function getServiceUserById($userId)
     {
         return $this->userService->getUserById($userId);
+    }
+
+    /**
+     * @param $passenger
+     * @param $departure
+     * @return Ride
+     * @throws \AppBundle\Exception\UserNotPassengerException
+     */
+    protected function getNewRide(AppUser $passenger, AppLocation $departure)
+    {
+        return $this->rideService->newRide($passenger, $departure);
+    }
+
+    /**
+     * @param $rideInProgress
+     * @param $driver
+     * @return Ride
+     */
+    protected function markRideCompleted(Ride $rideInProgress, AppUser $driver)
+    {
+        return $this->rideService->markRideCompleted($rideInProgress, $driver);
+    }
+
+    /**
+     * @param $ride
+     * @return RideEventType
+     */
+    protected function getRideStatus(Ride $ride)
+    {
+        return $this->rideService->getRideStatus($ride);
+    }
+
+    /**
+     * @param $acceptedRide
+     * @param $driver
+     * @return Ride
+     */
+    protected function markRideInProgress(Ride $acceptedRide, AppUser $driver)
+    {
+        return $this->rideService->markRideInProgress($acceptedRide, $driver);
+    }
+
+    /**
+     * @param $newRide
+     * @param $driver
+     * @return Ride
+     */
+    protected function acceptRide(Ride $newRide, AppUser $driver)
+    {
+        return $this->rideService->acceptRide($newRide, $driver);
+    }
+
+    /**
+     * @return Ride
+     * @throws \AppBundle\Exception\UserNotPassengerException
+     */
+    protected function getSavedNewRideWithPassengerAndDestination()
+    {
+        $passenger = $this->getSavedUser();
+        $this->makeUserPassenger($passenger);
+
+        $departure = $this->getSavedHomeLocation();
+
+        /** @var Ride $newRide */
+        $newRide = $this->getNewRide(
+            $passenger,
+            $departure
+        );
+
+        return $newRide;
+    }
+
+    /**
+     * @param AppUser $driver
+     * @return Ride
+     * @throws \AppBundle\Exception\UserNotPassengerException
+     */
+    protected function getRideInProgress(AppUser $driver)
+    {
+        $newRide = $this->getSavedNewRideWithPassengerAndDestination();
+        $acceptedRide = $this->acceptRide($newRide, $driver);
+        return $this->markRideInProgress($acceptedRide, $driver);
+    }
+
+    /**
+     * @return Ride
+     * @throws \AppBundle\Exception\UserNotPassengerException
+     */
+    protected function getAcceptedRide()
+    {
+        $newDriver = $this->getNewDriver();
+        return $this->getAcceptedRideWithDriver($newDriver);
+    }
+
+    /**
+     * @param AppUser $driver
+     * @return Ride
+     * @throws \AppBundle\Exception\UserNotPassengerException
+     */
+    protected function getAcceptedRideWithDriver(AppUser $driver)
+    {
+        $newRide = $this->getSavedNewRideWithPassengerAndDestination();
+        return $this->acceptRide($newRide, $driver);
     }
 }
