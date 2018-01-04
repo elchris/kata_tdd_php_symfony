@@ -1,27 +1,19 @@
 <?php
 
-
 namespace AppBundle\Entity;
 
-use AppBundle\UnassignedDriverException;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Uuid;
 
 /**
  * Class Ride
- * @package AppBundle\Entity
+ * @package Tests\AppBundle
  *
  * @ORM\Entity()
  * @ORM\Table(name="rides")
  */
 class Ride
 {
-    /**
-     * @var int $id
-     * @ORM\Id()
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
     /**
      * @var AppUser
      * @ORM\ManyToOne(targetEntity="AppUser", fetch="EAGER")
@@ -50,74 +42,59 @@ class Ride
      */
     private $destination;
 
-
     /**
-     * @var \DateTime
-     * @ORM\Column(name="created", type="datetime", nullable=false)
+     * @var Uuid $id
+     * @ORM\Id()
+     * @ORM\Column(name="id", type="guid", nullable=false)
      */
-    private $created;
+    private $id;
 
     /**
+     * Ride constructor.
      * @param AppUser $passenger
      * @param AppLocation $departure
      */
     public function __construct(AppUser $passenger, AppLocation $departure)
     {
+        $this->id = Uuid::uuid4();
         $this->passenger = $passenger;
         $this->departure = $departure;
-        $this->created = new \DateTime();
     }
 
     /**
-     * @return AppUser
+     * @return Uuid
      */
-    public function getPassenger()
+    public function getId()
     {
-        return $this->passenger;
-    }
-
-    /**
-     * @return AppLocation
-     */
-    public function getDeparture()
-    {
-        return $this->departure;
-    }
-
-    /**
-     * @param AppUser $driver
-     */
-    public function assignDriver(AppUser $driver)
-    {
-        $this->driver = $driver;
-    }
-
-    public function getDriver()
-    {
-        if (! $this->hasDriver()) {
-            throw new UnassignedDriverException();
-        }
-        return $this->driver;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasDriver()
-    {
-        return ! is_null($this->driver);
-    }
-
-    /**
-     * @return AppLocation
-     */
-    public function getDestination()
-    {
-        return $this->destination;
+        return $this->id;
     }
 
     public function assignDestination(AppLocation $destination)
     {
         $this->destination = $destination;
+    }
+
+    public function assignDriver(AppUser $driver)
+    {
+        $this->driver = $driver;
+    }
+
+    public function isDrivenBy(AppUser $driver)
+    {
+        return $this->driver->is($driver);
+    }
+
+    public function isDestinedFor(AppLocation $destinationLocation)
+    {
+        return $this->destination->equals($destinationLocation);
+    }
+
+    public function getPassengerTransaction(RideEventType $status)
+    {
+        return new RideEvent(
+            $this,
+            $this->passenger,
+            $status
+        );
     }
 }

@@ -1,284 +1,172 @@
 <?php
 
-
 namespace AppBundle\Service;
 
 use AppBundle\Entity\AppLocation;
+use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
-use AppBundle\Entity\RideEvent;
 use AppBundle\Entity\RideEventType;
-use AppBundle\Repository\RideRepositoryInterface;
-use AppBundle\RideEventLifeCycleException;
+use AppBundle\Exception\ActingDriverIsNotAssignedDriverException;
+use AppBundle\Exception\RideLifeCycleException;
+use AppBundle\Exception\UserNotInDriverRoleException;
+use AppBundle\Exception\UserNotPassengerException;
+use AppBundle\Repository\RideEventRepository;
+use AppBundle\Repository\RideRepository;
 
 class RideService
 {
     /**
-     * @var RideRepositoryInterface
+     * @var RideRepository
      */
     private $rideRepository;
+    /**
+     * @var RideEventRepository
+     */
+    private $rideEventRepository;
 
     /**
-     * @param RideRepositoryInterface $rideRepository
+     * RideService constructor.
+     * @param RideRepository $rideRepository
+     * @param RideEventRepository $rideEventRepository
      */
-    public function __construct(RideRepositoryInterface $rideRepository)
+    public function __construct(RideRepository $rideRepository, RideEventRepository $rideEventRepository)
     {
         $this->rideRepository = $rideRepository;
+        $this->rideEventRepository = $rideEventRepository;
     }
 
-    /**
-     * @param AppUser $passenger
-     * @param AppLocation $departure
-     * @return Ride
-     */
-    public function createRide(AppUser $passenger, AppLocation $departure)
+    public function newRide(AppUser $passenger, AppLocation $departure)
     {
-        return $this->rideRepository->createRide($passenger, $departure);
+        if (!$passenger->hasRole(AppRole::passenger())) {
+            throw new UserNotPassengerException();
+        }
+
+        $newRide = new Ride($passenger, $departure);
+        $this->rideRepository->save($newRide);
+
+        $this->rideEventRepository->markRideStatusByPassenger(
+            $newRide,
+            RideEventType::requested()
+        );
+
+        return $newRide;
     }
 
-    /**
-     * @param AppUser $passenger
-     * @return Ride[]
-     */
-    public function getRidesForPassenger(AppUser $passenger)
-    {
-        return $this->rideRepository->getRidesForPassenger($passenger);
-    }
-
-    public function passengerMarkRideAs(Ride $ride, RideEventType $type)
-    {
-        $actor = $ride->getPassenger();
-        $this->markRideAsForActor($ride, $type, $actor);
-    }
-
-    public function driverMarkRideAs(Ride $ride, RideEventType $type)
-    {
-        $actor = $ride->getDriver();
-        $this->markRideAsForActor($ride, $type, $actor);
-    }
-
-    public function prospectiveDriverMarkRideAs(Ride $ride, RideEventType $type, AppUser $prospectiveDriver)
-    {
-        $this->markRideAsForActor($ride, $type, $prospectiveDriver);
-    }
-
-    /**
-     * @param Ride $ride
-     * @return RideEvent
-     */
     public function getRideStatus(Ride $ride)
     {
-        return $this->rideRepository->getLastEventForRide($ride);
+        $lastEvent = $this->rideEventRepository->getLastEventForRide($ride);
+        return $lastEvent->getStatus();
     }
 
-    /**
-     * @param Ride $ride
-     * @param RideEventType $eventType
-     * @return bool
-     */
-    public function isRide(Ride $ride, RideEventType $eventType)
+    public function acceptRide(Ride $ride, AppUser $driver)
     {
-        return $this->rideRepository->isRideStatus($ride, $eventType);
-    }
+        $this->validateUserHasDriverRole($driver);
+        $this->validateRideIsRequested($ride);
 
-    /**
-     * @param Ride $ride
-     * @param AppUser $driver
-     */
-    public function assignDriverToRide(Ride $ride, AppUser $driver)
-    {
-        $this->rideRepository->assignDriverToRide($ride, $driver);
-    }
+        $this->markRide($ride, $driver, RideEventType::accepted());
 
-    public function assignDestinationToRide(Ride $ride, AppLocation $destination)
-    {
-        $this->rideRepository->assignDestinationToRide($ride, $destination);
-    }
-
-    public function requestRide(AppUser $passenger, AppLocation $departure)
-    {
-        $newRide = $this->createRide($passenger, $departure);
-        $this->passengerMarkRideAs($newRide, RideEventType::asRequested());
-    }
-
-    public function driverAcceptRide(Ride $ride, AppUser $driver)
-    {
-        $this->prospectiveDriverMarkRideAs($ride, RideEventType::asAccepted(), $driver);
-        $this->assignDriverToRide($ride, $driver);
-    }
-
-    public function setDestinationForRide(Ride $ride, AppLocation $destination)
-    {
-        $this->passengerMarkRideAs($ride, RideEventType::asDestination());
-        $this->assignDestinationToRide($ride, $destination);
-    }
-
-    public function startRide(Ride $ride)
-    {
-        $this->driverMarkRideAs($ride, RideEventType::inProgress());
-    }
-
-    public function completeRide(Ride $ride)
-    {
-        $this->driverMarkRideAs($ride, RideEventType::asCompleted());
-    }
-
-    /**
-     * @param Ride $ride
-     * @param RideEventType $type
-     * @param AppUser $actor
-     * @throws RideEventLifeCycleException
-     */
-    private function markRideAsForActor(Ride $ride, RideEventType $type, AppUser $actor)
-    {
-        $this->validateRideLifecycle($ride, $type);
-        $event = new RideEvent(
-            $this->rideRepository->getEventType($type),
+        $this->rideRepository->assignDriverToRide(
             $ride,
-            $actor
+            $driver
         );
-        $this->rideRepository->saveRideEvent($event);
+
+        return $ride;
+    }
+
+    public function markRideInProgress(Ride $acceptedRide, AppUser $driver)
+    {
+        $this->validateRideIsAccepted($acceptedRide);
+        $this->validateUserHasDriverRole($driver);
+        $this->validateAttemptingDriverIsAssignedDriver($acceptedRide, $driver);
+
+        $this->markRide(
+            $acceptedRide,
+            $driver,
+            RideEventType::inProgress()
+        );
+        return $acceptedRide;
+    }
+
+    public function markRideCompleted(Ride $rideInProgress, AppUser $driver)
+    {
+        $this->validateAttemptingDriverIsAssignedDriver($rideInProgress, $driver);
+        $this->validateRideIsInProgress($rideInProgress);
+
+        $this->markRide(
+            $rideInProgress,
+            $driver,
+            RideEventType::completed()
+        );
+        return $rideInProgress;
     }
 
     /**
-     * @param Ride $ride
-     * @param RideEventType $type
-     * @throws RideEventLifeCycleException
+     * @param AppUser $driver
+     * @throws UserNotInDriverRoleException
      */
-    private function validateRequestedLifecycle(Ride $ride, RideEventType $type)
+    private function validateUserHasDriverRole(AppUser $driver)
     {
-        if (
-            $type->equals(RideEventType::asRequested())
-            &&
-            $this->isRide($ride, RideEventType::asRequested())
-        ) {
-            throw new RideEventLifeCycleException('Ride is already requested.');
+        if (!$driver->hasRole(AppRole::driver())) {
+            throw new UserNotInDriverRoleException();
         }
     }
 
     /**
      * @param Ride $ride
-     * @param RideEventType $type
-     * @throws RideEventLifeCycleException
+     * @throws RideLifeCycleException
      */
-    private function validateAcceptedLifecycle(Ride $ride, RideEventType $type)
+    private function validateRideIsRequested(Ride $ride)
     {
-        if (
-            $type->equals(RideEventType::asAccepted())
-            &&
-            !$this->isRide($ride, RideEventType::asRequested())
-        ) {
-            throw new RideEventLifeCycleException();
+        if (!RideEventType::requested()->equals(
+            $this->getRideStatus($ride)
+        )) {
+            throw new RideLifeCycleException();
         }
     }
 
     /**
-     * @param Ride $ride
-     * @param RideEventType $type
-     * @throws RideEventLifeCycleException
+     * @param Ride $acceptedRide
+     * @throws RideLifeCycleException
      */
-    private function validateInProgressLifeCycle(Ride $ride, RideEventType $type)
+    private function validateRideIsAccepted(Ride $acceptedRide)
     {
-        if (
-            $type->equals(RideEventType::inProgress())
-            &&
-            ! $this->isRide($ride, RideEventType::asDestination())
-        ) {
-            throw new RideEventLifeCycleException();
+        if (!RideEventType::accepted()->equals(
+            $this->getRideStatus($acceptedRide)
+        )) {
+            throw new RideLifeCycleException();
         }
     }
 
     /**
-     * @param Ride $ride
-     * @param RideEventType $type
-     * @throws RideEventLifeCycleException
+     * @param Ride $acceptedRide
+     * @param AppUser $driver
+     * @throws ActingDriverIsNotAssignedDriverException
      */
-    private function validateCancelledLifeCycle(Ride $ride, RideEventType $type)
+    private function validateAttemptingDriverIsAssignedDriver(Ride $acceptedRide, AppUser $driver)
     {
-        if (
-            $type->equals(RideEventType::asCancelled())
-            &&
-            $this->rideIsAlreadyCommitted($ride)
-        ) {
-            throw new RideEventLifeCycleException();
+        if (!$acceptedRide->isDrivenBy($driver)) {
+            throw new ActingDriverIsNotAssignedDriverException();
         }
     }
 
     /**
-     * @param Ride $ride
-     * @param RideEventType $type
-     * @throws RideEventLifeCycleException
+     * @param Ride $rideInProgress
+     * @throws RideLifeCycleException
      */
-    private function validateCompletedLifeCycle(Ride $ride, RideEventType $type)
+    private function validateRideIsInProgress(Ride $rideInProgress)
     {
-        if (
-            $type->equals(RideEventType::asCompleted())
-            &&
-            (!$this->isRide($ride, RideEventType::inProgress()))
-        ) {
-            throw new RideEventLifeCycleException();
+        if (!RideEventType::inProgress()->equals($this->getRideStatus($rideInProgress))) {
+            throw new RideLifeCycleException();
         }
     }
 
-    /**
-     * @param Ride $ride
-     * @param RideEventType $type
-     * @throws RideEventLifeCycleException
-     */
-    private function validateRejectedLifecycle(Ride $ride, RideEventType $type)
+    private function markRide(Ride $ride, AppUser $driver, RideEventType $status)
     {
-        if (
-            $type->equals(RideEventType::asRejected())
-            &&
-            (!$this->isRide($ride, RideEventType::asRequested()))
-        ) {
-            throw new RideEventLifeCycleException();
-        }
-    }
-
-    /**
-     * @param Ride $ride
-     * @param RideEventType $type
-     * @throws RideEventLifeCycleException
-     */
-    private function validateDestinationLifeCycle(Ride $ride, RideEventType $type)
-    {
-        if (
-            $type->equals(RideEventType::asDestination())
-            &&
-            $this->rideIsAlreadyCommitted($ride)
-        ) {
-            throw new RideEventLifeCycleException();
-        }
-    }
-
-    /**
-     * @param Ride $ride
-     * @param RideEventType $type
-     * @throws RideEventLifeCycleException
-     */
-    private function validateRideLifecycle(Ride $ride, RideEventType $type)
-    {
-        $this->validateRequestedLifecycle($ride, $type);
-        $this->validateAcceptedLifecycle($ride, $type);
-        $this->validateDestinationLifeCycle($ride, $type);
-        $this->validateInProgressLifeCycle($ride, $type);
-        $this->validateCancelledLifeCycle($ride, $type);
-        $this->validateCompletedLifeCycle($ride, $type);
-        $this->validateRejectedLifecycle($ride, $type);
-    }
-
-    /**
-     * @param Ride $ride
-     * @return bool
-     */
-    private function rideIsAlreadyCommitted(Ride $ride)
-    {
-        return !
-        (
-            $this->isRide($ride, RideEventType::asRequested())
-            ||
-            $this->isRide($ride, RideEventType::asAccepted())
+        $this->rideEventRepository->markRideStatusByActor(
+            $ride,
+            $driver,
+            $status
         );
     }
 }

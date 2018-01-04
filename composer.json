@@ -41,12 +41,14 @@
         "sensio/distribution-bundle": "^5.0",
         "sensio/framework-extra-bundle": "^3.0.2",
         "incenteev/composer-parameter-handler": "^2.0",
-        "doctrine/doctrine-migrations-bundle": "^1.0"
+        "doctrine/doctrine-migrations-bundle": "^1.0",
+        "squizlabs/php_codesniffer": "*",
+        "ramsey/uuid": "^3.7"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
         "symfony/phpunit-bridge": "^3.0",
-        "phpunit/phpunit": "5.5.*"
+        "phpunit/phpunit": "^6.5"
     },
     "scripts": {
         "symfony-scripts": [

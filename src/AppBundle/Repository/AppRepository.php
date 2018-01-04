@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AppBundle\Repository;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -13,26 +12,17 @@ abstract class AppRepository
     protected $em;
 
     /**
-     * @param EntityManagerInterface $entityManager
+     * UserRepository constructor.
+     * @param EntityManagerInterface $em
      */
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $em)
     {
-        $this->em = $entityManager;
+        $this->em = $em;
     }
 
-    protected function save($entity)
+    public function save($object)
     {
-        $this->em->persist($entity);
+        $this->em->persist($object);
         $this->em->flush();
-        return $entity;
-    }
-
-    /**
-     * @return \Doctrine\ORM\QueryBuilder
-     */
-    protected function qb()
-    {
-        return $this->em
-            ->createQueryBuilder();
     }
 }

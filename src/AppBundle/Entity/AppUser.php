@@ -1,10 +1,11 @@
 <?php
 
-
 namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Uuid;
 
 /**
  * Class AppUser
@@ -15,15 +16,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class AppUser
 {
-
-    /**
-     * @var integer $id
-     * @ORM\Id()
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
     /**
      * @var string $firstName
      * @ORM\Column(name="first_name", type="string", nullable=false)
@@ -37,7 +29,14 @@ class AppUser
     private $lastName;
 
     /**
-     * @var ArrayCollection | AppRole[] $roles
+     * @var Uuid $id
+     * @ORM\Id()
+     * @ORM\Column(name="id", type="guid", nullable=false)
+     */
+    private $id;
+
+    /**
+     * @var ArrayCollection $roles
      * @ORM\ManyToMany(targetEntity="AppRole")
      * @ORM\JoinTable(
      *     name="users_roles",
@@ -48,14 +47,41 @@ class AppUser
     private $roles;
 
     /**
-     * @param $firstName
-     * @param $lastName
+     * AppUser constructor.
+     * @param string $firstName
+     * @param string $lastName
      */
     public function __construct($firstName, $lastName)
     {
+        $this->id = Uuid::uuid4();
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->roles = new ArrayCollection();
+    }
+
+    /**
+     * @return Uuid
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function assignRole(AppRole $role)
+    {
+        $this->roles->add($role);
+    }
+
+    public function hasRole(AppRole $role)
+    {
+        $hasRoleCriteria =
+        Criteria::create()->andWhere(
+            Criteria::expr()->eq(
+                'id',
+                $role->getId()
+            )
+        );
+        return $this->roles->matching($hasRoleCriteria)->count() > 0;
     }
 
     public function getFirstName()
@@ -63,18 +89,13 @@ class AppUser
         return $this->firstName;
     }
 
-    public function getFullName()
+    public function getLastName()
     {
-        return $this->firstName.' '.$this->lastName;
+        return $this->lastName;
     }
 
-    public function addRole(AppRole $role)
+    public function is(AppUser $userToCompare)
     {
-        $this->roles->add($role);
-    }
-
-    public function hasRole(AppRole $role)
-    {
-        return $this->roles->contains($role);
+        return $this->getId()->equals($userToCompare->getId());
     }
 }

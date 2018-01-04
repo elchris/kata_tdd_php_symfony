@@ -1,24 +1,19 @@
 <?php
 
-
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Uuid;
 
 /**
+ * Class AppLocation
+ * @package AppBundle\Entity
+ *
  * @ORM\Entity()
  * @ORM\Table(name="locations")
  */
 class AppLocation
 {
-    /**
-     * @var int $id;
-     * @ORM\Id()
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
     /**
      * @var float
      * @ORM\Column(name="lat", type="float", nullable=false)
@@ -31,20 +26,35 @@ class AppLocation
     private $long;
 
     /**
-     * @var \DateTime $created
-     * @ORM\Column(name="created", type="datetime", nullable=false)
+     * @var Uuid $id
+     * @ORM\Id()
+     * @ORM\Column(name="id", type="guid", nullable=false)
      */
-    private $created;
+    private $id;
 
     /**
+     * AppLocation constructor.
      * @param float $lat
      * @param float $long
      */
     public function __construct($lat, $long)
     {
+        $this->id = Uuid::uuid4();
         $this->lat = $lat;
         $this->long = $long;
-        $this->created = new \DateTime();
+    }
+
+    public static function cloneFrom(AppLocation $savedLocation)
+    {
+        return new self($savedLocation->getLat(), $savedLocation->getLong());
+    }
+
+    /**
+     * @return Uuid
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     public function getLat()
@@ -57,12 +67,12 @@ class AppLocation
         return $this->long;
     }
 
-    public function equals(AppLocation $otherLocation)
+    public function equals(AppLocation $compareLocation)
     {
         return (
-            ($this->getLat() === $otherLocation->getLat())
+            ($compareLocation->getLat() === $this->getLat())
             &&
-            ($this->getLong() === $otherLocation->getLong())
+            ($compareLocation->getLong() === $this->getLong())
         );
     }
 }

@@ -1,67 +1,70 @@
 <?php
 
-
 namespace AppBundle\Service;
 
 use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
-use AppBundle\Repository\UserRepositoryInterface;
-use AppBundle\RoleLifeCycleException;
+use AppBundle\Repository\UserRepository;
+use Ramsey\Uuid\Uuid;
 
 class UserService
 {
     /**
-     * @var UserRepositoryInterface
+     * @var UserRepository
      */
     private $userRepository;
 
     /**
-     * @param UserRepositoryInterface $userRepository
+     * UserService constructor.
+     * @param UserRepository $userRepository
      */
-    public function __construct(UserRepositoryInterface $userRepository)
+    public function __construct(UserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
     }
 
     public function newUser($firstName, $lastName)
     {
-        $this->userRepository->newUser($firstName, $lastName);
+        $newUser = new AppUser($firstName, $lastName);
+        $this->userRepository->save($newUser);
+        return $newUser;
     }
 
     /**
-     * @param integer $userId
+     * @param Uuid $userId
      * @return AppUser
      */
-    public function getUserById($userId)
+    public function getUserById(Uuid $userId)
     {
         return $this->userRepository->getUserById($userId);
     }
 
-    public function assignRoleToUser(AppUser $user, AppRole $role)
+    public function makeUserDriver(AppUser $user)
     {
-        if (!$this->userRepository->isUserInRole($user, $role)) {
-            $this->userRepository->assignRoleToUser($user, $role);
-        } else {
-            throw new RoleLifeCycleException(
-                'User: '
-                .$user->getFullName()
-                .' is already of Role: '
-                .$role->getName()
-            );
-        }
+        $this->assignRole($user, AppRole::driver());
+    }
+
+    public function isDriver(AppUser $user)
+    {
+        return $user->hasRole(AppRole::driver());
+    }
+
+    public function makeUserPassenger(AppUser $user)
+    {
+        $this->assignRole($user, AppRole::passenger());
+    }
+
+    public function isPassenger(AppUser $user)
+    {
+        return $user->hasRole(AppRole::passenger());
     }
 
     /**
      * @param AppUser $user
-     * @return bool
+     * @param $role
      */
-    public function isUserPassenger(AppUser $user)
+    protected function assignRole(AppUser $user, AppRole $role)
     {
-        return $this->userRepository->isUserInRole($user, AppRole::asPassenger());
-    }
-
-    public function isUserDriver(AppUser $user)
-    {
-        return $this->userRepository->isUserInRole($user, AppRole::asDriver());
+        $this->userRepository->assignRoleToUser($user, $role);
     }
 }

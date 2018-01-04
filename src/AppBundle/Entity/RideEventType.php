@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -10,82 +9,72 @@ use Doctrine\ORM\Mapping as ORM;
  * @package AppBundle\Entity
  *
  * @ORM\Entity()
- * @ORM\Table(name="ride_event_types")
+ * @ORM\Table(name="rideEventTypes")
  */
 class RideEventType
 {
+    const REQUESTED_ID = 1;
+    const ACCEPTED_ID = 2;
+    const IN_PROGRESS_ID = 3;
+    const CANCELLED_ID = 4;
+    const COMPLETED_ID = 5;
+    const REJECTED_ID = 6;
+
     /**
-     * @var integer $id
+     * @var int $id
      * @ORM\Id()
      * @ORM\Column(name="id", type="integer", nullable=false)
      */
     private $id;
+
     /**
      * @var string $name
      * @ORM\Column(name="name", type="string", nullable=false)
      */
     private $name;
 
-    /**
-     * @param int $id
-     * @param string $name
-     */
     private function __construct($id, $name)
     {
         $this->id = $id;
         $this->name = $name;
     }
 
-    public static function asRequested()
+    public static function requested()
     {
-        return new self(1, 'Requested');
+        return new self(self::REQUESTED_ID, 'Requested');
     }
 
-    public static function asAccepted()
+    public static function accepted()
     {
-        return new self(2, 'Accepted');
+        return new self(self::ACCEPTED_ID, 'Accepted');
     }
 
     public static function inProgress()
     {
-        return new self(3, 'In Progress');
+        return new self(self::IN_PROGRESS_ID, 'In Progress');
     }
 
-    public static function asCancelled()
+    public static function cancelled()
     {
-        return new self(4, 'Cancelled');
+        return new self(self::CANCELLED_ID, 'Cancelled');
     }
 
-    public static function asCompleted()
+    public static function completed()
     {
-        return new self(5, 'Completed');
+        return new self(self::COMPLETED_ID, 'Completed');
     }
 
-    public static function asRejected()
+    public static function rejected()
     {
-        return new self(6, 'Rejected');
+        return new self(self::REJECTED_ID, 'Rejected');
     }
 
-    public static function asDestination()
+    public function equals(RideEventType $typeToCompare)
     {
-        return new self(7, 'Destination Assigned');
+        return $this->id === $typeToCompare->getId();
     }
 
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param RideEventType $eventType
-     * @return bool
-     */
-    public function equals(RideEventType $eventType)
-    {
-        return $this->id === $eventType->getId();
-    }
-
-    private function getId()
+    public function getId()
     {
         return $this->id;
     }

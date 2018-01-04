@@ -1,36 +1,38 @@
 <?php
 
-
 namespace AppBundle\Service;
 
 use AppBundle\Entity\AppLocation;
-use AppBundle\Repository\LocationRepositoryInterface;
+use AppBundle\Repository\LocationRepository;
 
 class LocationService
 {
     /**
-     * @var LocationRepositoryInterface
+     * @var LocationRepository
      */
     private $locationRepository;
 
     /**
-     * @param LocationRepositoryInterface $locationRepository
+     * LocationService constructor.
+     * @param LocationRepository $locationRepository
      */
-    public function __construct(LocationRepositoryInterface $locationRepository)
+    public function __construct($locationRepository)
     {
         $this->locationRepository = $locationRepository;
     }
 
     /**
-     * @param float $lat
-     * @param float $long
+     * @param $lat
+     * @param $long
      * @return AppLocation
      */
     public function getLocation($lat, $long)
     {
-        return $this->locationRepository->getOrCreateLocation(
-            $lat,
-            $long
+        return $this->locationRepository->getLocation(
+            new AppLocation(
+                $lat,
+                $long
+            )
         );
     }
 }

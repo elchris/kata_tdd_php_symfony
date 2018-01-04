@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -15,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class AppRole
 {
     /**
-     * @var int $id
+     * @var integer $id
      * @ORM\Id()
      * @ORM\Column(name="id", type="integer", nullable=false)
      */
@@ -29,23 +28,22 @@ class AppRole
 
     private function __construct($id, $name)
     {
-
         $this->id = $id;
         $this->name = $name;
     }
 
-    public static function asPassenger()
+    public static function driver()
     {
-        return new self(1, 'Passenger');
+        return new self(1, 'Driver');
     }
 
-    public static function asDriver()
+    public static function passenger()
     {
-        return new self(2, 'Driver');
+        return new self(2, 'Passenger');
     }
 
-    public function getName()
+    public function getId()
     {
-        return $this->name;
+        return $this->id;
     }
 }

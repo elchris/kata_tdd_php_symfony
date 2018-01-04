@@ -1,49 +1,46 @@
 <?php
 
-
 namespace AppBundle\Repository;
 
 use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
+use AppBundle\Exception\DuplicateRoleAssignmentException;
+use Ramsey\Uuid\Uuid;
 
-class UserRepository extends AppRepository implements UserRepositoryInterface
+class UserRepository extends AppRepository
 {
-    public function newUser($firstName, $lastName)
-    {
-        $user = new AppUser($firstName, $lastName);
-        $this->save($user);
-    }
-
     /**
-     * @param integer $userId
+     * @param Uuid $userId
      * @return AppUser
      */
-    public function getUserById($userId)
+    public function getUserById(Uuid $userId)
     {
         return $this->em->createQuery(
             'select u from E:AppUser u where u.id = :userId'
         )
-            ->setParameter('userId', $userId)
-            ->getSingleResult();
+        ->setParameter('userId', $userId)
+        ->getSingleResult();
     }
 
     public function assignRoleToUser(AppUser $user, AppRole $role)
     {
-        $user->addRole($this->getStoredRole($role));
+        if ($user->hasRole($role)) {
+            throw new DuplicateRoleAssignmentException();
+        }
+        $role = $this->getRoleReference($role);
+        $user->assignRole($role);
         $this->save($user);
     }
 
-    private function getStoredRole(AppRole $role)
+    /**
+     * @param AppRole $role
+     * @return AppRole
+     */
+    private function getRoleReference(AppRole $role)
     {
-        return $this->em->createQuery(
-            'select r from E:AppRole r where r = :role'
-        )
-            ->setParameter('role', $role)
-            ->getSingleResult();
-    }
+        /** @var AppRole $role */
+        $role = $this->em->getReference(AppRole::class, $role->getId());
 
-    public function isUserInRole(AppUser $user, AppRole $role)
-    {
-        return $user->hasRole($this->getStoredRole($role));
+        return $role;
     }
 }
