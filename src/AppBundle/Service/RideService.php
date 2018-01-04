@@ -36,6 +36,12 @@ class RideService
         $this->rideEventRepository = $rideEventRepository;
     }
 
+    /**
+     * @param AppUser $passenger
+     * @param AppLocation $departure
+     * @return Ride
+     * @throws UserNotPassengerException
+     */
     public function newRide(AppUser $passenger, AppLocation $departure)
     {
         if (!$passenger->hasRole(AppRole::passenger())) {
@@ -59,6 +65,13 @@ class RideService
         return $lastEvent->getStatus();
     }
 
+    /**
+     * @param Ride $ride
+     * @param AppUser $driver
+     * @return Ride
+     * @throws RideLifeCycleException
+     * @throws UserNotInDriverRoleException
+     */
     public function acceptRide(Ride $ride, AppUser $driver)
     {
         $this->validateUserHasDriverRole($driver);
@@ -74,6 +87,14 @@ class RideService
         return $ride;
     }
 
+    /**
+     * @param Ride $acceptedRide
+     * @param AppUser $driver
+     * @return Ride
+     * @throws ActingDriverIsNotAssignedDriverException
+     * @throws RideLifeCycleException
+     * @throws UserNotInDriverRoleException
+     */
     public function markRideInProgress(Ride $acceptedRide, AppUser $driver)
     {
         $this->validateRideIsAccepted($acceptedRide);
@@ -88,6 +109,13 @@ class RideService
         return $acceptedRide;
     }
 
+    /**
+     * @param Ride $rideInProgress
+     * @param AppUser $driver
+     * @return Ride
+     * @throws ActingDriverIsNotAssignedDriverException
+     * @throws RideLifeCycleException
+     */
     public function markRideCompleted(Ride $rideInProgress, AppUser $driver)
     {
         $this->validateAttemptingDriverIsAssignedDriver($rideInProgress, $driver);
