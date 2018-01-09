@@ -2,6 +2,8 @@
 
 namespace Tests;
 
+use AppBundle\Exception\DuplicateRoleAssignmentException;
+use AppBundle\Exception\UserNotFoundException;
 use Tests\AppBundle\AppTestCase;
 
 class UserServiceTest extends AppTestCase
@@ -13,6 +15,10 @@ class UserServiceTest extends AppTestCase
         self::assertSame('holland', $user->getLastName());
     }
 
+    /**
+     * @throws DuplicateRoleAssignmentException
+     * @throws UserNotFoundException
+     */
     public function testMakeUserDriver()
     {
         $savedUser = $this->getSavedUser();
@@ -22,6 +28,10 @@ class UserServiceTest extends AppTestCase
         self::assertTrue($this->userService->isDriver($retrievedUser));
     }
 
+    /**
+     * @throws DuplicateRoleAssignmentException
+     * @throws UserNotFoundException
+     */
     public function testMakeUserPassenger()
     {
         $savedUser = $this->getSavedUser();

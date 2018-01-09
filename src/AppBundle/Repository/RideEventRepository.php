@@ -6,22 +6,27 @@ use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
 use AppBundle\Entity\RideEvent;
 use AppBundle\Entity\RideEventType;
+use AppBundle\Exception\RideNotFoundException;
 
 class RideEventRepository extends AppRepository
 {
     /**
      * @param Ride $ride
-     * @return RideEvent
+     * @return mixed
+     * @throws RideNotFoundException
      */
     public function getLastEventForRide(Ride $ride)
     {
-        return $this->em->createQuery(
-            'select e from E:RideEvent e where e.ride = :ride order by e.created desc, e.id desc'
-        )
-        ->setMaxResults(1)
-        ->setParameter('ride', $ride)
-        ->getSingleResult()
-        ;
+        try {
+            return $this->em->createQuery(
+                'select e from E:RideEvent e where e.ride = :ride order by e.created desc, e.id desc'
+            )
+                ->setMaxResults(1)
+                ->setParameter('ride', $ride)
+                ->getSingleResult();
+        } catch (\Exception $e) {
+            throw new RideNotFoundException();
+        }
     }
 
     public function markRideStatusByActor(
@@ -54,10 +59,9 @@ class RideEventRepository extends AppRepository
     private function getStatusReference(RideEventType $status)
     {
         /** @var RideEventType $status */
-        $status = $this->em->getReference(
-            RideEventType::class,
-            $status->getId()
-        );
+        $status = $this->em->getRepository(
+            RideEventType::class
+        )->find($status->getId());
 
         return $status;
     }

@@ -4,6 +4,9 @@ namespace Tests\AppBundle;
 
 use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
+use AppBundle\Exception\DuplicateRoleAssignmentException;
+use AppBundle\Exception\RideNotFoundException;
+use AppBundle\Exception\UserNotFoundException;
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -34,6 +37,25 @@ class RideRepositoryTest extends AppTestCase
         );
     }
 
+    /**
+     * @throws RideNotFoundException
+     */
+    public function testRideNotFoundThrowsException()
+    {
+        $nonExistentRide = new Ride(
+            $this->getSavedUser(),
+            $this->getSavedHomeLocation()
+        );
+
+        $this->expectException(RideNotFoundException::class);
+
+        $this->getRideById($nonExistentRide->getId());
+    }
+
+    /**
+     * @throws DuplicateRoleAssignmentException
+     * @throws UserNotFoundException
+     */
     public function testCreateRideWithDepartureAndPassenger()
     {
         $ride = $this->getSavedRide();
@@ -41,6 +63,11 @@ class RideRepositoryTest extends AppTestCase
         self::assertNotEmpty($ride->getId());
     }
 
+    /**
+     * @throws DuplicateRoleAssignmentException
+     * @throws RideNotFoundException
+     * @throws UserNotFoundException
+     */
     public function testAssignDestinationToRide()
     {
         $retrievedRide = $this->getRideWithDestination();
@@ -48,6 +75,11 @@ class RideRepositoryTest extends AppTestCase
         self::assertTrue($retrievedRide->isDestinedFor($this->destinationWork));
     }
 
+    /**
+     * @throws DuplicateRoleAssignmentException
+     * @throws RideNotFoundException
+     * @throws UserNotFoundException
+     */
     public function testAssignDriverToRide()
     {
         /** @var AppUser $driver */
@@ -62,6 +94,9 @@ class RideRepositoryTest extends AppTestCase
 
     /**
      * @return Ride
+     * @throws DuplicateRoleAssignmentException
+     * @throws RideNotFoundException
+     * @throws UserNotFoundException
      */
     protected function getRideWithDestination()
     {
@@ -80,7 +115,8 @@ class RideRepositoryTest extends AppTestCase
 
     /**
      * @param Uuid $id
-     * @return Ride
+     * @return mixed
+     * @throws RideNotFoundException
      */
     protected function getRideById(Uuid $id)
     {

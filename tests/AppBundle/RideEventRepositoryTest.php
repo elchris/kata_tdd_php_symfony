@@ -6,47 +6,37 @@ use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
 use AppBundle\Entity\RideEvent;
 use AppBundle\Entity\RideEventType;
+use AppBundle\Exception\DuplicateRoleAssignmentException;
+use AppBundle\Exception\RideNotFoundException;
+use AppBundle\Exception\UserNotFoundException;
 
 class RideEventRepositoryTest extends AppTestCase
 {
-    /** @var RideEventType $requestedType */
-    private $requestedType;
-
-    /** @var RideEventType $acceptedType */
-    private $acceptedType;
-
-    /** @var RideEventType $inProgressType */
-    private $inProgressType;
-
-    /** @var RideEventType $cancelledType */
-    private $cancelledType;
-
-    /** @var RideEventType $completedType */
-    private $completedType;
-
-    /** @var RideEventType $rejectedType */
-    private $rejectedType;
-
     /** @var Ride $savedRide */
     private $savedRide;
 
+    /**
+     * @throws DuplicateRoleAssignmentException
+     * @throws UserNotFoundException
+     */
     public function setUp()
     {
         parent::setUp();
-
         $this->savedRide = $this->getSavedRide();
-        $this->requestedType = RideEventType::requested();
-        $this->acceptedType = RideEventType::accepted();
-        $this->inProgressType = RideEventType::inProgress();
-        $this->cancelledType = RideEventType::cancelled();
-        $this->completedType = RideEventType::completed();
-        $this->rejectedType = RideEventType::rejected();
-        $this->save($this->requestedType);
-        $this->save($this->acceptedType);
-        $this->save($this->inProgressType);
-        $this->save($this->cancelledType);
-        $this->save($this->completedType);
-        $this->save($this->rejectedType);
+    }
+
+    /**
+     * @throws RideNotFoundException
+     */
+    public function testNonExistentRideThrowsException()
+    {
+        $nonExistentRide = new Ride(
+            $this->getSavedUser(),
+            $this->getSavedHomeLocation()
+        );
+
+        $this->expectException(RideNotFoundException::class);
+        $this->getLastEvent($nonExistentRide);
     }
 
     public function testSaveNewRideEvent()
@@ -56,6 +46,9 @@ class RideEventRepositoryTest extends AppTestCase
         self::assertGreaterThan(0, $rideEvent->getId());
     }
 
+    /**
+     * @throws RideNotFoundException
+     */
     public function testRideIsCurrentlyRequested()
     {
         $this->getSavedRequestedRideEvent();
@@ -65,31 +58,49 @@ class RideEventRepositoryTest extends AppTestCase
         self::assertTrue($lastEventForRide->is(RideEventType::requested()));
     }
 
+    /**
+     * @throws RideNotFoundException
+     */
     public function testRideIsCurrentlyAccepted()
     {
         $this->assertLastEventIsOfType($this->acceptedType);
     }
 
+    /**
+     * @throws RideNotFoundException
+     */
     public function testRideIsCurrentlyInProgress()
     {
         $this->assertLastEventIsOfType($this->inProgressType);
     }
 
+    /**
+     * @throws RideNotFoundException
+     */
     public function testRideIsCurrentlyCancelled()
     {
         $this->assertLastEventIsOfType($this->cancelledType);
     }
 
+    /**
+     * @throws RideNotFoundException
+     */
     public function testRideIsCurrentlyCompleted()
     {
         $this->assertLastEventIsOfType($this->completedType);
     }
 
+    /**
+     * @throws RideNotFoundException
+     */
     public function testRideIsCurrentlyRejected()
     {
         $this->assertLastEventIsOfType($this->rejectedType);
     }
 
+    /**
+     * @throws RideNotFoundException
+     */
     public function testMarkRideAsStatus()
     {
         $this->markRide(
@@ -116,7 +127,8 @@ class RideEventRepositoryTest extends AppTestCase
 
     /**
      * @param RideEventType $eventTypeToAssert
-     * @return RideEvent
+     * @return mixed
+     * @throws RideNotFoundException
      */
     private function assertLastEventIsOfType(RideEventType $eventTypeToAssert)
     {
@@ -136,6 +148,11 @@ class RideEventRepositoryTest extends AppTestCase
         return $lastEventForRide;
     }
 
+    /**
+     * @param Ride $ride
+     * @return mixed
+     * @throws RideNotFoundException
+     */
     protected function getLastEvent(Ride $ride)
     {
         return $this->rideEventRepository->getLastEventForRide($ride);
