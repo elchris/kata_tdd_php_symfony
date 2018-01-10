@@ -16,7 +16,7 @@ class LocationService
      * LocationService constructor.
      * @param LocationRepository $locationRepository
      */
-    public function __construct($locationRepository)
+    public function __construct(LocationRepository $locationRepository)
     {
         $this->locationRepository = $locationRepository;
     }
