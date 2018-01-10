@@ -5,6 +5,7 @@ namespace AppBundle\Repository;
 use AppBundle\Entity\AppLocation;
 use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
+use AppBundle\Exception\RideNotFoundException;
 use Ramsey\Uuid\Uuid;
 
 class RideRepository extends AppRepository
@@ -17,15 +18,20 @@ class RideRepository extends AppRepository
 
     /**
      * @param Uuid $id
-     * @return Ride
+     * @return mixed
+     * @throws RideNotFoundException
      */
     public function getRideById(Uuid $id)
     {
-        return $this->em->createQuery(
-            'select r from E:Ride r where r.id = :id'
-        )
-        ->setParameter('id', $id)
-        ->getSingleResult();
+        try {
+            return $this->em->createQuery(
+                'select r from E:Ride r where r.id = :id'
+            )
+                ->setParameter('id', $id)
+                ->getSingleResult();
+        } catch (\Exception $e) {
+            throw new RideNotFoundException();
+        }
     }
 
     public function assignDriverToRide(Ride $ride, AppUser $driver)

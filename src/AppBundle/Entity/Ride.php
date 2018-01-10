@@ -86,7 +86,7 @@ class Ride
 
     public function isDestinedFor(AppLocation $destinationLocation)
     {
-        return $this->destination->equals($destinationLocation);
+        return $this->destination->isSameAs($destinationLocation);
     }
 
     public function getPassengerTransaction(RideEventType $status)

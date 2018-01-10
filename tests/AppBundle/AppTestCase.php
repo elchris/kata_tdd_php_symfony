@@ -4,9 +4,16 @@
 namespace Tests\AppBundle;
 
 use AppBundle\Entity\AppLocation;
+use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
 use AppBundle\Entity\RideEventType;
+use AppBundle\Exception\ActingDriverIsNotAssignedDriverException;
+use AppBundle\Exception\DuplicateRoleAssignmentException;
+use AppBundle\Exception\RideLifeCycleException;
+use AppBundle\Exception\RideNotFoundException;
+use AppBundle\Exception\UserNotInDriverRoleException;
+use AppBundle\Exception\UserNotInPassengerRoleException;
 use AppBundle\Repository\LocationRepository;
 use AppBundle\Repository\RideEventRepository;
 use AppBundle\Repository\RideRepository;
@@ -29,6 +36,24 @@ abstract class AppTestCase extends WebTestCase
     /** @var  EntityManagerInterface */
     private $em;
 
+    /** @var RideEventType $requestedType */
+    protected $requestedType;
+
+    /** @var RideEventType $acceptedType */
+    protected $acceptedType;
+
+    /** @var RideEventType $inProgressType */
+    protected $inProgressType;
+
+    /** @var RideEventType $cancelledType */
+    protected $cancelledType;
+
+    /** @var RideEventType $completedType */
+    protected $completedType;
+
+    /** @var RideEventType $rejectedType */
+    protected $rejectedType;
+
     protected function setUp()
     {
         parent::setUp();
@@ -45,6 +70,9 @@ abstract class AppTestCase extends WebTestCase
             $this->rideRepository,
             $this->rideEventRepository
         );
+
+        $this->bootStrapAppRoles();
+        $this->bootStrapRideEventTypes();
     }
 
     protected function em()
@@ -56,6 +84,7 @@ abstract class AppTestCase extends WebTestCase
     {
         $this->em->persist($entity);
         $this->em->flush();
+        return $entity;
     }
 
     private function setUpEntityManager()
@@ -105,6 +134,7 @@ abstract class AppTestCase extends WebTestCase
 
     /**
      * @return AppUser
+     * @throws DuplicateRoleAssignmentException
      */
     protected function getNewPassenger()
     {
@@ -114,7 +144,8 @@ abstract class AppTestCase extends WebTestCase
     }
 
     /**
-     * @param $user
+     * @param AppUser $user
+     * @throws DuplicateRoleAssignmentException
      */
     protected function makeUserPassenger(AppUser $user)
     {
@@ -122,7 +153,8 @@ abstract class AppTestCase extends WebTestCase
     }
 
     /**
-     * @param $driver
+     * @param AppUser $driver
+     * @throws DuplicateRoleAssignmentException
      */
     protected function makeUserDriver(AppUser $driver)
     {
@@ -140,12 +172,19 @@ abstract class AppTestCase extends WebTestCase
 
     /**
      * @return AppUser
+     * @throws DuplicateRoleAssignmentException
      */
     protected function getNewDriver()
     {
         return $this->getNewDriverWithName('new', 'driver');
     }
 
+    /**
+     * @param $first
+     * @param $last
+     * @return AppUser
+     * @throws DuplicateRoleAssignmentException
+     */
     protected function getNewDriverWithName($first, $last)
     {
         $driver = $this->getSavedUserWithName($first, $last);
@@ -155,6 +194,8 @@ abstract class AppTestCase extends WebTestCase
 
     /**
      * @return Ride
+     * @throws DuplicateRoleAssignmentException
+     * @throws \AppBundle\Exception\UserNotFoundException
      */
     protected function getSavedRide()
     {
@@ -180,6 +221,7 @@ abstract class AppTestCase extends WebTestCase
     /**
      * @param $userId
      * @return AppUser
+     * @throws \AppBundle\Exception\UserNotFoundException
      */
     protected function getServiceUserById($userId)
     {
@@ -190,7 +232,7 @@ abstract class AppTestCase extends WebTestCase
      * @param $passenger
      * @param $departure
      * @return Ride
-     * @throws \AppBundle\Exception\UserNotPassengerException
+     * @throws UserNotInPassengerRoleException
      */
     protected function getNewRide(AppUser $passenger, AppLocation $departure)
     {
@@ -198,9 +240,12 @@ abstract class AppTestCase extends WebTestCase
     }
 
     /**
-     * @param $rideInProgress
-     * @param $driver
+     * @param Ride $rideInProgress
+     * @param AppUser $driver
      * @return Ride
+     * @throws ActingDriverIsNotAssignedDriverException
+     * @throws RideLifeCycleException
+     * @throws RideNotFoundException
      */
     protected function markRideCompleted(Ride $rideInProgress, AppUser $driver)
     {
@@ -210,6 +255,7 @@ abstract class AppTestCase extends WebTestCase
     /**
      * @param $ride
      * @return RideEventType
+     * @throws RideNotFoundException
      */
     protected function getRideStatus(Ride $ride)
     {
@@ -217,9 +263,13 @@ abstract class AppTestCase extends WebTestCase
     }
 
     /**
-     * @param $acceptedRide
-     * @param $driver
+     * @param Ride $acceptedRide
+     * @param AppUser $driver
      * @return Ride
+     * @throws ActingDriverIsNotAssignedDriverException
+     * @throws RideLifeCycleException
+     * @throws UserNotInDriverRoleException
+     * @throws RideNotFoundException
      */
     protected function markRideInProgress(Ride $acceptedRide, AppUser $driver)
     {
@@ -227,9 +277,12 @@ abstract class AppTestCase extends WebTestCase
     }
 
     /**
-     * @param $newRide
-     * @param $driver
+     * @param Ride $newRide
+     * @param AppUser $driver
      * @return Ride
+     * @throws RideLifeCycleException
+     * @throws UserNotInDriverRoleException
+     * @throws RideNotFoundException
      */
     protected function acceptRide(Ride $newRide, AppUser $driver)
     {
@@ -238,7 +291,8 @@ abstract class AppTestCase extends WebTestCase
 
     /**
      * @return Ride
-     * @throws \AppBundle\Exception\UserNotPassengerException
+     * @throws DuplicateRoleAssignmentException
+     * @throws UserNotInPassengerRoleException
      */
     protected function getSavedNewRideWithPassengerAndDestination()
     {
@@ -259,7 +313,12 @@ abstract class AppTestCase extends WebTestCase
     /**
      * @param AppUser $driver
      * @return Ride
-     * @throws \AppBundle\Exception\UserNotPassengerException
+     * @throws ActingDriverIsNotAssignedDriverException
+     * @throws DuplicateRoleAssignmentException
+     * @throws RideLifeCycleException
+     * @throws UserNotInDriverRoleException
+     * @throws UserNotInPassengerRoleException
+     * @throws RideNotFoundException
      */
     protected function getRideInProgress(AppUser $driver)
     {
@@ -270,7 +329,11 @@ abstract class AppTestCase extends WebTestCase
 
     /**
      * @return Ride
-     * @throws \AppBundle\Exception\UserNotPassengerException
+     * @throws DuplicateRoleAssignmentException
+     * @throws RideLifeCycleException
+     * @throws UserNotInDriverRoleException
+     * @throws UserNotInPassengerRoleException
+     * @throws RideNotFoundException
      */
     protected function getAcceptedRide()
     {
@@ -281,11 +344,31 @@ abstract class AppTestCase extends WebTestCase
     /**
      * @param AppUser $driver
      * @return Ride
-     * @throws \AppBundle\Exception\UserNotPassengerException
+     * @throws DuplicateRoleAssignmentException
+     * @throws RideLifeCycleException
+     * @throws UserNotInDriverRoleException
+     * @throws UserNotInPassengerRoleException
+     * @throws RideNotFoundException
      */
     protected function getAcceptedRideWithDriver(AppUser $driver)
     {
         $newRide = $this->getSavedNewRideWithPassengerAndDestination();
         return $this->acceptRide($newRide, $driver);
+    }
+
+    private function bootStrapAppRoles(): void
+    {
+        $this->save(AppRole::driver());
+        $this->save(AppRole::passenger());
+    }
+
+    protected function bootStrapRideEventTypes(): void
+    {
+        $this->requestedType = $this->save(RideEventType::requested());
+        $this->acceptedType = $this->save(RideEventType::accepted());
+        $this->inProgressType = $this->save(RideEventType::inProgress());
+        $this->cancelledType = $this->save(RideEventType::cancelled());
+        $this->completedType = $this->save(RideEventType::completed());
+        $this->rejectedType = $this->save(RideEventType::rejected());
     }
 }

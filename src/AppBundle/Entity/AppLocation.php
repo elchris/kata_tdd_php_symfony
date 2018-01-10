@@ -26,6 +26,12 @@ class AppLocation
     private $long;
 
     /**
+     * @var \DateTime
+     * @ORM\Column(name="created", type="datetime", nullable=false)
+     */
+    private $created;
+
+    /**
      * @var Uuid $id
      * @ORM\Id()
      * @ORM\Column(name="id", type="guid", nullable=false)
@@ -42,19 +48,12 @@ class AppLocation
         $this->id = Uuid::uuid4();
         $this->lat = $lat;
         $this->long = $long;
+        $this->created = new \DateTime();
     }
 
-    public static function cloneFrom(AppLocation $savedLocation)
+    public static function cloneFrom(AppLocation $toClone)
     {
-        return new self($savedLocation->getLat(), $savedLocation->getLong());
-    }
-
-    /**
-     * @return Uuid
-     */
-    public function getId()
-    {
-        return $this->id;
+        return new self($toClone->lat, $toClone->long);
     }
 
     public function getLat()
@@ -67,12 +66,22 @@ class AppLocation
         return $this->long;
     }
 
-    public function equals(AppLocation $compareLocation)
+    public function isSameAs(AppLocation $compareLocation)
     {
         return (
-            ($compareLocation->getLat() === $this->getLat())
+            ($compareLocation->lat === $this->lat)
             &&
-            ($compareLocation->getLong() === $this->getLong())
+            ($compareLocation->long === $this->long)
         );
+    }
+
+    public function preDates(AppLocation $compareLocation)
+    {
+        return $this->created < $compareLocation->created;
+    }
+
+    public function equals(AppLocation $compareLocation)
+    {
+        return $this->id->equals($compareLocation->id);
     }
 }

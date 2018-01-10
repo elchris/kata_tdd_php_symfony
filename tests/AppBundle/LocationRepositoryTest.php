@@ -25,7 +25,24 @@ class LocationRepositoryTest extends AppTestCase
     {
         $homeLocation = $this->getSavedLocation();
 
-        self::assertNotEmpty($homeLocation->getId());
+        self::assertNotNull($homeLocation);
+    }
+
+    public function testGetDupeLocationsReturnsFirst()
+    {
+        $homeLocation = $this->getSavedLocation();
+        $dupeHomeLocation = $this->getSavedLocation();
+        self::assertTrue($homeLocation->preDates($dupeHomeLocation));
+        self::assertTrue($homeLocation->isSameAs($dupeHomeLocation));
+        self::assertFalse($dupeHomeLocation->equals($homeLocation));
+        $lookupLocation = AppLocation::cloneFrom($homeLocation);
+
+        $retrievedLocation = $this->getOrCreateLocation($lookupLocation);
+
+        self::assertTrue($homeLocation->isSameAs($retrievedLocation));
+        self::assertTrue($dupeHomeLocation->isSameAs($retrievedLocation));
+        self::assertTrue($homeLocation->equals($retrievedLocation));
+        self::assertFalse($dupeHomeLocation->equals($retrievedLocation));
     }
 
     public function testGetExistingLocationByLatLong()
@@ -35,7 +52,7 @@ class LocationRepositoryTest extends AppTestCase
 
         $retrievedLocation = $this->getOrCreateLocation($lookupLocation);
 
-        self::assertTrue($retrievedLocation->equals($savedLocation));
+        self::assertTrue($retrievedLocation->isSameAs($savedLocation));
     }
 
     public function testCreateAndGetNewLocation()
@@ -45,7 +62,7 @@ class LocationRepositoryTest extends AppTestCase
 
         $retrievedLocation = $this->getOrCreateLocation($workLocation);
 
-        self::assertTrue($retrievedLocation->equals($workLocation));
+        self::assertTrue($retrievedLocation->isSameAs($workLocation));
     }
 
     /**

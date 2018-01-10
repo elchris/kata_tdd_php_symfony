@@ -19,6 +19,6 @@ class LocationServiceTest extends AppTestCase
             $referenceLocation->getLong()
         );
 
-        self::assertTrue($retrievedLocation->equals($referenceLocation));
+        self::assertTrue($retrievedLocation->isSameAs($referenceLocation));
     }
 }

@@ -4,6 +4,8 @@ namespace AppBundle\Service;
 
 use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
+use AppBundle\Exception\DuplicateRoleAssignmentException;
+use AppBundle\Exception\UserNotFoundException;
 use AppBundle\Repository\UserRepository;
 use Ramsey\Uuid\Uuid;
 
@@ -33,12 +35,17 @@ class UserService
     /**
      * @param Uuid $userId
      * @return AppUser
+     * @throws UserNotFoundException
      */
     public function getUserById(Uuid $userId)
     {
         return $this->userRepository->getUserById($userId);
     }
 
+    /**
+     * @param AppUser $user
+     * @throws DuplicateRoleAssignmentException
+     */
     public function makeUserDriver(AppUser $user)
     {
         $this->assignRole($user, AppRole::driver());
@@ -49,6 +56,10 @@ class UserService
         return $user->hasRole(AppRole::driver());
     }
 
+    /**
+     * @param AppUser $user
+     * @throws DuplicateRoleAssignmentException
+     */
     public function makeUserPassenger(AppUser $user)
     {
         $this->assignRole($user, AppRole::passenger());
@@ -61,7 +72,8 @@ class UserService
 
     /**
      * @param AppUser $user
-     * @param $role
+     * @param AppRole $role
+     * @throws DuplicateRoleAssignmentException
      */
     protected function assignRole(AppUser $user, AppRole $role)
     {
