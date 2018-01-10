@@ -45,9 +45,7 @@ class RideService
      */
     public function newRide(AppUser $passenger, AppLocation $departure)
     {
-        if (!$passenger->hasRole(AppRole::passenger())) {
-            throw new UserNotInPassengerRoleException();
-        }
+        $this->validateUserHasPassengerRole($passenger);
 
         $newRide = new Ride($passenger, $departure);
         $this->rideRepository->save($newRide);
@@ -137,6 +135,17 @@ class RideService
             RideEventType::completed()
         );
         return $rideInProgress;
+    }
+
+    /**
+     * @param AppUser $passenger
+     * @throws UserNotInPassengerRoleException
+     */
+    private function validateUserHasPassengerRole(AppUser $passenger)
+    {
+        if (!$passenger->hasRole(AppRole::passenger())) {
+            throw new UserNotInPassengerRoleException();
+        }
     }
 
     /**
