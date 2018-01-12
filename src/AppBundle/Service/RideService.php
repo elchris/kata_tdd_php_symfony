@@ -60,13 +60,15 @@ class RideService
 
     /**
      * @param Ride $ride
-     * @return mixed
+     * @return RideEventType
      * @throws RideNotFoundException
      */
     public function getRideStatus(Ride $ride)
     {
-        $lastEvent = $this->rideEventRepository->getLastEventForRide($ride);
-        return $lastEvent->getStatus();
+        return
+            $this->rideEventRepository
+                ->getLastEventForRide($ride)
+                ->getStatus();
     }
 
     /**

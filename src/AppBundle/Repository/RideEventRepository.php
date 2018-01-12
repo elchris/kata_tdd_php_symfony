@@ -12,7 +12,7 @@ class RideEventRepository extends AppRepository
 {
     /**
      * @param Ride $ride
-     * @return mixed
+     * @return RideEvent
      * @throws RideNotFoundException
      */
     public function getLastEventForRide(Ride $ride)
