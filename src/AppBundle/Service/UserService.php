@@ -75,7 +75,7 @@ class UserService
      * @param AppRole $role
      * @throws DuplicateRoleAssignmentException
      */
-    protected function assignRole(AppUser $user, AppRole $role)
+    private function assignRole(AppUser $user, AppRole $role)
     {
         $this->userRepository->assignRoleToUser($user, $role);
     }

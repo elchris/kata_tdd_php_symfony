@@ -229,8 +229,8 @@ abstract class AppTestCase extends WebTestCase
     }
 
     /**
-     * @param $passenger
-     * @param $departure
+     * @param AppUser $passenger
+     * @param AppLocation $departure
      * @return Ride
      * @throws UserNotInPassengerRoleException
      */
@@ -362,7 +362,7 @@ abstract class AppTestCase extends WebTestCase
         $this->save(AppRole::passenger());
     }
 
-    protected function bootStrapRideEventTypes(): void
+    private function bootStrapRideEventTypes(): void
     {
         $this->requestedType = $this->save(RideEventType::requested());
         $this->acceptedType = $this->save(RideEventType::accepted());
