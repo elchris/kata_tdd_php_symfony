@@ -43,12 +43,16 @@
         "incenteev/composer-parameter-handler": "^2.0",
         "doctrine/doctrine-migrations-bundle": "^1.0",
         "squizlabs/php_codesniffer": "*",
-        "ramsey/uuid": "^3.7"
+        "ramsey/uuid": "^3.7",
+        "friendsofsymfony/rest-bundle": "^2.3",
+        "jms/serializer-bundle": "^2.3",
+        "nelmio/cors-bundle": "^1.5"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
         "symfony/phpunit-bridge": "^3.0",
-        "phpunit/phpunit": "^6.5"
+        "phpunit/phpunit": "^6.5",
+        "codeception/codeception": "^2.3"
     },
     "scripts": {
         "symfony-scripts": [

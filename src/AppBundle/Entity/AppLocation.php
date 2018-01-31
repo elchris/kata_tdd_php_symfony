@@ -21,7 +21,7 @@ class AppLocation
     private $lat;
     /**
      * @var float
-     * @ORM\Column(name="long", type="float", nullable=false)
+     * @ORM\Column(name="longitude", type="float", nullable=false)
      */
     private $long;
 

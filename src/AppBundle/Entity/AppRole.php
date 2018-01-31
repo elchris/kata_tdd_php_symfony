@@ -13,6 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class AppRole
 {
+    const DRIVER = 'Driver';
+    const PASSENGER = 'Passenger';
     /**
      * @var integer $id
      * @ORM\Id()
@@ -34,12 +36,22 @@ class AppRole
 
     public static function driver()
     {
-        return new self(1, 'Driver');
+        return new self(1, self::DRIVER);
     }
 
     public static function passenger()
     {
-        return new self(2, 'Passenger');
+        return new self(2, self::PASSENGER);
+    }
+
+    public static function isPassenger($role)
+    {
+        return $role === self::PASSENGER;
+    }
+
+    public static function isDriver($role)
+    {
+        return $role === self::DRIVER;
     }
 
     public function getId()
