@@ -15,6 +15,8 @@ class AppRole
 {
     const DRIVER = 'Driver';
     const PASSENGER = 'Passenger';
+    const DRIVER_ID = 1;
+    const PASSENGER_ID = 2;
     /**
      * @var integer $id
      * @ORM\Id()
@@ -36,12 +38,12 @@ class AppRole
 
     public static function driver()
     {
-        return new self(1, self::DRIVER);
+        return new self(self::DRIVER_ID, self::DRIVER);
     }
 
     public static function passenger()
     {
-        return new self(2, self::PASSENGER);
+        return new self(self::PASSENGER_ID, self::PASSENGER);
     }
 
     public static function isPassenger($role)

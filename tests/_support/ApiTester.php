@@ -83,32 +83,19 @@ class ApiTester extends \Codeception\Actor
 
     protected function verifyPassengerRoleOnUser()
     {
-        $this->seeResponseContainsJson(
-            [
-                'roles' => [
-                    [
-                        'id' => 2,
-                        'name' => \AppBundle\Entity\AppRole::PASSENGER
-                    ]
-                ]
-            ]
+        $this->verifyPassengerRole(
+            2,
+            \AppBundle\Entity\AppRole::PASSENGER
         );
     }
 
     protected function verifyDriverRoleOnUser()
     {
-        $this->seeResponseContainsJson(
-            [
-                'roles' => [
-                    [
-                        'id' => 1,
-                        'name' => \AppBundle\Entity\AppRole::DRIVER
-                    ]
-                ]
-            ]
+        $this->verifyPassengerRole(
+            1,
+            \AppBundle\Entity\AppRole::DRIVER
         );
     }
-
 
     /**
      * @param $userId
@@ -117,14 +104,9 @@ class ApiTester extends \Codeception\Actor
     protected function assignPassengerRoleToUser($userId)
     {
         $this->wantTo('Assign Passenger Role to the Created User');
-        $patchedUser = $this->sendPatchApiRequest(
-            '/user/' . $userId,
-            [
-                'role' => \AppBundle\Entity\AppRole::PASSENGER
-            ]
-        );
+        $roleToAssign = \AppBundle\Entity\AppRole::PASSENGER;
 
-        return $patchedUser;
+        return $this->assignRoleToUser($userId, $roleToAssign);
     }
 
     /**
@@ -134,14 +116,9 @@ class ApiTester extends \Codeception\Actor
     protected function assignDriverRoleToUser($userId)
     {
         $this->wantTo('Assign Driver Role to the Created User');
-        $patchedUser = $this->sendPatchApiRequest(
-            '/user/' . $userId,
-            [
-                'role' => \AppBundle\Entity\AppRole::DRIVER
-            ]
-        );
+        $roleToAssign = \AppBundle\Entity\AppRole::DRIVER;
 
-        return $patchedUser;
+        return $this->assignRoleToUser($userId, $roleToAssign);
     }
 
     protected function createNewUser(string $first, string $last)
@@ -163,5 +140,40 @@ class ApiTester extends \Codeception\Actor
         $this->seeResponseContainsJson(['id' => $userId]);
 
         return $response;
+    }
+
+    /**
+     * @param $userId
+     * @param $roleToAssign
+     * @return mixed
+     */
+    private function assignRoleToUser($userId, $roleToAssign)
+    {
+        $patchedUser = $this->sendPatchApiRequest(
+            '/user/' . $userId,
+            [
+                'role' => $roleToAssign
+            ]
+        );
+
+        return $patchedUser;
+    }
+
+    /**
+     * @param $roleIdToVerify
+     * @param $roleToVerify
+     */
+    private function verifyPassengerRole($roleIdToVerify, $roleToVerify): void
+    {
+        $this->seeResponseContainsJson(
+            [
+                'roles' => [
+                    [
+                        'id' => $roleIdToVerify,
+                        'name' => $roleToVerify
+                    ]
+                ]
+            ]
+        );
     }
 }
