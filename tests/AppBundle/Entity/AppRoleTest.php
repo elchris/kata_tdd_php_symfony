@@ -1,8 +1,9 @@
 <?php
 
 
-namespace AppBundle\Entity;
+namespace Tests\AppBundle\Entity;
 
+use AppBundle\Entity\AppRole;
 use Tests\AppBundle\AppTestCase;
 
 class AppRoleTest extends AppTestCase

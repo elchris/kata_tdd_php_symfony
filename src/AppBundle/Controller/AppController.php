@@ -26,7 +26,8 @@ class AppController extends FOSRestController
     {
         return new RideService(
             new RideRepository($this->em()),
-            new RideEventRepository($this->em())
+            new RideEventRepository($this->em()),
+            new LocationRepository($this->em())
         );
     }
 

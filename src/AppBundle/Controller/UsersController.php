@@ -3,6 +3,8 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\AppRole;
+use AppBundle\Exception\DuplicateRoleAssignmentException;
+use AppBundle\Exception\UserNotFoundException;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\AppUser;
@@ -28,7 +30,7 @@ class UsersController extends AppController
      * @Rest\Get("/api/v1/user/{id}")
      * @param string $id
      * @return AppUser
-     * @throws \AppBundle\Exception\UserNotFoundException
+     * @throws UserNotFoundException
      */
     public function idAction(string $id)
     {
@@ -40,8 +42,8 @@ class UsersController extends AppController
      * @param string $id
      * @param Request $request
      * @return AppUser
-     * @throws \AppBundle\Exception\UserNotFoundException
-     * @throws \AppBundle\Exception\DuplicateRoleAssignmentException
+     * @throws UserNotFoundException
+     * @throws DuplicateRoleAssignmentException
      */
     public function patchAction(string $id, Request $request)
     {
@@ -53,7 +55,7 @@ class UsersController extends AppController
     /**
      * @param Request $request
      * @param $userToPatch
-     * @throws \AppBundle\Exception\DuplicateRoleAssignmentException
+     * @throws DuplicateRoleAssignmentException
      */
     private function patchRole(Request $request, $userToPatch): void
     {

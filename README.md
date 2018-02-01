@@ -43,8 +43,10 @@ Run:
 
 Migrations:
 
-* bin/console doctrine:migrations:diff
-* bin/console doctrine:migrations:migrate
+* Generate a single migration from the current state of the Entity Graph
+    * bin/console doctrine:migrations:diff
+* Execute all current migrations
+    * bin/console doctrine:migrations:migrate
 
 Generate:
 

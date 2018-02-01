@@ -1,5 +1,8 @@
 <?php
 
+use AppBundle\Entity\RideEventType;
+use Tests\AppBundle\LocationServiceTest;
+
 /**
  * Inherited Methods
  * @method void wantToTest($text)
@@ -53,6 +56,68 @@ class ApiTester extends \Codeception\Actor
         $this->seeResponseIsJson();
 
         return json_decode($this->grabResponse(), true);
+    }
+
+    public function acceptRideByDriver(string $rideId, string $driverId, string $passengerId)
+    {
+        $patchedRide = $this->sendPatchApiRequest('/ride/'. $rideId, [
+            'driverId' => $driverId,
+            'eventId' => RideEventType::ACCEPTED_ID
+        ]);
+        $this->seeResponseContainsJson([
+            'driver' => [
+                'id' => $driverId
+            ],
+            'passenger' => [
+                'id' => $passengerId
+            ]
+        ]);
+        $this->verifyRideStatus(
+            $rideId,
+            RideEventType::ACCEPTED_ID,
+            RideEventType::ACCEPTED
+        );
+        return $patchedRide;
+    }
+
+    public function assignDestinationToRide(
+        string $rideId,
+        $destinationLat,
+        $destinationLong
+    ) {
+        $patchedRide = $this->sendPatchApiRequest('/ride/'.$rideId, [
+            'destinationLat' => $destinationLat,
+            'destinationLong' => $destinationLong
+        ]);
+        $this->seeResponseContainsJson([
+            'destination' => [
+                'lat' => $destinationLat,
+                'long' => $destinationLong
+            ]
+        ]);
+        return $patchedRide;
+    }
+
+    public function getNewRide()
+    {
+        $passenger = $this->getNewPassenger();
+
+        $createdRide = $this->sendPostApiRequest('/ride', [
+            'passengerId' => $passenger['id'],
+            'departureLat' => LocationServiceTest::HOME_LOCATION_LAT,
+            'departureLong' => LocationServiceTest::HOME_LOCATION_LONG
+        ]);
+        $rideId = $createdRide['id'];
+
+        $this->sendGetApiRequest('/ride/'.$rideId);
+        $this->seeResponseContainsJson([
+            'id' => $rideId
+        ]);
+
+        $statusIdToVerify = RideEventType::REQUESTED_ID;
+        $statusNameToVerify = RideEventType::REQUESTED;
+        $this->verifyRideStatus($rideId, $statusIdToVerify, $statusNameToVerify);
+        return $createdRide;
     }
 
     public function getNewPassenger()
@@ -175,5 +240,19 @@ class ApiTester extends \Codeception\Actor
                 ]
             ]
         );
+    }
+
+    /**
+     * @param $rideId
+     * @param $statusIdToVerify
+     * @param $statusNameToVerify
+     */
+    public function verifyRideStatus($rideId, $statusIdToVerify, $statusNameToVerify): void
+    {
+        $this->sendGetApiRequest('/ride/' . $rideId . '/status');
+        $this->seeResponseContainsJson([
+            'id' => $statusIdToVerify,
+            'name' => $statusNameToVerify
+        ]);
     }
 }

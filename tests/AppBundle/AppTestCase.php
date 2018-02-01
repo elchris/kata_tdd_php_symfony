@@ -32,6 +32,7 @@ abstract class AppTestCase extends WebTestCase
     const HOME_LOCATION_LONG = -122.432444;
     const WORK_LOCATION_LAT = 37.7721718;
     const WORK_LOCATION_LONG = -122.4310872;
+    private $locationRepository;
 
     /** @var  EntityManagerInterface */
     private $em;
@@ -63,12 +64,14 @@ abstract class AppTestCase extends WebTestCase
 
         $this->userRepository = new UserRepository($this->em());
         $this->userService = new UserService(new UserRepository($this->em()));
-        $this->locationService = new LocationService(new LocationRepository($this->em()));
+        $this->locationRepository = new LocationRepository($this->em());
+        $this->locationService = new LocationService($this->locationRepository);
         $this->rideRepository = new RideRepository($this->em());
         $this->rideEventRepository = new RideEventRepository($this->em());
         $this->rideService = new RideService(
             $this->rideRepository,
-            $this->rideEventRepository
+            $this->rideEventRepository,
+            $this->locationRepository
         );
 
         $this->bootStrapAppRoles();

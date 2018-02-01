@@ -12,8 +12,10 @@ use AppBundle\Exception\RideLifeCycleException;
 use AppBundle\Exception\RideNotFoundException;
 use AppBundle\Exception\UserNotInDriverRoleException;
 use AppBundle\Exception\UserNotInPassengerRoleException;
+use AppBundle\Repository\LocationRepository;
 use AppBundle\Repository\RideEventRepository;
 use AppBundle\Repository\RideRepository;
+use Ramsey\Uuid\Uuid;
 
 class RideService
 {
@@ -25,16 +27,25 @@ class RideService
      * @var RideEventRepository
      */
     private $rideEventRepository;
+    /**
+     * @var LocationRepository
+     */
+    private $locationRepository;
 
     /**
      * RideService constructor.
      * @param RideRepository $rideRepository
      * @param RideEventRepository $rideEventRepository
+     * @param LocationRepository $locationRepository
      */
-    public function __construct(RideRepository $rideRepository, RideEventRepository $rideEventRepository)
-    {
+    public function __construct(
+        RideRepository $rideRepository,
+        RideEventRepository $rideEventRepository,
+        LocationRepository $locationRepository
+    ) {
         $this->rideRepository = $rideRepository;
         $this->rideEventRepository = $rideEventRepository;
+        $this->locationRepository = $locationRepository;
     }
 
     /**
@@ -56,6 +67,16 @@ class RideService
         );
 
         return $newRide;
+    }
+
+    /**
+     * @param Uuid $id
+     * @return mixed
+     * @throws RideNotFoundException
+     */
+    public function getRide(Uuid $id)
+    {
+        return $this->rideRepository->getRideById($id);
     }
 
     /**
@@ -94,6 +115,15 @@ class RideService
         return $ride;
     }
 
+    public function assignDestinationToRide(Ride $ride, AppLocation $lookupDestination)
+    {
+        $destination = $this->locationRepository->getLocation($lookupDestination);
+        $this->rideRepository->assignDestinationToRide(
+            $ride,
+            $destination
+        );
+        return $ride;
+    }
 
     /**
      * @param Ride $acceptedRide
