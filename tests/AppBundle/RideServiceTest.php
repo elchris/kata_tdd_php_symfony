@@ -2,6 +2,7 @@
 
 namespace Tests\AppBundle;
 
+use AppBundle\Entity\AppLocation;
 use AppBundle\Entity\Ride;
 use AppBundle\Entity\RideEventType;
 use AppBundle\Exception\ActingDriverIsNotAssignedDriverException;
@@ -23,6 +24,20 @@ class RideServiceTest extends AppTestCase
 
         self::assertInstanceOf(Ride::class, $newRide);
         self::assertNotEmpty($newRide->getId());
+    }
+
+    /**
+     * @throws DuplicateRoleAssignmentException
+     * @throws UserNotInPassengerRoleException
+     * @throws RideNotFoundException
+     */
+    public function testGetRideById()
+    {
+        $newRide = $this->getSavedNewRideWithPassengerAndDestination();
+
+        $retrievedRide = $this->rideService->getRide($newRide->getId());
+
+        self::assertTrue($newRide->is($retrievedRide));
     }
 
     /**
@@ -76,6 +91,26 @@ class RideServiceTest extends AppTestCase
 
         self::assertTrue(RideEventType::accepted()->equals($rideStatus));
         self::assertTrue($acceptedRide->isDrivenBy($newDriver));
+    }
+
+    /**
+     * @throws DuplicateRoleAssignmentException
+     * @throws UserNotInPassengerRoleException
+     */
+    public function testAssignDestinationToRide()
+    {
+        $newRide = $this->getSavedNewRideWithPassengerAndDestination();
+        $workLocation = new AppLocation(
+            LocationServiceTest::WORK_LOCATION_LAT,
+            LocationServiceTest::WORK_LOCATION_LONG
+        );
+        /** @var Ride $rideWithDestination */
+        $rideWithDestination = $this->rideService->assignDestinationToRide(
+            $newRide,
+            $workLocation
+        );
+
+        self::assertTrue($rideWithDestination->isDestinedFor($workLocation));
     }
 
     /**

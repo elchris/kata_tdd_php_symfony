@@ -97,4 +97,9 @@ class Ride
             $status
         );
     }
+
+    public function is(Ride $rideToCompare)
+    {
+        return $this->id->equals($rideToCompare->id);
+    }
 }

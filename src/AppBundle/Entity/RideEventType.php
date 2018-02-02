@@ -19,6 +19,8 @@ class RideEventType
     const CANCELLED_ID = 4;
     const COMPLETED_ID = 5;
     const REJECTED_ID = 6;
+    const REQUESTED = 'Requested';
+    const ACCEPTED = 'Accepted';
 
     /**
      * @var int $id
@@ -41,12 +43,12 @@ class RideEventType
 
     public static function requested()
     {
-        return new self(self::REQUESTED_ID, 'Requested');
+        return new self(self::REQUESTED_ID, self::REQUESTED);
     }
 
     public static function accepted()
     {
-        return new self(self::ACCEPTED_ID, 'Accepted');
+        return new self(self::ACCEPTED_ID, self::ACCEPTED);
     }
 
     public static function inProgress()
@@ -67,6 +69,11 @@ class RideEventType
     public static function rejected()
     {
         return new self(self::REJECTED_ID, 'Rejected');
+    }
+
+    public static function newById($eventTypeId)
+    {
+        return new self($eventTypeId, '');
     }
 
     public function equals(RideEventType $typeToCompare)
