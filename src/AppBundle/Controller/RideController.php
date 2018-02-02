@@ -4,8 +4,10 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\AppLocation;
+use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
 use AppBundle\Entity\RideEventType;
+use AppBundle\Exception\ActingDriverIsNotAssignedDriverException;
 use AppBundle\Exception\RideLifeCycleException;
 use AppBundle\Exception\RideNotFoundException;
 use AppBundle\Exception\UserNotFoundException;
@@ -68,6 +70,7 @@ class RideController extends AppController
      * @throws UserNotFoundException
      * @throws RideLifeCycleException
      * @throws UserNotInDriverRoleException
+     * @throws ActingDriverIsNotAssignedDriverException
      */
     public function patchAction(string $id, Request $request)
     {
@@ -102,8 +105,26 @@ class RideController extends AppController
     private function patchRideAcceptance(RideEventType $eventToProcess, Ride $rideToPatch, Request $request): void
     {
         if (RideEventType::accepted()->equals($eventToProcess)) {
-            $driver = $this->getUserById($request->get('driverId'));
+            $driver = $this->getDriverFromRequest($request);
             $this->ride()->acceptRide($rideToPatch, $driver);
+        }
+    }
+
+    /**
+     * @param RideEventType $eventToProcess
+     * @param Ride $rideToPatch
+     * @param Request $request
+     * @throws RideLifeCycleException
+     * @throws RideNotFoundException
+     * @throws UserNotFoundException
+     * @throws UserNotInDriverRoleException
+     * @throws ActingDriverIsNotAssignedDriverException
+     */
+    private function patchRideInProgress(RideEventType $eventToProcess, Ride $rideToPatch, Request $request)
+    {
+        if (RideEventType::inProgress()->equals($eventToProcess)) {
+            $driver = $this->getDriverFromRequest($request);
+            $this->ride()->markRideInProgress($rideToPatch, $driver);
         }
     }
 
@@ -115,12 +136,14 @@ class RideController extends AppController
      * @throws RideNotFoundException
      * @throws UserNotFoundException
      * @throws UserNotInDriverRoleException
+     * @throws ActingDriverIsNotAssignedDriverException
      */
     private function patchRideLifeCycle(Request $request, $eventId, Ride $rideToPatch): void
     {
         if (!is_null($eventId)) {
             $eventToProcess = RideEventType::newById(intval($eventId));
             $this->patchRideAcceptance($eventToProcess, $rideToPatch, $request);
+            $this->patchRideInProgress($eventToProcess, $rideToPatch, $request);
         }
     }
 
@@ -140,5 +163,15 @@ class RideController extends AppController
                 )
             );
         }
+    }
+
+    /**
+     * @param Request $request
+     * @return AppUser
+     * @throws UserNotFoundException
+     */
+    private function getDriverFromRequest(Request $request)
+    {
+        return $this->getUserById($request->get('driverId'));
     }
 }
