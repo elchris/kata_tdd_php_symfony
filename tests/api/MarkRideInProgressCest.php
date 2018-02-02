@@ -2,9 +2,10 @@
 namespace Tests\api;
 
 use ApiTester;
+use AppBundle\Entity\RideEventType;
 use Tests\AppBundle\LocationServiceTest;
 
-class AcceptRideByDriverCest
+class MarkRideInProgressCest
 {
     public function seeAcceptedRideByDriver(ApiTester $I)
     {
@@ -13,11 +14,14 @@ class AcceptRideByDriverCest
 
         $driverId = $driver['id'];
         $rideId = $requestedRide['id'];
+        $passengerId = $requestedRide['passenger']['id'];
+
         $I->acceptRideByDriver(
             $rideId,
             $driverId,
-            $requestedRide['passenger']['id']
+            $passengerId
         );
         $I->assignWorkDestinationToRide($rideId);
+        $I->markRideInProgress($rideId, $driverId);
     }
 }

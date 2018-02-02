@@ -58,6 +58,24 @@ class ApiTester extends \Codeception\Actor
         return json_decode($this->grabResponse(), true);
     }
 
+    public function markRideInProgress($rideId, $driverId)
+    {
+        $this->sendPatchApiRequest('/ride/'.$rideId, [
+            'driverId' => $driverId,
+            'eventId' => RideEventType::IN_PROGRESS_ID
+        ]);
+        $this->seeResponseContainsJson([
+            'driver' => [
+                'id' => $driverId
+            ]
+        ]);
+        $this->verifyRideStatus(
+            $rideId,
+            RideEventType::IN_PROGRESS_ID,
+            RideEventType::IN_PROGRESS_STATUS
+        );
+    }
+    
     public function acceptRideByDriver(string $rideId, string $driverId, string $passengerId)
     {
         $patchedRide = $this->sendPatchApiRequest('/ride/'. $rideId, [
@@ -96,6 +114,13 @@ class ApiTester extends \Codeception\Actor
             ]
         ]);
         return $patchedRide;
+    }
+
+    public function assignWorkDestinationToRide(string $rideId)
+    {
+        $destinationLat = LocationServiceTest::WORK_LOCATION_LAT;
+        $destinationLong = LocationServiceTest::WORK_LOCATION_LONG;
+        $this->assignDestinationToRide($rideId, $destinationLat, $destinationLong);
     }
 
     public function getNewRide()

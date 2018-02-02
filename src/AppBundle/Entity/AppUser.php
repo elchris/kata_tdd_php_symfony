@@ -62,9 +62,11 @@ class AppUser
     /**
      * @return Uuid
      */
-    public function getId()
+    public function getId() : Uuid
     {
-        return $this->id;
+        /** @var Uuid $id */
+        $id = Uuid::fromString($this->id);
+        return $id;
     }
 
     public function assignRole(AppRole $role)
@@ -96,6 +98,6 @@ class AppUser
 
     public function is(AppUser $userToCompare)
     {
-        return $this->id->equals($userToCompare->id);
+        return $this->getId()->equals($userToCompare->getId());
     }
 }
