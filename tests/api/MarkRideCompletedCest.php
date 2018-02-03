@@ -3,13 +3,13 @@ namespace Tests\api;
 
 use ApiTester;
 
-class MarkRideInProgressCest
+class MarkRideCompletedCest
 {
     /**
-     * @depends Tests\api\MarkRideAcceptedByDriverCest:seeRideAcceptedByDriver
+     * @depends Tests\api\MarkRideInProgressCest:seeRideMarkedInProgress
      * @param ApiTester $I
      */
-    public function seeRideMarkedInProgress(ApiTester $I)
+    public function seeRideMarkedCompleted(ApiTester $I)
     {
         $requestedRide = $I->getNewRide();
         $driver = $I->getNewDriver();
@@ -25,5 +25,6 @@ class MarkRideInProgressCest
         );
         $I->assignWorkDestinationToRide($rideId);
         $I->markRideInProgress($rideId, $driverId);
+        $I->markRideCompleted($rideId, $driverId);
     }
 }

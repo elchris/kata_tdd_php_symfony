@@ -64,15 +64,25 @@ class ApiTester extends \Codeception\Actor
             'driverId' => $driverId,
             'eventId' => RideEventType::IN_PROGRESS_ID
         ]);
-        $this->seeResponseContainsJson([
-            'driver' => [
-                'id' => $driverId
-            ]
-        ]);
+        $this->verifyDriver($driverId);
         $this->verifyRideStatus(
             $rideId,
             RideEventType::IN_PROGRESS_ID,
             RideEventType::IN_PROGRESS_STATUS
+        );
+    }
+
+    public function markRideCompleted($rideId, $driverId)
+    {
+        $this->sendPatchApiRequest('/ride/'.$rideId, [
+            'driverId' => $driverId,
+            'eventId' => RideEventType::COMPLETED_ID
+        ]);
+        $this->verifyDriver($driverId);
+        $this->verifyRideStatus(
+            $rideId,
+            RideEventType::COMPLETED_ID,
+            RideEventType::COMPLETED
         );
     }
     
@@ -82,14 +92,8 @@ class ApiTester extends \Codeception\Actor
             'driverId' => $driverId,
             'eventId' => RideEventType::ACCEPTED_ID
         ]);
-        $this->seeResponseContainsJson([
-            'driver' => [
-                'id' => $driverId
-            ],
-            'passenger' => [
-                'id' => $passengerId
-            ]
-        ]);
+        $this->verifyDriver($driverId);
+        $this->verifyPassenger($passengerId);
         $this->verifyRideStatus(
             $rideId,
             RideEventType::ACCEPTED_ID,
@@ -193,7 +197,6 @@ class ApiTester extends \Codeception\Actor
      */
     protected function assignPassengerRoleToUser($userId)
     {
-        $this->wantTo('Assign Passenger Role to the Created User');
         $roleToAssign = \AppBundle\Entity\AppRole::PASSENGER;
 
         return $this->assignRoleToUser($userId, $roleToAssign);
@@ -205,7 +208,6 @@ class ApiTester extends \Codeception\Actor
      */
     protected function assignDriverRoleToUser($userId)
     {
-        $this->wantTo('Assign Driver Role to the Created User');
         $roleToAssign = \AppBundle\Entity\AppRole::DRIVER;
 
         return $this->assignRoleToUser($userId, $roleToAssign);
@@ -278,6 +280,30 @@ class ApiTester extends \Codeception\Actor
         $this->seeResponseContainsJson([
             'id' => $statusIdToVerify,
             'name' => $statusNameToVerify
+        ]);
+    }
+
+    /**
+     * @param $driverId
+     */
+    private function verifyDriver($driverId): void
+    {
+        $this->seeResponseContainsJson([
+            'driver' => [
+                'id' => $driverId
+            ]
+        ]);
+    }
+
+    /**
+     * @param string $passengerId
+     */
+    private function verifyPassenger(string $passengerId): void
+    {
+        $this->seeResponseContainsJson([
+            'passenger' => [
+                'id' => $passengerId
+            ]
         ]);
     }
 }

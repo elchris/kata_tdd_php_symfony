@@ -52,3 +52,8 @@ Generate:
 
 * vendor/bin/codecept generate:suite api
 * vendor/bin/codecept generate:cept api CreateUser
+
+References:
+
+* https://www.jetbrains.com/help/phpstorm/testing-with-codeception.html
+* https://www.jetbrains.com/help/idea/testing-with-codeception.html
