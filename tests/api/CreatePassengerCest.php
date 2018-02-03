@@ -5,7 +5,10 @@ use ApiTester;
 
 class CreatePassengerCest
 {
-    public function getNewPassenger(ApiTester $I)
+    /**
+     * @param ApiTester $I
+     */
+    public function seeNewPassengerCreated(ApiTester $I)
     {
         $I->getNewPassenger();
     }

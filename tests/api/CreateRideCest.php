@@ -5,7 +5,11 @@ use ApiTester;
 
 class CreateRideCest
 {
-    public function seeNewRideIsRequested(ApiTester $I)
+    /**
+     * @depends Tests\api\CreatePassengerCest:seeNewPassengerCreated
+     * @param ApiTester $I
+     */
+    public function seeNewlyCreatedRideIsRequested(ApiTester $I)
     {
         $I->getNewRide();
     }

@@ -2,11 +2,14 @@
 namespace Tests\api;
 
 use ApiTester;
-use Tests\AppBundle\LocationServiceTest;
 
-class AcceptRideByDriverCest
+class MarkRideAcceptedByDriverCest
 {
-    public function seeAcceptedRideByDriver(ApiTester $I)
+    /**
+     * @depends Tests\api\CreateRideCest:seeNewlyCreatedRideIsRequested
+     * @param ApiTester $I
+     */
+    public function seeRideAcceptedByDriver(ApiTester $I)
     {
         $requestedRide = $I->getNewRide();
         $driver = $I->getNewDriver();

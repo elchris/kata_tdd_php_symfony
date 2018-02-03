@@ -129,6 +129,23 @@ class RideController extends AppController
     }
 
     /**
+     * @param RideEventType $eventToProcess
+     * @param Ride $rideToPatch
+     * @param Request $request
+     * @throws ActingDriverIsNotAssignedDriverException
+     * @throws RideLifeCycleException
+     * @throws RideNotFoundException
+     * @throws UserNotFoundException
+     */
+    private function patchRideCompleted(RideEventType $eventToProcess, Ride $rideToPatch, Request $request)
+    {
+        if (RideEventType::completed()->equals($eventToProcess)) {
+            $driver = $this->getDriverFromRequest($request);
+            $this->ride()->markRideCompleted($rideToPatch, $driver);
+        }
+    }
+
+    /**
      * @param Request $request
      * @param $eventId
      * @param Ride $rideToPatch
@@ -144,6 +161,7 @@ class RideController extends AppController
             $eventToProcess = RideEventType::newById(intval($eventId));
             $this->patchRideAcceptance($eventToProcess, $rideToPatch, $request);
             $this->patchRideInProgress($eventToProcess, $rideToPatch, $request);
+            $this->patchRideCompleted($eventToProcess, $rideToPatch, $request);
         }
     }
 

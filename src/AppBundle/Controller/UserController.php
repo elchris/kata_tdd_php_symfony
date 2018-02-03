@@ -9,7 +9,7 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\AppUser;
 
-class UsersController extends AppController
+class UserController extends AppController
 {
     /**
      * @Rest\Post("/api/v1/user")
