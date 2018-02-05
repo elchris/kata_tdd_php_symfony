@@ -12,36 +12,36 @@ use AppBundle\Exception\RideLifeCycleException;
 use AppBundle\Exception\RideNotFoundException;
 use AppBundle\Exception\UserNotInDriverRoleException;
 use AppBundle\Exception\UserNotInPassengerRoleException;
-use AppBundle\Repository\LocationRepository;
-use AppBundle\Repository\RideEventRepository;
-use AppBundle\Repository\RideRepository;
+use AppBundle\Repository\LocationRepositoryInterface;
+use AppBundle\Repository\RideEventRepositoryInterface;
+use AppBundle\Repository\RideRepositoryInterface;
 use Ramsey\Uuid\Uuid;
 
 class RideService
 {
     /**
-     * @var RideRepository
+     * @var RideRepositoryInterface
      */
     private $rideRepository;
     /**
-     * @var RideEventRepository
+     * @var RideEventRepositoryInterface
      */
     private $rideEventRepository;
     /**
-     * @var LocationRepository
+     * @var LocationRepositoryInterface
      */
     private $locationRepository;
 
     /**
      * RideService constructor.
-     * @param RideRepository $rideRepository
-     * @param RideEventRepository $rideEventRepository
-     * @param LocationRepository $locationRepository
+     * @param RideRepositoryInterface $rideRepository
+     * @param RideEventRepositoryInterface $rideEventRepository
+     * @param LocationRepositoryInterface $locationRepository
      */
     public function __construct(
-        RideRepository $rideRepository,
-        RideEventRepository $rideEventRepository,
-        LocationRepository $locationRepository
+        RideRepositoryInterface $rideRepository,
+        RideEventRepositoryInterface $rideEventRepository,
+        LocationRepositoryInterface $locationRepository
     ) {
         $this->rideRepository = $rideRepository;
         $this->rideEventRepository = $rideEventRepository;

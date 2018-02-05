@@ -4,6 +4,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\AppUser;
+use AppBundle\Exception\UserNotFoundException;
 use AppBundle\Repository\LocationRepository;
 use AppBundle\Repository\RideEventRepository;
 use AppBundle\Repository\RideRepository;
@@ -17,12 +18,18 @@ use Ramsey\Uuid\Uuid;
 
 class AppController extends FOSRestController
 {
-    protected function user()
+    /**
+     * @return UserService
+     */
+    protected function user() : UserService
     {
         return new UserService(new UserRepository($this->em()));
     }
 
-    protected function ride()
+    /**
+     * @return RideService
+     */
+    protected function ride() : RideService
     {
         return new RideService(
             new RideRepository($this->em()),
@@ -31,7 +38,10 @@ class AppController extends FOSRestController
         );
     }
 
-    protected function location()
+    /**
+     * @return LocationService
+     */
+    protected function location() : LocationService
     {
         return new LocationService(
             new LocationRepository($this->em())
@@ -62,7 +72,7 @@ class AppController extends FOSRestController
     /**
      * @param string $id
      * @return AppUser|mixed
-     * @throws \AppBundle\Exception\UserNotFoundException
+     * @throws UserNotFoundException
      */
     protected function getUserById(string $id): AppUser
     {

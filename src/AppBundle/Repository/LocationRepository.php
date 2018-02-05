@@ -6,7 +6,7 @@ use AppBundle\Entity\AppLocation;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 
-class LocationRepository extends AppRepository
+class LocationRepository extends AppRepository implements LocationRepositoryInterface
 {
 
     /**

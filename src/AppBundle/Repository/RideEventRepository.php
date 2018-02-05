@@ -8,7 +8,7 @@ use AppBundle\Entity\RideEvent;
 use AppBundle\Entity\RideEventType;
 use AppBundle\Exception\RideNotFoundException;
 
-class RideEventRepository extends AppRepository
+class RideEventRepository extends AppRepository implements RideEventRepositoryInterface
 {
     /**
      * @param Ride $ride

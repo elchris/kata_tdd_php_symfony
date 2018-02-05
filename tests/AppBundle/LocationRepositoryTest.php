@@ -4,6 +4,7 @@ namespace Tests\AppBundle;
 
 use AppBundle\Entity\AppLocation;
 use AppBundle\Repository\LocationRepository;
+use AppBundle\Repository\LocationRepositoryInterface;
 
 class LocationRepositoryTest extends AppTestCase
 {
@@ -18,7 +19,7 @@ class LocationRepositoryTest extends AppTestCase
         $this->locationRepository = new LocationRepository($this->em());
     }
 
-    /** @var  LocationRepository */
+    /** @var  LocationRepositoryInterface */
     private $locationRepository;
 
     public function testCreateLocation()
@@ -57,7 +58,6 @@ class LocationRepositoryTest extends AppTestCase
 
     public function testCreateAndGetNewLocation()
     {
-        $this->getSavedLocation();
         $workLocation = new AppLocation(self::WORK_LOCATION_LAT, self::WORK_LOCATION_LONG);
 
         $retrievedLocation = $this->getOrCreateLocation($workLocation);
@@ -75,7 +75,7 @@ class LocationRepositoryTest extends AppTestCase
             self::HOME_LOCATION_LONG
         );
 
-        $this->locationRepository->save($homeLocation);
+        $this->save($homeLocation);
 
         return $homeLocation;
     }

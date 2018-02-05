@@ -8,7 +8,7 @@ use AppBundle\Entity\Ride;
 use AppBundle\Exception\RideNotFoundException;
 use Ramsey\Uuid\Uuid;
 
-class RideRepository extends AppRepository
+class RideRepository extends AppRepository implements RideRepositoryInterface
 {
     public function assignDestinationToRide(Ride $ride, AppLocation $destination)
     {

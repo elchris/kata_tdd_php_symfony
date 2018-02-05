@@ -8,7 +8,7 @@ use AppBundle\Exception\DuplicateRoleAssignmentException;
 use AppBundle\Exception\UserNotFoundException;
 use Ramsey\Uuid\Uuid;
 
-class UserRepository extends AppRepository
+class UserRepository extends AppRepository implements UserRepositoryInterface
 {
     /**
      * @param Uuid $userId
@@ -43,6 +43,10 @@ class UserRepository extends AppRepository
         $this->save($user);
     }
 
+    public function saveUser(AppUser $user)
+    {
+        $this->save($user);
+    }
 
     /**
      * @param AppRole $role

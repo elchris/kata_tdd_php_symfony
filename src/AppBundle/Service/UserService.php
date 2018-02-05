@@ -6,21 +6,21 @@ use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
 use AppBundle\Exception\DuplicateRoleAssignmentException;
 use AppBundle\Exception\UserNotFoundException;
-use AppBundle\Repository\UserRepository;
+use AppBundle\Repository\UserRepositoryInterface;
 use Ramsey\Uuid\Uuid;
 
 class UserService
 {
     /**
-     * @var UserRepository
+     * @var UserRepositoryInterface
      */
     private $userRepository;
 
     /**
      * UserService constructor.
-     * @param UserRepository $userRepository
+     * @param UserRepositoryInterface $userRepository
      */
-    public function __construct(UserRepository $userRepository)
+    public function __construct(UserRepositoryInterface $userRepository)
     {
         $this->userRepository = $userRepository;
     }
@@ -28,7 +28,7 @@ class UserService
     public function newUser($firstName, $lastName)
     {
         $newUser = new AppUser($firstName, $lastName);
-        $this->userRepository->save($newUser);
+        $this->userRepository->saveUser($newUser);
         return $newUser;
     }
 

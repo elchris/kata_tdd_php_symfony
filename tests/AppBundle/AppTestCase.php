@@ -16,8 +16,11 @@ use AppBundle\Exception\UserNotInDriverRoleException;
 use AppBundle\Exception\UserNotInPassengerRoleException;
 use AppBundle\Repository\LocationRepository;
 use AppBundle\Repository\RideEventRepository;
+use AppBundle\Repository\RideEventRepositoryInterface;
 use AppBundle\Repository\RideRepository;
+use AppBundle\Repository\RideRepositoryInterface;
 use AppBundle\Repository\UserRepository;
+use AppBundle\Repository\UserRepositoryInterface;
 use AppBundle\Service\LocationService;
 use AppBundle\Service\RideService;
 use AppBundle\Service\UserService;
@@ -101,7 +104,7 @@ abstract class AppTestCase extends WebTestCase
         }
     }
 
-    /** @var  UserRepository */
+    /** @var  UserRepositoryInterface */
     protected $userRepository;
 
     /** @var  UserService */
@@ -110,10 +113,10 @@ abstract class AppTestCase extends WebTestCase
     /** @var  LocationService */
     protected $locationService;
 
-    /** @var  RideRepository */
+    /** @var  RideRepositoryInterface */
     protected $rideRepository;
 
-    /** @var  RideEventRepository */
+    /** @var  RideEventRepositoryInterface */
     protected $rideEventRepository;
 
     /** @var  RideService */
