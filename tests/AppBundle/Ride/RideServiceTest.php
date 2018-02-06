@@ -78,10 +78,6 @@ class RideServiceTest extends AppTestCase
      */
     public function testAcceptRideByProspectiveDriver()
     {
-        //verify that the user is a driver role
-        //verify that the ride is in requested status
-        //mark the ride as accepted
-
         $newRide = $this->ride()->getSavedNewRideWithPassengerAndDestination();
         $newDriver = $this->user()->getNewDriver();
 

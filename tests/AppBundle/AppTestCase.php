@@ -1,14 +1,11 @@
 <?php
 
-
 namespace Tests\AppBundle;
 
 use Tests\AppBundle\Production\LocationApi;
 use Tests\AppBundle\Production\RideApi;
 use Tests\AppBundle\Production\UserApi;
 
-use AppBundle\Entity\AppRole;
-use AppBundle\Entity\RideEventType;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\ToolsException;
@@ -19,26 +16,14 @@ abstract class AppTestCase extends WebTestCase
     /** @var RideApi */
     private $rideApi;
 
+    /** @var LocationApi */
+    private $locationApi;
+
+    /** @var UserApi */
+    private $userApi;
+
     /** @var  EntityManagerInterface */
     private $em;
-
-    /** @var RideEventType $requestedType */
-    protected $requestedType;
-
-    /** @var RideEventType $acceptedType */
-    protected $acceptedType;
-
-    /** @var RideEventType $inProgressType */
-    protected $inProgressType;
-
-    /** @var RideEventType $cancelledType */
-    protected $cancelledType;
-
-    /** @var RideEventType $completedType */
-    protected $completedType;
-
-    /** @var RideEventType $rejectedType */
-    protected $rejectedType;
 
     protected function setUp()
     {
@@ -47,8 +32,8 @@ abstract class AppTestCase extends WebTestCase
         $this->em = static::$kernel->getContainer()->get('doctrine')->getManager();
         $this->setUpEntityManager();
 
-        $this->bootStrapAppRoles();
         $this->ride()->bootStrapRideEventTypes();
+        $this->user()->bootStrapRoles();
     }
 
     protected function em()
@@ -79,7 +64,10 @@ abstract class AppTestCase extends WebTestCase
      */
     protected function user()
     {
-        return new UserApi($this->em());
+        if (is_null($this->userApi)) {
+            $this->userApi = new UserApi($this->em());
+        }
+        return $this->userApi;
     }
 
     /**
@@ -87,9 +75,15 @@ abstract class AppTestCase extends WebTestCase
      */
     protected function location()
     {
-        return new LocationApi($this->em());
+        if (is_null($this->locationApi)) {
+            $this->locationApi = new LocationApi($this->em());
+        }
+        return $this->locationApi;
     }
 
+    /**
+     * @return RideApi
+     */
     protected function ride()
     {
         if (is_null($this->rideApi)) {
@@ -100,11 +94,5 @@ abstract class AppTestCase extends WebTestCase
             );
         }
         return $this->rideApi;
-    }
-
-    private function bootStrapAppRoles(): void
-    {
-        $this->save(AppRole::driver());
-        $this->save(AppRole::passenger());
     }
 }

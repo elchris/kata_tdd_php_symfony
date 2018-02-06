@@ -3,6 +3,7 @@
 
 namespace Tests\AppBundle\Production;
 
+use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
 use AppBundle\Exception\DuplicateRoleAssignmentException;
 use AppBundle\Exception\UserNotFoundException;
@@ -13,8 +14,14 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class UserApi
 {
+    /** @var UserService */
     private $userService;
+
+    /** @var UserRepository */
     private $userRepository;
+
+    /** @var EntityManagerInterface */
+    private $entityManager;
 
     public function __construct(EntityManagerInterface $entityManager)
     {
@@ -22,6 +29,7 @@ class UserApi
         $this->userService = new UserService(
             $this->userRepository
         );
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -135,5 +143,17 @@ class UserApi
         $driver = $this->getSavedUserWithName($first, $last);
         $this->makeUserDriver($driver);
         return $driver;
+    }
+
+    private function saveRole(AppRole $role)
+    {
+        $this->entityManager->persist($role);
+        $this->entityManager->flush();
+    }
+
+    public function bootStrapRoles()
+    {
+        $this->saveRole(AppRole::driver());
+        $this->saveRole(AppRole::passenger());
     }
 }

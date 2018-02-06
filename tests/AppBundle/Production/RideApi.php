@@ -24,17 +24,13 @@ use Ramsey\Uuid\Uuid;
 
 class RideApi
 {
-    /**
-     * @var EntityManagerInterface
-     */
+    /** @var EntityManagerInterface */
     private $entityManager;
-    /**
-     * @var UserApi
-     */
+
+    /** @var UserApi */
     private $user;
-    /**
-     * @var LocationApi
-     */
+
+    /** @var LocationApi */
     private $location;
 
     /** @var RideRepositoryInterface  */
@@ -291,43 +287,41 @@ class RideApi
 
     private function requested()
     {
-        return $this->saveRideEventType(RideEventType::requested());
+        return $this->saveEventType(RideEventType::requested());
     }
 
     private function accepted()
     {
-        return $this->saveRideEventType(RideEventType::accepted());
+        return $this->saveEventType(RideEventType::accepted());
     }
 
     private function inProgress()
     {
-        return $this->saveRideEventType(RideEventType::inProgress());
+        return $this->saveEventType(RideEventType::inProgress());
     }
 
     private function cancelled()
     {
-        return $this->saveRideEventType(RideEventType::cancelled());
+        return $this->saveEventType(RideEventType::cancelled());
     }
 
     private function completed()
     {
-        return $this->saveRideEventType(RideEventType::completed());
+        return $this->saveEventType(RideEventType::completed());
     }
 
     private function rejected()
     {
-        return $this->saveRideEventType(RideEventType::rejected());
+        return $this->saveEventType(RideEventType::rejected());
     }
 
     /**
      * @param RideEventType $type
      * @return RideEventType
      */
-    private function saveRideEventType(RideEventType $type): RideEventType
+    private function saveEventType(RideEventType $type): RideEventType
     {
-        $this->entityManager->persist($type);
-        $this->entityManager->flush();
-        return $type;
+        return $this->saveObject($type);
     }
 
     /**
@@ -336,10 +330,14 @@ class RideApi
      */
     private function saveRide(Ride $ride): Ride
     {
-        $this->entityManager->persist($ride);
-        $this->entityManager->flush();
+        return $this->saveObject($ride);
+    }
 
-        return $ride;
+    private function saveObject($object)
+    {
+        $this->entityManager->persist($object);
+        $this->entityManager->flush();
+        return $object;
     }
 
     public function bootStrapRideEventTypes(): void
