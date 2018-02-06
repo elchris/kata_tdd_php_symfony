@@ -12,7 +12,7 @@ class UserRepositoryTest extends AppTestCase
 {
     public function testCreateAndSaveNewUser()
     {
-        $user = $this->getSavedUser();
+        $user = $this->user()->getSavedUser();
 
         self::assertNotNull($user);
     }
@@ -22,7 +22,7 @@ class UserRepositoryTest extends AppTestCase
      */
     public function testGetUserById()
     {
-        $savedUser = $this->getSavedUser();
+        $savedUser = $this->user()->getSavedUser();
 
         $retrievedUser = $this->getRepoUserById($savedUser->getId());
 
@@ -65,10 +65,10 @@ class UserRepositoryTest extends AppTestCase
      */
     public function testUserCanHaveBothRoles()
     {
-        $savedUser = $this->getSavedUser();
+        $savedUser = $this->user()->getSavedUser();
 
-        $this->assignRoleToUser($savedUser, AppRole::driver());
-        $this->assignRoleToUser($savedUser, AppRole::passenger());
+        $this->assignRepoRoleToUser($savedUser, AppRole::driver());
+        $this->assignRepoRoleToUser($savedUser, AppRole::passenger());
 
         $retrievedUser = $this->getRepoUserById($savedUser->getId());
 
@@ -81,12 +81,12 @@ class UserRepositoryTest extends AppTestCase
      */
     public function testDuplicateRoleAssignmentThrows()
     {
-        $savedUser = $this->getSavedUser();
+        $savedUser = $this->user()->getSavedUser();
 
-        $this->assignRoleToUser($savedUser, AppRole::driver());
+        $this->assignRepoRoleToUser($savedUser, AppRole::driver());
         $this->expectException(DuplicateRoleAssignmentException::class);
 
-        $this->assignRoleToUser($savedUser, AppRole::driver());
+        $this->assignRepoRoleToUser($savedUser, AppRole::driver());
     }
 
     /**
@@ -96,9 +96,9 @@ class UserRepositoryTest extends AppTestCase
      */
     private function assertUserHasExpectedRole(AppRole $role)
     {
-        $savedUser = $this->getSavedUser();
+        $savedUser = $this->user()->getSavedUser();
 
-        $this->assignRoleToUser($savedUser, $role);
+        $this->assignRepoRoleToUser($savedUser, $role);
         $retrievedUser = $this->getRepoUserById($savedUser->getId());
 
         self::assertTrue($retrievedUser->hasRole($role));
@@ -109,9 +109,9 @@ class UserRepositoryTest extends AppTestCase
      * @param AppRole $role
      * @throws DuplicateRoleAssignmentException
      */
-    protected function assignRoleToUser(AppUser $user, AppRole $role)
+    protected function assignRepoRoleToUser(AppUser $user, AppRole $role)
     {
-        $this->userRepository->assignRoleToUser($user, $role);
+        $this->user()->getRepo()->assignRoleToUser($user, $role);
     }
 
     /**
@@ -121,6 +121,6 @@ class UserRepositoryTest extends AppTestCase
      */
     private function getRepoUserById(Uuid $userId): AppUser
     {
-        return $this->userRepository->getUserById($userId);
+        return $this->user()->getRepo()->getUserById($userId);
     }
 }

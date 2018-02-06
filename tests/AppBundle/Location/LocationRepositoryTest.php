@@ -3,25 +3,10 @@
 namespace Tests\AppBundle;
 
 use AppBundle\Entity\AppLocation;
-use AppBundle\Repository\LocationRepository;
-use AppBundle\Repository\LocationRepositoryInterface;
+use Tests\AppBundle\Production\LocationApi;
 
 class LocationRepositoryTest extends AppTestCase
 {
-    /*
-         * home: 37.773160, -122.432444
-         * work: 37.7721718,-122.4310872
-         */
-
-    public function setUp()
-    {
-        parent::setUp();
-        $this->locationRepository = new LocationRepository($this->em());
-    }
-
-    /** @var  LocationRepositoryInterface */
-    private $locationRepository;
-
     public function testCreateLocation()
     {
         $homeLocation = $this->getSavedLocation();
@@ -58,7 +43,10 @@ class LocationRepositoryTest extends AppTestCase
 
     public function testCreateAndGetNewLocation()
     {
-        $workLocation = new AppLocation(self::WORK_LOCATION_LAT, self::WORK_LOCATION_LONG);
+        $workLocation = new AppLocation(
+            LocationApi::WORK_LOCATION_LAT,
+            LocationApi::WORK_LOCATION_LONG
+        );
 
         $retrievedLocation = $this->getOrCreateLocation($workLocation);
 
@@ -71,8 +59,8 @@ class LocationRepositoryTest extends AppTestCase
     private function getSavedLocation()
     {
         $homeLocation = new AppLocation(
-            self::HOME_LOCATION_LAT,
-            self::HOME_LOCATION_LONG
+            LocationApi::HOME_LOCATION_LAT,
+            LocationApi::HOME_LOCATION_LONG
         );
 
         $this->save($homeLocation);
@@ -82,6 +70,6 @@ class LocationRepositoryTest extends AppTestCase
 
     protected function getOrCreateLocation(AppLocation $lookupLocation)
     {
-        return $this->locationRepository->getLocation($lookupLocation);
+        return $this->location()->getRepo()->getLocation($lookupLocation);
     }
 }

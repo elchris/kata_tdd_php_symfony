@@ -10,7 +10,7 @@ class UserServiceTest extends AppTestCase
 {
     public function testRegisterNewUser()
     {
-        $user = $this->getSavedUser();
+        $user = $this->user()->getSavedUser();
         self::assertSame('chris', $user->getFirstName());
         self::assertSame('holland', $user->getLastName());
     }
@@ -21,11 +21,11 @@ class UserServiceTest extends AppTestCase
      */
     public function testMakeUserDriver()
     {
-        $savedUser = $this->getSavedUser();
-        $this->makeUserDriver($savedUser);
-        $retrievedUser = $this->getServiceUserById($savedUser->getId());
+        $savedUser = $this->user()->getSavedUser();
+        $this->user()->makeUserDriver($savedUser);
+        $retrievedUser = $this->user()->getServiceUserById($savedUser->getId());
 
-        self::assertTrue($this->userService->isDriver($retrievedUser));
+        self::assertTrue($this->user()->isDriver($retrievedUser));
     }
 
     /**
@@ -34,10 +34,10 @@ class UserServiceTest extends AppTestCase
      */
     public function testMakeUserPassenger()
     {
-        $savedUser = $this->getSavedUser();
-        $this->makeUserPassenger($savedUser);
-        $retrievedUser = $this->getServiceUserById($savedUser->getId());
+        $savedUser = $this->user()->getSavedUser();
+        $this->user()->makeUserPassenger($savedUser);
+        $retrievedUser = $this->user()->getServiceUserById($savedUser->getId());
 
-        self::assertTrue($this->isPassenger($retrievedUser));
+        self::assertTrue($this->user()->isPassenger($retrievedUser));
     }
 }

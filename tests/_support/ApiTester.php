@@ -1,7 +1,9 @@
 <?php
 
+use AppBundle\Entity\AppRole;
 use AppBundle\Entity\RideEventType;
-use Tests\AppBundle\LocationServiceTest;
+use Codeception\Util\HttpCode;
+use Tests\AppBundle\Production\LocationApi;
 
 /**
  * Inherited Methods
@@ -52,7 +54,7 @@ class ApiTester extends \Codeception\Actor
      */
     protected function validateAndReturnResponse()
     {
-        $this->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
+        $this->seeResponseCodeIs(HttpCode::OK);
         $this->seeResponseIsJson();
 
         return json_decode($this->grabResponse(), true);
@@ -122,8 +124,8 @@ class ApiTester extends \Codeception\Actor
 
     public function assignWorkDestinationToRide(string $rideId)
     {
-        $destinationLat = LocationServiceTest::WORK_LOCATION_LAT;
-        $destinationLong = LocationServiceTest::WORK_LOCATION_LONG;
+        $destinationLat = LocationApi::WORK_LOCATION_LAT;
+        $destinationLong = LocationApi::WORK_LOCATION_LONG;
         $this->assignDestinationToRide($rideId, $destinationLat, $destinationLong);
     }
 
@@ -133,8 +135,8 @@ class ApiTester extends \Codeception\Actor
 
         $createdRide = $this->sendPostApiRequest('/ride', [
             'passengerId' => $passenger['id'],
-            'departureLat' => LocationServiceTest::HOME_LOCATION_LAT,
-            'departureLong' => LocationServiceTest::HOME_LOCATION_LONG
+            'departureLat' => LocationApi::HOME_LOCATION_LAT,
+            'departureLong' => LocationApi::HOME_LOCATION_LONG
         ]);
         $rideId = $createdRide['id'];
 
@@ -179,7 +181,7 @@ class ApiTester extends \Codeception\Actor
     {
         $this->verifyPassengerRole(
             2,
-            \AppBundle\Entity\AppRole::PASSENGER
+            AppRole::PASSENGER
         );
     }
 
@@ -187,7 +189,7 @@ class ApiTester extends \Codeception\Actor
     {
         $this->verifyPassengerRole(
             1,
-            \AppBundle\Entity\AppRole::DRIVER
+            AppRole::DRIVER
         );
     }
 
@@ -197,7 +199,7 @@ class ApiTester extends \Codeception\Actor
      */
     protected function assignPassengerRoleToUser($userId)
     {
-        $roleToAssign = \AppBundle\Entity\AppRole::PASSENGER;
+        $roleToAssign = AppRole::PASSENGER;
 
         return $this->assignRoleToUser($userId, $roleToAssign);
     }
@@ -208,7 +210,7 @@ class ApiTester extends \Codeception\Actor
      */
     protected function assignDriverRoleToUser($userId)
     {
-        $roleToAssign = \AppBundle\Entity\AppRole::DRIVER;
+        $roleToAssign = AppRole::DRIVER;
 
         return $this->assignRoleToUser($userId, $roleToAssign);
     }
