@@ -2,7 +2,6 @@
 
 namespace Tests\AppBundle;
 
-use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
 use AppBundle\Entity\RideEvent;
 use AppBundle\Entity\RideEventType;
@@ -22,23 +21,24 @@ class RideEventRepositoryTest extends AppTestCase
     public function setUp()
     {
         parent::setUp();
-        $this->savedRide = $this->getSavedRide();
+        $this->savedRide = $this->ride()->getRepoSavedRide();
     }
 
-    /**
-     * @throws RideNotFoundException
-     */
     public function testNonExistentRideThrowsException()
     {
         $nonExistentRide = new Ride(
-            $this->getSavedUser(),
-            $this->getSavedHomeLocation()
+            $this->user()->getSavedUser(),
+            $this->location()->getSavedHomeLocation()
         );
 
         $this->expectException(RideNotFoundException::class);
-        $this->getLastEvent($nonExistentRide);
+        $this->ride()->getRepoLastEvent($nonExistentRide);
     }
 
+    /**
+     * @throws DuplicateRoleAssignmentException
+     * @throws UserNotFoundException
+     */
     public function testSaveNewRideEvent()
     {
         $rideEvent = $this->getSavedRequestedRideEvent();
@@ -47,123 +47,114 @@ class RideEventRepositoryTest extends AppTestCase
     }
 
     /**
-     * @throws RideNotFoundException
+     * @throws DuplicateRoleAssignmentException
+     * @throws UserNotFoundException
      */
     public function testRideIsCurrentlyRequested()
     {
         $this->getSavedRequestedRideEvent();
 
-        $lastEventForRide = $this->getLastEvent($this->savedRide);
+        $lastEventForRide = $this->ride()->getRepoLastEvent($this->savedRide);
 
         self::assertTrue($lastEventForRide->is(RideEventType::requested()));
     }
 
     /**
-     * @throws RideNotFoundException
+     * @throws DuplicateRoleAssignmentException
+     * @throws UserNotFoundException
      */
     public function testRideIsCurrentlyAccepted()
     {
-        $this->assertLastEventIsOfType($this->acceptedType);
+        $this->assertLastEventIsOfType($this->ride()->accepted);
     }
 
     /**
-     * @throws RideNotFoundException
+     * @throws DuplicateRoleAssignmentException
+     * @throws UserNotFoundException
      */
     public function testRideIsCurrentlyInProgress()
     {
-        $this->assertLastEventIsOfType($this->inProgressType);
+        $this->assertLastEventIsOfType($this->ride()->inProgress);
     }
 
     /**
-     * @throws RideNotFoundException
+     * @throws DuplicateRoleAssignmentException
+     * @throws UserNotFoundException
      */
     public function testRideIsCurrentlyCancelled()
     {
-        $this->assertLastEventIsOfType($this->cancelledType);
+        $this->assertLastEventIsOfType($this->ride()->cancelled);
     }
 
     /**
-     * @throws RideNotFoundException
+     * @throws DuplicateRoleAssignmentException
+     * @throws UserNotFoundException
      */
     public function testRideIsCurrentlyCompleted()
     {
-        $this->assertLastEventIsOfType($this->completedType);
+        $this->assertLastEventIsOfType($this->ride()->completed);
     }
 
     /**
-     * @throws RideNotFoundException
+     * @throws DuplicateRoleAssignmentException
+     * @throws UserNotFoundException
      */
     public function testRideIsCurrentlyRejected()
     {
-        $this->assertLastEventIsOfType($this->rejectedType);
+        $this->assertLastEventIsOfType($this->ride()->rejected);
     }
 
     /**
-     * @throws RideNotFoundException
+     * @throws DuplicateRoleAssignmentException
+     * @throws UserNotFoundException
      */
     public function testMarkRideAsStatus()
     {
-        $this->markRide(
+        $this->ride()->markRepoRide(
             $this->savedRide,
-            $this->savedPassenger,
+            $this->user()->getSavedPassenger(),
             RideEventType::requested()
         );
-        $lastEventForRide = $this->getLastEvent($this->savedRide);
+        $lastEventForRide = $this->ride()->getRepoLastEvent($this->savedRide);
 
         self::assertTrue($lastEventForRide->is(RideEventType::requested()));
     }
 
     /**
      * @return RideEvent
+     * @throws DuplicateRoleAssignmentException
+     * @throws UserNotFoundException
      */
     private function getSavedRequestedRideEvent()
     {
-        return $this->markRide(
+        return $this->ride()->markRepoRide(
             $this->savedRide,
-            $this->savedPassenger,
-            $this->requestedType
+            $this->user()->getSavedPassenger(),
+            $this->ride()->requested
         );
     }
 
     /**
      * @param RideEventType $eventTypeToAssert
      * @return mixed
-     * @throws RideNotFoundException
+     * @throws DuplicateRoleAssignmentException
+     * @throws UserNotFoundException
      */
     private function assertLastEventIsOfType(RideEventType $eventTypeToAssert)
     {
         $this->getSavedRequestedRideEvent();
 
-        $this->rideEventRepository->save(new RideEvent(
+        $this->save(new RideEvent(
             $this->savedRide,
-            $this->getSavedUserWithName('Jamie', 'Isaacs'),
+            $this->user()->getSavedUserWithName('Jamie', 'Isaacs'),
             $eventTypeToAssert
         ));
 
-        $lastEventForRide = $this->getLastEvent($this->savedRide);
+        $lastEventForRide = $this->ride()->getRepoLastEvent($this->savedRide);
 
         self::assertFalse($lastEventForRide->is(RideEventType::requested()));
         self::assertTrue($lastEventForRide->is($eventTypeToAssert));
 
         return $lastEventForRide;
-    }
-
-    /**
-     * @param Ride $ride
-     * @return mixed
-     * @throws RideNotFoundException
-     */
-    protected function getLastEvent(Ride $ride)
-    {
-        return $this->rideEventRepository->getLastEventForRide($ride);
-    }
-
-    protected function markRide(Ride $ride, AppUser $passenger, RideEventType $status)
-    {
-        return $this->rideEventRepository->markRideStatusByActor(
-            $ride,
-            $passenger,
-            $status
-        );
     }
 }

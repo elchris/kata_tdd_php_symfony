@@ -21,7 +21,7 @@ class RideController extends AppController
     /**
      * @Rest\Post("/api/v1/ride")
      * @param Request $request
-     * @return \AppBundle\Entity\Ride
+     * @return Ride
      * @throws UserNotFoundException
      * @throws UserNotInPassengerRoleException
      */
@@ -51,7 +51,7 @@ class RideController extends AppController
     /**
      * @Rest\Get("/api/v1/ride/{id}/status")
      * @param string $id
-     * @return \AppBundle\Entity\RideEventType
+     * @return RideEventType
      * @throws RideNotFoundException
      */
     public function statusAction(string $id)

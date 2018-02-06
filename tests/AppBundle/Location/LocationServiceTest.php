@@ -3,18 +3,19 @@
 namespace Tests\AppBundle;
 
 use AppBundle\Entity\AppLocation;
+use Tests\AppBundle\Production\LocationApi;
 
 class LocationServiceTest extends AppTestCase
 {
     public function testGetLocation()
     {
         $referenceLocation = new AppLocation(
-            self::HOME_LOCATION_LAT,
-            self::HOME_LOCATION_LONG
+            LocationApi::HOME_LOCATION_LAT,
+            LocationApi::HOME_LOCATION_LONG
         );
 
         /** @var AppLocation $retrievedLocation */
-        $retrievedLocation = $this->locationService->getLocation(
+        $retrievedLocation = $this->location()->getLocation(
             $referenceLocation->getLat(),
             $referenceLocation->getLong()
         );

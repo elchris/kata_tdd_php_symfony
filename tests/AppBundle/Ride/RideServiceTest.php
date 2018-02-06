@@ -2,7 +2,6 @@
 
 namespace Tests\AppBundle;
 
-use AppBundle\Entity\AppLocation;
 use AppBundle\Entity\Ride;
 use AppBundle\Entity\RideEventType;
 use AppBundle\Exception\ActingDriverIsNotAssignedDriverException;
@@ -20,7 +19,7 @@ class RideServiceTest extends AppTestCase
      */
     public function testCreateRide()
     {
-        $newRide = $this->getSavedNewRideWithPassengerAndDestination();
+        $newRide = $this->ride()->getSavedNewRideWithPassengerAndDestination();
 
         self::assertInstanceOf(Ride::class, $newRide);
         self::assertNotEmpty($newRide->getId());
@@ -33,9 +32,9 @@ class RideServiceTest extends AppTestCase
      */
     public function testGetRideById()
     {
-        $newRide = $this->getSavedNewRideWithPassengerAndDestination();
+        $newRide = $this->ride()->getSavedNewRideWithPassengerAndDestination();
 
-        $retrievedRide = $this->rideService->getRide($newRide->getId());
+        $retrievedRide = $this->ride()->getRideById($newRide->getId());
 
         self::assertTrue($newRide->is($retrievedRide));
     }
@@ -48,13 +47,13 @@ class RideServiceTest extends AppTestCase
 
     public function testRideUserNotPassengerThrowsRoleException()
     {
-        $notPassengerUser = $this->getSavedUser();
-        self::assertFalse($this->isPassenger($notPassengerUser));
-        $departure = $this->getSavedHomeLocation();
+        $notPassengerUser = $this->user()->getSavedUser();
+        self::assertFalse($this->user()->isPassenger($notPassengerUser));
+        $departure = $this->location()->getSavedHomeLocation();
 
         $this->expectException(UserNotInPassengerRoleException::class);
 
-        $this->getNewRide($notPassengerUser, $departure);
+        $this->ride()->getNewRide($notPassengerUser, $departure);
     }
 
     /**
@@ -64,8 +63,8 @@ class RideServiceTest extends AppTestCase
      */
     public function testGetRideStatusIsRequestedWhenNew()
     {
-        $newRide = $this->getSavedNewRideWithPassengerAndDestination();
-        $rideStatus = $this->getRideStatus($newRide);
+        $newRide = $this->ride()->getSavedNewRideWithPassengerAndDestination();
+        $rideStatus = $this->ride()->getRideStatus($newRide);
 
         self::assertTrue(RideEventType::requested()->equals($rideStatus));
     }
@@ -79,15 +78,11 @@ class RideServiceTest extends AppTestCase
      */
     public function testAcceptRideByProspectiveDriver()
     {
-        //verify that the user is a driver role
-        //verify that the ride is in requested status
-        //mark the ride as accepted
+        $newRide = $this->ride()->getSavedNewRideWithPassengerAndDestination();
+        $newDriver = $this->user()->getNewDriver();
 
-        $newRide = $this->getSavedNewRideWithPassengerAndDestination();
-        $newDriver = $this->getNewDriver();
-
-        $acceptedRide = $this->acceptRide($newRide, $newDriver);
-        $rideStatus = $this->getRideStatus($newRide);
+        $acceptedRide = $this->ride()->acceptRide($newRide, $newDriver);
+        $rideStatus = $this->ride()->getRideStatus($newRide);
 
         self::assertTrue(RideEventType::accepted()->equals($rideStatus));
         self::assertTrue($acceptedRide->isDrivenBy($newDriver));
@@ -99,16 +94,10 @@ class RideServiceTest extends AppTestCase
      */
     public function testAssignDestinationToRide()
     {
-        $newRide = $this->getSavedNewRideWithPassengerAndDestination();
-        $workLocation = new AppLocation(
-            LocationServiceTest::WORK_LOCATION_LAT,
-            LocationServiceTest::WORK_LOCATION_LONG
-        );
+        $newRide = $this->ride()->getSavedNewRideWithPassengerAndDestination();
+        $workLocation = $this->location()->getWorkLocation();
         /** @var Ride $rideWithDestination */
-        $rideWithDestination = $this->rideService->assignDestinationToRide(
-            $newRide,
-            $workLocation
-        );
+        $rideWithDestination = $this->ride()->assignDestinationToRide($newRide, $workLocation);
 
         self::assertTrue($rideWithDestination->isDestinedFor($workLocation));
     }
@@ -122,13 +111,13 @@ class RideServiceTest extends AppTestCase
      */
     public function testAcceptingNonRequestedRideThrowsException()
     {
-        $newRide = $this->getSavedNewRideWithPassengerAndDestination();
-        $winningDriver = $this->getNewDriverWithName('Winning', 'Driver');
-        $losingDriver = $this->getNewDriverWithName('Losing', 'Driver');
-        $this->acceptRide($newRide, $winningDriver);
+        $newRide = $this->ride()->getSavedNewRideWithPassengerAndDestination();
+        $winningDriver = $this->user()->getNewDriverWithName('Winning', 'Driver');
+        $losingDriver = $this->user()->getNewDriverWithName('Losing', 'Driver');
+        $this->ride()->acceptRide($newRide, $winningDriver);
 
         $this->expectException(RideLifeCycleException::class);
-        $this->acceptRide($newRide, $losingDriver);
+        $this->ride()->acceptRide($newRide, $losingDriver);
     }
 
     /**
@@ -140,11 +129,11 @@ class RideServiceTest extends AppTestCase
      */
     public function testAcceptingRideByNonDriverThrowsUserNotDriverException()
     {
-        $newRide = $this->getSavedNewRideWithPassengerAndDestination();
-        $attemptingDriver = $this->getNewPassenger();
+        $newRide = $this->ride()->getSavedNewRideWithPassengerAndDestination();
+        $attemptingDriver = $this->user()->getNewPassenger();
 
         $this->expectException(UserNotInDriverRoleException::class);
-        $this->acceptRide($newRide, $attemptingDriver);
+        $this->ride()->acceptRide($newRide, $attemptingDriver);
     }
 
     /**
@@ -157,8 +146,8 @@ class RideServiceTest extends AppTestCase
      */
     public function testMarkRideInProgressByDriver()
     {
-        $rideInProgress = $this->getRideInProgress($this->getNewDriver());
-        $rideStatus = $this->getRideStatus($rideInProgress);
+        $rideInProgress = $this->ride()->getRideInProgress($this->user()->getNewDriver());
+        $rideStatus = $this->ride()->getRideStatus($rideInProgress);
 
         self::assertTrue(RideEventType::inProgress()->equals($rideStatus));
     }
@@ -173,11 +162,11 @@ class RideServiceTest extends AppTestCase
      */
     public function testMarkingRideInProgressIfNotAcceptedThrowsException()
     {
-        $newRide = $this->getSavedNewRideWithPassengerAndDestination();
-        $newDriver = $this->getNewDriver();
+        $newRide = $this->ride()->getSavedNewRideWithPassengerAndDestination();
+        $newDriver = $this->user()->getNewDriver();
 
         $this->expectException(RideLifeCycleException::class);
-        $this->markRideInProgress($newRide, $newDriver);
+        $this->ride()->markRideInProgress($newRide, $newDriver);
     }
 
     /**
@@ -190,11 +179,11 @@ class RideServiceTest extends AppTestCase
      */
     public function testMarkingRideInProgressByNonDriverThrowsException()
     {
-        $acceptedRide = $this->getAcceptedRide();
-        $nonDriverUser = $this->getSavedUserWithName('Non', 'Driver');
+        $acceptedRide = $this->ride()->getAcceptedRide();
+        $nonDriverUser = $this->user()->getSavedUserWithName('Non', 'Driver');
 
         $this->expectException(UserNotInDriverRoleException::class);
-        $this->markRideInProgress($acceptedRide, $nonDriverUser);
+        $this->ride()->markRideInProgress($acceptedRide, $nonDriverUser);
     }
 
     /**
@@ -207,11 +196,11 @@ class RideServiceTest extends AppTestCase
      */
     public function testMarkingRideInProgressByDriverOtherThanAssignedDriverThrows()
     {
-        $acceptedRide = $this->getAcceptedRide();
-        $rogueDriverUser = $this->getNewDriverWithName('Rogue', 'Driver');
+        $acceptedRide = $this->ride()->getAcceptedRide();
+        $rogueDriverUser = $this->user()->getNewDriverWithName('Rogue', 'Driver');
 
         $this->expectException(ActingDriverIsNotAssignedDriverException::class);
-        $this->markRideInProgress($acceptedRide, $rogueDriverUser);
+        $this->ride()->markRideInProgress($acceptedRide, $rogueDriverUser);
     }
 
     /**
@@ -224,11 +213,11 @@ class RideServiceTest extends AppTestCase
      */
     public function testMarkRideAsCompletedByDriver()
     {
-        $newDriver = $this->getNewDriver();
-        $rideInProgress = $this->getRideInProgress($newDriver);
+        $newDriver = $this->user()->getNewDriver();
+        $rideInProgress = $this->ride()->getRideInProgress($newDriver);
 
-        $completedRide = $this->markRideCompleted($rideInProgress, $newDriver);
-        $rideStatus = $this->getRideStatus($completedRide);
+        $completedRide = $this->ride()->markRideCompleted($rideInProgress, $newDriver);
+        $rideStatus = $this->ride()->getRideStatus($completedRide);
 
         self::assertTrue(RideEventType::completed()->equals($rideStatus));
     }
@@ -243,12 +232,12 @@ class RideServiceTest extends AppTestCase
      */
     public function testCompletingRideByDriverOtherThanAssignedDriverThrows()
     {
-        $newDriver = $this->getNewDriver();
-        $rideInProgress= $this->getRideInProgress($newDriver);
-        $rogueDriver = $this->getNewDriverWithName('Rogue', 'Driver');
+        $newDriver = $this->user()->getNewDriver();
+        $rideInProgress= $this->ride()->getRideInProgress($newDriver);
+        $rogueDriver = $this->user()->getNewDriverWithName('Rogue', 'Driver');
 
         $this->expectException(ActingDriverIsNotAssignedDriverException::class);
-        $this->markRideCompleted($rideInProgress, $rogueDriver);
+        $this->ride()->markRideCompleted($rideInProgress, $rogueDriver);
     }
 
     /**
@@ -261,10 +250,10 @@ class RideServiceTest extends AppTestCase
      */
     public function testCompletingRideIfNotInProgressThrowsException()
     {
-        $newDriver = $this->getNewDriver();
-        $acceptedRide = $this->getAcceptedRideWithDriver($newDriver);
+        $newDriver = $this->user()->getNewDriver();
+        $acceptedRide = $this->ride()->getAcceptedRideWithDriver($newDriver);
 
         $this->expectException(RideLifeCycleException::class);
-        $this->markRideCompleted($acceptedRide, $newDriver);
+        $this->ride()->markRideCompleted($acceptedRide, $newDriver);
     }
 }

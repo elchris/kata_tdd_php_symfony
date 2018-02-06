@@ -7,9 +7,8 @@ use AppBundle\Entity\AppLocation;
 interface LocationRepositoryInterface
 {
     /**
-     * @param float $lat
-     * @param float $long
+     * @param AppLocation $lookupLocation
      * @return AppLocation
      */
-    public function getOrCreateLocation($lat, $long);
+    public function getLocation(AppLocation $lookupLocation);
 }
