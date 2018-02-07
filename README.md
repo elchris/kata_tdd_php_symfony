@@ -7,6 +7,10 @@ Introduction:
 * Consult Kata-Tasks.rtf to get an idea of the various tests you'll be writing and help shape your sequencing.
 * With this said, you do not have to follow the sequencing outlined.
 
+Alternatively:
+
+https://laravel.com/docs/5.5/homestead#first-steps
+
 Installation:
 
 * Install Brew: https://brew.sh
@@ -26,6 +30,7 @@ Checkout Code:
 * composer install
 
 Configure IDE:
+
 * PHP Interpreter Level 7.2
 * PHPUnit Run-Time
 * Annotations Plugin
@@ -33,6 +38,11 @@ Configure IDE:
 * Inspection: phpcs to PSR-2 Scope
     * Exclude DoctrineMigrations
     * Exclude tests\acceptance
+    
+Configure DB
+
+* cp parameters.yml.dist parameters.yml
+* create database symfony;
 
 Run:
 
