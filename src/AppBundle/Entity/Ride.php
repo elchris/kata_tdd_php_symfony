@@ -45,7 +45,9 @@ class Ride
     /**
      * @var Uuid $id
      * @ORM\Id()
-     * @ORM\Column(name="id", type="guid", nullable=false)
+     * @ORM\Column(name="id", type="uuid", unique=true, nullable=false)
+     * @ORM\GeneratedValue(strategy="CUSTOM")
+     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      */
     private $id;
 
@@ -69,9 +71,24 @@ class Ride
         return $this->id;
     }
 
+    public function getPassenger()
+    {
+        return $this->passenger;
+    }
+
     public function assignDestination(AppLocation $destination)
     {
         $this->destination = $destination;
+    }
+
+    public function hasDestination()
+    {
+        return ! is_null($this->destination);
+    }
+
+    public function getDestination()
+    {
+        return $this->destination;
     }
 
     public function assignDriver(AppUser $driver)
@@ -82,6 +99,16 @@ class Ride
     public function isDrivenBy(AppUser $driver)
     {
         return $this->driver->is($driver);
+    }
+
+    public function hasDriver()
+    {
+        return ! is_null($this->driver);
+    }
+
+    public function getDriver()
+    {
+        return $this->driver;
     }
 
     public function isDestinedFor(AppLocation $destinationLocation)

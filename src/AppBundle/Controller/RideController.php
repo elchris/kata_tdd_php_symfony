@@ -3,6 +3,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\DTO\RideDto;
 use AppBundle\Entity\AppLocation;
 use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
@@ -21,7 +22,7 @@ class RideController extends AppController
     /**
      * @Rest\Post("/api/v1/ride")
      * @param Request $request
-     * @return Ride
+     * @return RideDto
      * @throws UserNotFoundException
      * @throws UserNotInPassengerRoleException
      */
@@ -34,18 +35,18 @@ class RideController extends AppController
             $request->get('departureLat'),
             $request->get('departureLong')
         );
-        return $this->ride()->newRide($passenger, $departure);
+        return new RideDto($this->ride()->newRide($passenger, $departure));
     }
 
     /**
      * @Rest\Get("/api/v1/ride/{id}")
      * @param string $id
-     * @return Ride
+     * @return RideDto
      * @throws RideNotFoundException
      */
     public function idAction(string $id)
     {
-        return $this->getRide($id);
+        return new RideDto($this->getRide($id));
     }
 
     /**
@@ -65,7 +66,7 @@ class RideController extends AppController
      * @Rest\Patch("/api/v1/ride/{id}")
      * @param string $id
      * @param Request $request
-     * @return Ride
+     * @return RideDto
      * @throws RideNotFoundException
      * @throws UserNotFoundException
      * @throws RideLifeCycleException
@@ -80,7 +81,7 @@ class RideController extends AppController
         $destinationLong = $request->get('destinationLong');
         $this->patchRideLifeCycle($request, $eventId, $rideToPatch);
         $this->patchRideDestination($destinationLat, $destinationLong, $rideToPatch);
-        return $rideToPatch;
+        return new RideDto($rideToPatch);
     }
 
     /**
@@ -88,7 +89,7 @@ class RideController extends AppController
      * @return Ride
      * @throws RideNotFoundException
      */
-    protected function getRide(string $id): Ride
+    private function getRide(string $id): Ride
     {
         return $this->ride()->getRide($this->id($id));
     }
