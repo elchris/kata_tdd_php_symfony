@@ -10,6 +10,17 @@ use Ramsey\Uuid\Uuid;
 
 class UserRepositoryTest extends AppTestCase
 {
+    /**
+     * @throws UserNotFoundException
+     */
+    public function testUserUuid()
+    {
+        $user = $this->user()->getSavedUser();
+        $this->em()->clear();
+        $retrievedUser = $this->user()->getRepo()->getUserById($user->getId());
+        self::assertTrue($retrievedUser->is($user));
+    }
+
     public function testCreateAndSaveNewUser()
     {
         $user = $this->user()->getSavedUser();

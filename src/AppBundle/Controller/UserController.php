@@ -2,19 +2,19 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\DTO\UserDto;
 use AppBundle\Entity\AppRole;
 use AppBundle\Exception\DuplicateRoleAssignmentException;
 use AppBundle\Exception\UserNotFoundException;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Entity\AppUser;
 
 class UserController extends AppController
 {
     /**
      * @Rest\Post("/api/v1/user")
      * @param Request $request
-     * @return AppUser
+     * @return UserDto
      */
     public function postAction(Request $request)
     {
@@ -23,25 +23,25 @@ class UserController extends AppController
             $request->get('lastName')
         );
 
-        return $createdUser;
+        return new UserDto($createdUser);
     }
 
     /**
      * @Rest\Get("/api/v1/user/{id}")
      * @param string $id
-     * @return AppUser
+     * @return UserDto
      * @throws UserNotFoundException
      */
     public function idAction(string $id)
     {
-        return $this->getUserById($id);
+        return new UserDto($this->getUserById($id));
     }
 
     /**
      * @Rest\Patch("/api/v1/user/{id}")
      * @param string $id
      * @param Request $request
-     * @return AppUser
+     * @return UserDto
      * @throws UserNotFoundException
      * @throws DuplicateRoleAssignmentException
      */
@@ -49,7 +49,7 @@ class UserController extends AppController
     {
         $userToPatch = $this->getUserById($id);
         $this->patchRole($request, $userToPatch);
-        return $userToPatch;
+        return new UserDto($userToPatch);
     }
 
     /**

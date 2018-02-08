@@ -34,7 +34,9 @@ class AppLocation
     /**
      * @var Uuid $id
      * @ORM\Id()
-     * @ORM\Column(name="id", type="guid", nullable=false)
+     * @ORM\Column(name="id", type="uuid", unique=true, nullable=false)
+     * @ORM\GeneratedValue(strategy="CUSTOM")
+     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      */
     private $id;
 

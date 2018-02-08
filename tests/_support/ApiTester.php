@@ -88,14 +88,13 @@ class ApiTester extends \Codeception\Actor
         );
     }
     
-    public function acceptRideByDriver(string $rideId, string $driverId, string $passengerId)
+    public function acceptRideByDriver(string $rideId, string $driverId)
     {
         $patchedRide = $this->sendPatchApiRequest('/ride/'. $rideId, [
             'driverId' => $driverId,
             'eventId' => RideEventType::ACCEPTED_ID
         ]);
         $this->verifyDriver($driverId);
-        $this->verifyPassenger($passengerId);
         $this->verifyRideStatus(
             $rideId,
             RideEventType::ACCEPTED_ID,
@@ -145,6 +144,8 @@ class ApiTester extends \Codeception\Actor
             'id' => $rideId
         ]);
 
+        $this->verifyPassenger($passenger['id']);
+
         $statusIdToVerify = RideEventType::REQUESTED_ID;
         $statusNameToVerify = RideEventType::REQUESTED;
         $this->verifyRideStatus($rideId, $statusIdToVerify, $statusNameToVerify);
@@ -179,17 +180,19 @@ class ApiTester extends \Codeception\Actor
 
     protected function verifyPassengerRoleOnUser()
     {
-        $this->verifyPassengerRole(
-            2,
-            AppRole::PASSENGER
+        $this->seeResponseContainsJson(
+            [
+                'is_passenger' => true
+            ]
         );
     }
 
     protected function verifyDriverRoleOnUser()
     {
-        $this->verifyPassengerRole(
-            1,
-            AppRole::DRIVER
+        $this->seeResponseContainsJson(
+            [
+                'is_driver' => true
+            ]
         );
     }
 
@@ -254,24 +257,6 @@ class ApiTester extends \Codeception\Actor
     }
 
     /**
-     * @param $roleIdToVerify
-     * @param $roleToVerify
-     */
-    private function verifyPassengerRole($roleIdToVerify, $roleToVerify): void
-    {
-        $this->seeResponseContainsJson(
-            [
-                'roles' => [
-                    [
-                        'id' => $roleIdToVerify,
-                        'name' => $roleToVerify
-                    ]
-                ]
-            ]
-        );
-    }
-
-    /**
      * @param $rideId
      * @param $statusIdToVerify
      * @param $statusNameToVerify
@@ -291,21 +276,17 @@ class ApiTester extends \Codeception\Actor
     private function verifyDriver($driverId): void
     {
         $this->seeResponseContainsJson([
-            'driver' => [
-                'id' => $driverId
-            ]
+            'driver_id' => $driverId
         ]);
     }
 
     /**
-     * @param string $passengerId
+     * @param $passengerId
      */
-    private function verifyPassenger(string $passengerId): void
+    private function verifyPassenger($passengerId): void
     {
         $this->seeResponseContainsJson([
-            'passenger' => [
-                'id' => $passengerId
-            ]
+            'passenger_id' => $passengerId
         ]);
     }
 }

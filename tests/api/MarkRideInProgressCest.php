@@ -16,12 +16,10 @@ class MarkRideInProgressCest
 
         $driverId = $driver['id'];
         $rideId = $requestedRide['id'];
-        $passengerId = $requestedRide['passenger']['id'];
 
         $I->acceptRideByDriver(
             $rideId,
-            $driverId,
-            $passengerId
+            $driverId
         );
         $I->assignWorkDestinationToRide($rideId);
         $I->markRideInProgress($rideId, $driverId);

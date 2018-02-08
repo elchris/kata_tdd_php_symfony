@@ -18,8 +18,7 @@ class MarkRideAcceptedByDriverCest
         $rideId = $requestedRide['id'];
         $I->acceptRideByDriver(
             $rideId,
-            $driverId,
-            $requestedRide['passenger']['id']
+            $driverId
         );
         $I->assignWorkDestinationToRide($rideId);
     }

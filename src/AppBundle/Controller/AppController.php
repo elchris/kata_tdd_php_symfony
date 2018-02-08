@@ -71,7 +71,7 @@ class AppController extends FOSRestController
 
     /**
      * @param string $id
-     * @return AppUser|mixed
+     * @return AppUser
      * @throws UserNotFoundException
      */
     protected function getUserById(string $id): AppUser
