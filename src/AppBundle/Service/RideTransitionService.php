@@ -36,8 +36,8 @@ class RideTransitionService
 
     /**
      * @param Ride $ride
-     * @param string $eventId
-     * @param string $driverId
+     * @param string $eventId|null
+     * @param string $driverId|null
      * @return Ride
      * @throws ActingDriverIsNotAssignedDriverException
      * @throws RideLifeCycleException
@@ -45,15 +45,17 @@ class RideTransitionService
      * @throws UserNotFoundException
      * @throws UserNotInDriverRoleException
      */
-    public function updateRideByEventId(Ride $ride, string $eventId, string $driverId)
+    public function updateRideByEventId(Ride $ride, string $eventId = null, string $driverId = null)
     {
-        /** @var Uuid $uuid */
-        $uuid = Uuid::fromString($driverId);
-        $driver = $this->userService->getUserById($uuid);
-        $eventToProcess = RideEventType::newById(intval($eventId));
-        $this->patchRideAcceptance($eventToProcess, $ride, $driver);
-        $this->patchRideInProgress($eventToProcess, $ride, $driver);
-        $this->patchRideCompleted($eventToProcess, $ride, $driver);
+        if (! is_null($driverId)) {
+            /** @var Uuid $uuid */
+            $uuid = Uuid::fromString($driverId);
+            $driver = $this->userService->getUserById($uuid);
+            $eventToProcess = RideEventType::newById(intval($eventId));
+            $this->patchRideAcceptance($eventToProcess, $ride, $driver);
+            $this->patchRideInProgress($eventToProcess, $ride, $driver);
+            $this->patchRideCompleted($eventToProcess, $ride, $driver);
+        }
         return $ride;
     }
 

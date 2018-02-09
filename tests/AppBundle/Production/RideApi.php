@@ -66,8 +66,7 @@ class RideApi
         $this->rideEventRepo = new RideEventRepository($entityManager);
         $this->rideService = new RideService(
             $this->rideRepo,
-            $this->rideEventRepo,
-            $this->location->getRepo()
+            $this->rideEventRepo
         );
         $this->rideTransitionService = new RideTransitionService(
             $this->rideService,
@@ -293,8 +292,8 @@ class RideApi
 
     /**
      * @param Ride $ride
-     * @param string $eventId
-     * @param string $driverId
+     * @param string $eventId|null
+     * @param string $driverId|null
      * @return Ride
      * @throws ActingDriverIsNotAssignedDriverException
      * @throws RideLifeCycleException
@@ -302,7 +301,7 @@ class RideApi
      * @throws UserNotFoundException
      * @throws UserNotInDriverRoleException
      */
-    public function updateRideByEventId(Ride $ride, string $eventId, string $driverId)
+    public function updateRideByEventId(Ride $ride, string $eventId = null, string $driverId = null)
     {
         return $this->rideTransitionService->updateRideByEventId(
             $ride,
