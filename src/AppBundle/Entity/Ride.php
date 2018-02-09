@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\DTO\RideDto;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 
@@ -52,6 +53,12 @@ class Ride
     private $id;
 
     /**
+     * @var \DateTime $created
+     * @ORM\Column(name="created", type="datetime", nullable=true)
+     */
+    private $created;
+
+    /**
      * Ride constructor.
      * @param AppUser $passenger
      * @param AppLocation $departure
@@ -61,6 +68,7 @@ class Ride
         $this->id = Uuid::uuid4();
         $this->passenger = $passenger;
         $this->departure = $departure;
+        $this->created = new \DateTime(null, new \DateTimeZone('UTC'));
     }
 
     /**
@@ -71,11 +79,6 @@ class Ride
         return $this->id;
     }
 
-    public function getPassenger()
-    {
-        return $this->passenger;
-    }
-
     public function assignDestination(AppLocation $destination)
     {
         $this->destination = $destination;
@@ -84,11 +87,6 @@ class Ride
     public function hasDestination()
     {
         return ! is_null($this->destination);
-    }
-
-    public function getDestination()
-    {
-        return $this->destination;
     }
 
     public function assignDriver(AppUser $driver)
@@ -104,11 +102,6 @@ class Ride
     public function hasDriver()
     {
         return ! is_null($this->driver);
-    }
-
-    public function getDriver()
-    {
-        return $this->driver;
     }
 
     public function isDestinedFor(AppLocation $destinationLocation)
@@ -128,5 +121,15 @@ class Ride
     public function is(Ride $rideToCompare)
     {
         return $this->id->equals($rideToCompare->id);
+    }
+
+    public function toDto()
+    {
+        return new RideDto(
+            $this,
+            $this->passenger,
+            $this->driver,
+            $this->destination
+        );
     }
 }

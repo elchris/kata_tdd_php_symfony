@@ -2,7 +2,6 @@
 
 namespace Tests\AppBundle\DTO;
 
-use AppBundle\DTO\RideDto;
 use AppBundle\Entity\AppLocation;
 use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
@@ -24,7 +23,7 @@ class RideDtoTest extends AppTestCase
             $passenger,
             $home
         );
-        $rideDto = new RideDto($ride);
+        $rideDto = $ride->toDto();
 
         self::assertSame($passenger->getId()->toString(), $rideDto->passengerId);
         self::assertNull($rideDto->driverId);
@@ -51,7 +50,7 @@ class RideDtoTest extends AppTestCase
         );
         $ride->assignDriver($driver);
         $ride->assignDestination($work);
-        $rideDto = new RideDto($ride);
+        $rideDto = $ride->toDto();
 
         self::assertSame($driver->getId()->toString(), $rideDto->driverId);
         self::assertTrue($work->isSameAs($rideDto->destination));

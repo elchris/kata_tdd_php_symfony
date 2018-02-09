@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\DTO\UserDto;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
@@ -49,6 +50,17 @@ class AppUser
     private $roles;
 
     /**
+     * @var \DateTime $created
+     * @ORM\Column(name="created", type="datetime", nullable=false)
+     */
+
+    /**
+     * @var \DateTime $created
+     * @ORM\Column(name="created", type="datetime", nullable=true)
+     */
+    private $created;
+
+    /**
      * AppUser constructor.
      * @param string $firstName
      * @param string $lastName
@@ -59,6 +71,7 @@ class AppUser
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->roles = new ArrayCollection();
+        $this->created = new \DateTime(null, new \DateTimeZone('UTC'));
     }
 
     /**
@@ -86,18 +99,31 @@ class AppUser
         return $this->roles->matching($hasRoleCriteria)->count() > 0;
     }
 
-    public function getFirstName()
+    public function isNamed(string $nameToCheck)
     {
-        return $this->firstName;
-    }
-
-    public function getLastName()
-    {
-        return $this->lastName;
+        return $this->getFullName() === $nameToCheck;
     }
 
     public function is(AppUser $userToCompare)
     {
         return $this->getId()->equals($userToCompare->getId());
+    }
+
+    public function toDto()
+    {
+        return new UserDto(
+            $this->id->toString(),
+            $this->hasRole(AppRole::driver()),
+            $this->hasRole(AppRole::passenger()),
+            $this->getFullName()
+        );
+    }
+
+    /**
+     * @return string
+     */
+    private function getFullName(): string
+    {
+        return trim($this->firstName . ' ' . $this->lastName);
     }
 }
