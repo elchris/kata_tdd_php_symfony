@@ -156,4 +156,12 @@ class UserApi
         $this->saveRole(AppRole::driver());
         $this->saveRole(AppRole::passenger());
     }
+
+    /**
+     * @return UserService
+     */
+    public function getService() : UserService
+    {
+        return $this->userService;
+    }
 }

@@ -12,7 +12,6 @@ use AppBundle\Exception\RideLifeCycleException;
 use AppBundle\Exception\RideNotFoundException;
 use AppBundle\Exception\UserNotInDriverRoleException;
 use AppBundle\Exception\UserNotInPassengerRoleException;
-use AppBundle\Repository\LocationRepositoryInterface;
 use AppBundle\Repository\RideEventRepositoryInterface;
 use AppBundle\Repository\RideRepositoryInterface;
 use Ramsey\Uuid\Uuid;
@@ -27,25 +26,18 @@ class RideService
      * @var RideEventRepositoryInterface
      */
     private $rideEventRepository;
-    /**
-     * @var LocationRepositoryInterface
-     */
-    private $locationRepository;
 
     /**
      * RideService constructor.
      * @param RideRepositoryInterface $rideRepository
      * @param RideEventRepositoryInterface $rideEventRepository
-     * @param LocationRepositoryInterface $locationRepository
      */
     public function __construct(
         RideRepositoryInterface $rideRepository,
-        RideEventRepositoryInterface $rideEventRepository,
-        LocationRepositoryInterface $locationRepository
+        RideEventRepositoryInterface $rideEventRepository
     ) {
         $this->rideRepository = $rideRepository;
         $this->rideEventRepository = $rideEventRepository;
-        $this->locationRepository = $locationRepository;
     }
 
     /**
@@ -59,7 +51,7 @@ class RideService
         $this->validateUserHasPassengerRole($passenger);
 
         $newRide = new Ride($passenger, $departure);
-        $this->rideRepository->save($newRide);
+        $this->rideRepository->saveRide($newRide);
 
         $this->rideEventRepository->markRideStatusByPassenger(
             $newRide,
@@ -115,9 +107,8 @@ class RideService
         return $ride;
     }
 
-    public function assignDestinationToRide(Ride $ride, AppLocation $lookupDestination)
+    public function assignDestinationToRide(Ride $ride, AppLocation $destination)
     {
-        $destination = $this->locationRepository->getLocation($lookupDestination);
         $this->rideRepository->assignDestinationToRide(
             $ride,
             $destination

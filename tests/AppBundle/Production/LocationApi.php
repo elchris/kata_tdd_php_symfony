@@ -68,4 +68,12 @@ class LocationApi
             self::WORK_LOCATION_LONG
         );
     }
+
+    /**
+     * @return LocationService
+     */
+    public function getService() : LocationService
+    {
+        return $this->locationService;
+    }
 }

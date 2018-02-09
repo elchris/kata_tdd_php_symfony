@@ -14,10 +14,14 @@ interface RideRepositoryInterface
 
     /**
      * @param Uuid $id
-     * @return mixed
+     * @return Ride
      * @throws RideNotFoundException
      */
-    public function getRideById(Uuid $id);
+    public function getRideById(Uuid $id) : Ride;
 
     public function assignDriverToRide(Ride $ride, AppUser $driver);
+
+    public function save(Ride $newRide);
+
+    public function saveRide(Ride $newRide);
 }
