@@ -35,7 +35,11 @@ class RideController extends AppController
             $request->get('departureLat'),
             $request->get('departureLong')
         );
-        return new RideDto($this->ride()->newRide($passenger, $departure));
+        return $this
+            ->ride()
+            ->newRide($passenger, $departure)
+            ->toDto()
+            ;
     }
 
     /**
@@ -46,7 +50,7 @@ class RideController extends AppController
      */
     public function idAction(string $id)
     {
-        return new RideDto($this->getRide($id));
+        return $this->getRide($id)->toDto();
     }
 
     /**
@@ -81,7 +85,7 @@ class RideController extends AppController
         $destinationLong = $request->get('destinationLong');
         $this->patchRideLifeCycle($request, $eventId, $rideToPatch);
         $this->patchRideDestination($destinationLat, $destinationLong, $rideToPatch);
-        return new RideDto($rideToPatch);
+        return $rideToPatch->toDto();
     }
 
     /**

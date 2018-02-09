@@ -2,9 +2,6 @@
 
 namespace AppBundle\DTO;
 
-use AppBundle\Entity\AppRole;
-use AppBundle\Entity\AppUser;
-
 class UserDto
 {
     public $id;
@@ -13,13 +10,20 @@ class UserDto
     public $fullName;
 
     /**
-     * @param AppUser $createdUser
+     * @param string $id
+     * @param bool $isDriver
+     * @param bool $isPassenger
+     * @param string $fullName
      */
-    public function __construct(AppUser $createdUser)
-    {
-        $this->id = $createdUser->getId()->toString();
-        $this->isDriver = $createdUser->hasRole(AppRole::driver());
-        $this->isPassenger = $createdUser->hasRole(AppRole::passenger());
-        $this->fullName = trim($createdUser->getFirstName().' '.$createdUser->getLastName());
+    public function __construct(
+        string $id,
+        bool $isDriver,
+        bool $isPassenger,
+        string $fullName
+    ) {
+        $this->id = $id;
+        $this->isDriver = $isDriver;
+        $this->isPassenger = $isPassenger;
+        $this->fullName = $fullName;
     }
 }

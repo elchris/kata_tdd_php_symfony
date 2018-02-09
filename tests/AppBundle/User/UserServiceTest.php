@@ -11,8 +11,7 @@ class UserServiceTest extends AppTestCase
     public function testRegisterNewUser()
     {
         $user = $this->user()->getSavedUser();
-        self::assertSame('chris', $user->getFirstName());
-        self::assertSame('holland', $user->getLastName());
+        self::assertTrue($user->isNamed('chris holland'));
     }
 
     /**

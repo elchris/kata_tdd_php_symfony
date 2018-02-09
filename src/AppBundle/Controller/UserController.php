@@ -23,7 +23,7 @@ class UserController extends AppController
             $request->get('lastName')
         );
 
-        return new UserDto($createdUser);
+        return $createdUser->toDto();
     }
 
     /**
@@ -34,7 +34,7 @@ class UserController extends AppController
      */
     public function idAction(string $id)
     {
-        return new UserDto($this->getUserById($id));
+        return $this->getUserById($id)->toDto();
     }
 
     /**
@@ -49,7 +49,7 @@ class UserController extends AppController
     {
         $userToPatch = $this->getUserById($id);
         $this->patchRole($request, $userToPatch);
-        return new UserDto($userToPatch);
+        return $userToPatch->toDto();
     }
 
     /**
