@@ -16,12 +16,17 @@ class RideRepository extends AppRepository implements RideRepositoryInterface
         $this->save($ride);
     }
 
+    public function saveRide(Ride $ride)
+    {
+        $this->save($ride);
+    }
+
     /**
      * @param Uuid $id
-     * @return mixed
+     * @return Ride
      * @throws RideNotFoundException
      */
-    public function getRideById(Uuid $id)
+    public function getRideById(Uuid $id) : Ride
     {
         try {
             return $this->em->createQuery(

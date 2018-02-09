@@ -5,7 +5,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\DTO\RideDto;
 use AppBundle\Entity\AppLocation;
-use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
 use AppBundle\Entity\RideEventType;
 use AppBundle\Exception\ActingDriverIsNotAssignedDriverException;
@@ -83,7 +82,14 @@ class RideController extends AppController
         $eventId = $request->get('eventId');
         $destinationLat = $request->get('destinationLat');
         $destinationLong = $request->get('destinationLong');
-        $this->patchRideLifeCycle($request, $eventId, $rideToPatch);
+        $driverId = $request->get('driverId');
+        if (!is_null($eventId)) {
+            $this->rideTransition()->updateRideByEventId(
+                $rideToPatch,
+                $eventId,
+                $driverId
+            );
+        }
         $this->patchRideDestination($destinationLat, $destinationLong, $rideToPatch);
         return $rideToPatch->toDto();
     }
@@ -99,78 +105,6 @@ class RideController extends AppController
     }
 
     /**
-     * @param RideEventType $eventToProcess
-     * @param Ride $rideToPatch
-     * @param Request $request
-     * @throws RideLifeCycleException
-     * @throws RideNotFoundException
-     * @throws UserNotInDriverRoleException
-     * @throws UserNotFoundException
-     */
-    private function patchRideAcceptance(RideEventType $eventToProcess, Ride $rideToPatch, Request $request): void
-    {
-        if (RideEventType::accepted()->equals($eventToProcess)) {
-            $driver = $this->getDriverFromRequest($request);
-            $this->ride()->acceptRide($rideToPatch, $driver);
-        }
-    }
-
-    /**
-     * @param RideEventType $eventToProcess
-     * @param Ride $rideToPatch
-     * @param Request $request
-     * @throws RideLifeCycleException
-     * @throws RideNotFoundException
-     * @throws UserNotFoundException
-     * @throws UserNotInDriverRoleException
-     * @throws ActingDriverIsNotAssignedDriverException
-     */
-    private function patchRideInProgress(RideEventType $eventToProcess, Ride $rideToPatch, Request $request)
-    {
-        if (RideEventType::inProgress()->equals($eventToProcess)) {
-            $driver = $this->getDriverFromRequest($request);
-            $this->ride()->markRideInProgress($rideToPatch, $driver);
-        }
-    }
-
-    /**
-     * @param RideEventType $eventToProcess
-     * @param Ride $rideToPatch
-     * @param Request $request
-     * @throws ActingDriverIsNotAssignedDriverException
-     * @throws RideLifeCycleException
-     * @throws RideNotFoundException
-     * @throws UserNotFoundException
-     */
-    private function patchRideCompleted(RideEventType $eventToProcess, Ride $rideToPatch, Request $request)
-    {
-        if (RideEventType::completed()->equals($eventToProcess)) {
-            $driver = $this->getDriverFromRequest($request);
-            $this->ride()->markRideCompleted($rideToPatch, $driver);
-        }
-    }
-
-    /**
-     * @param Request $request
-     * @param $eventId
-     * @param Ride $rideToPatch
-     * @throws RideLifeCycleException
-     * @throws RideNotFoundException
-     * @throws UserNotFoundException
-     * @throws UserNotInDriverRoleException
-     * @throws ActingDriverIsNotAssignedDriverException
-     */
-    private function patchRideLifeCycle(Request $request, $eventId, Ride $rideToPatch): void
-    {
-        if (!is_null($eventId)) {
-            $eventToProcess = RideEventType::newById(intval($eventId));
-            $this->patchRideAcceptance($eventToProcess, $rideToPatch, $request);
-            $this->patchRideInProgress($eventToProcess, $rideToPatch, $request);
-            $this->patchRideCompleted($eventToProcess, $rideToPatch, $request);
-        }
-    }
-
-    /**
      * @param $destinationLat
      * @param $destinationLong
      * @param Ride $rideToPatch
@@ -180,21 +114,11 @@ class RideController extends AppController
         if (!is_null($destinationLat) && !is_null($destinationLong)) {
             $this->ride()->assignDestinationToRide(
                 $rideToPatch,
-                new AppLocation(
+                $this->location()->getLocation(
                     floatval($destinationLat),
                     floatval($destinationLong)
                 )
             );
         }
-    }
-
-    /**
-     * @param Request $request
-     * @return AppUser
-     * @throws UserNotFoundException
-     */
-    private function getDriverFromRequest(Request $request)
-    {
-        return $this->getUserById($request->get('driverId'));
     }
 }

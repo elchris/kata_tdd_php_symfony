@@ -19,6 +19,7 @@ use AppBundle\Repository\RideEventRepositoryInterface;
 use AppBundle\Repository\RideRepository;
 use AppBundle\Repository\RideRepositoryInterface;
 use AppBundle\Service\RideService;
+use AppBundle\Service\RideTransitionService;
 use Doctrine\ORM\EntityManagerInterface;
 use Ramsey\Uuid\Uuid;
 
@@ -42,6 +43,9 @@ class RideApi
     /** @var RideService  */
     private $rideService;
 
+    /** @var RideTransitionService */
+    private $rideTransitionService;
+
     public $requested;
     public $accepted;
     public $inProgress;
@@ -64,6 +68,10 @@ class RideApi
             $this->rideRepo,
             $this->rideEventRepo,
             $this->location->getRepo()
+        );
+        $this->rideTransitionService = new RideTransitionService(
+            $this->rideService,
+            $this->user->getService()
         );
     }
 
@@ -273,16 +281,34 @@ class RideApi
     /**
      * @param Ride $newRide
      * @param AppLocation $location
-     * @return mixed
+     * @return Ride
      */
-    public function assignDestinationToRide(Ride $newRide, AppLocation $location)
+    public function assignDestinationToRide(Ride $newRide, AppLocation $location) : Ride
     {
-        $rideWithDestination = $this->rideService->assignDestinationToRide(
+        return $this->rideService->assignDestinationToRide(
             $newRide,
             $location
         );
+    }
 
-        return $rideWithDestination;
+    /**
+     * @param Ride $ride
+     * @param string $eventId
+     * @param string $driverId
+     * @return Ride
+     * @throws ActingDriverIsNotAssignedDriverException
+     * @throws RideLifeCycleException
+     * @throws RideNotFoundException
+     * @throws UserNotFoundException
+     * @throws UserNotInDriverRoleException
+     */
+    public function updateRideByEventId(Ride $ride, string $eventId, string $driverId)
+    {
+        return $this->rideTransitionService->updateRideByEventId(
+            $ride,
+            $eventId,
+            $driverId
+        );
     }
 
     private function requested()

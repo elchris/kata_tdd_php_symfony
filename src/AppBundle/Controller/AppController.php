@@ -11,6 +11,7 @@ use AppBundle\Repository\RideRepository;
 use AppBundle\Repository\UserRepository;
 use AppBundle\Service\LocationService;
 use AppBundle\Service\RideService;
+use AppBundle\Service\RideTransitionService;
 use AppBundle\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\FOSRestController;
@@ -33,8 +34,15 @@ class AppController extends FOSRestController
     {
         return new RideService(
             new RideRepository($this->em()),
-            new RideEventRepository($this->em()),
-            new LocationRepository($this->em())
+            new RideEventRepository($this->em())
+        );
+    }
+
+    protected function rideTransition() : RideTransitionService
+    {
+        return new RideTransitionService(
+            $this->ride(),
+            $this->user()
         );
     }
 

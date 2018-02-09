@@ -2,12 +2,14 @@
 
 namespace Tests\AppBundle;
 
+use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
 use AppBundle\Entity\RideEventType;
 use AppBundle\Exception\ActingDriverIsNotAssignedDriverException;
 use AppBundle\Exception\DuplicateRoleAssignmentException;
 use AppBundle\Exception\RideLifeCycleException;
 use AppBundle\Exception\RideNotFoundException;
+use AppBundle\Exception\UserNotFoundException;
 use AppBundle\Exception\UserNotInDriverRoleException;
 use AppBundle\Exception\UserNotInPassengerRoleException;
 
@@ -86,20 +88,6 @@ class RideServiceTest extends AppTestCase
 
         self::assertTrue(RideEventType::accepted()->equals($rideStatus));
         self::assertTrue($acceptedRide->isDrivenBy($newDriver));
-    }
-
-    /**
-     * @throws DuplicateRoleAssignmentException
-     * @throws UserNotInPassengerRoleException
-     */
-    public function testAssignDestinationToRide()
-    {
-        $newRide = $this->ride()->getSavedNewRideWithPassengerAndDestination();
-        $workLocation = $this->location()->getWorkLocation();
-        /** @var Ride $rideWithDestination */
-        $rideWithDestination = $this->ride()->assignDestinationToRide($newRide, $workLocation);
-
-        self::assertTrue($rideWithDestination->isDestinedFor($workLocation));
     }
 
     /**
@@ -255,5 +243,68 @@ class RideServiceTest extends AppTestCase
 
         $this->expectException(RideLifeCycleException::class);
         $this->ride()->markRideCompleted($acceptedRide, $newDriver);
+    }
+
+    /**
+     * @throws DuplicateRoleAssignmentException
+     * @throws UserNotInPassengerRoleException
+     */
+    public function testAssignDestinationToRide()
+    {
+        $newRide = $this->ride()->getSavedNewRideWithPassengerAndDestination();
+        $workLocation = $this->location()->getWorkLocation();
+        /** @var Ride $rideWithDestination */
+        $rideWithDestination = $this->ride()->assignDestinationToRide($newRide, $workLocation);
+
+        self::assertTrue($rideWithDestination->isDestinedFor($workLocation));
+    }
+
+
+    /**
+     * @throws ActingDriverIsNotAssignedDriverException
+     * @throws DuplicateRoleAssignmentException
+     * @throws RideLifeCycleException
+     * @throws RideNotFoundException
+     * @throws UserNotInDriverRoleException
+     * @throws UserNotInPassengerRoleException
+     * @throws UserNotFoundException
+     */
+    public function testPatchRideLifeCycle()
+    {
+        $driver = $this->user()->getNewDriver();
+        $ride = $this->ride()->getSavedNewRideWithPassengerAndDestination();
+
+        $this->assertRidePatchEvent($ride, RideEventType::ACCEPTED_ID, $driver);
+        $this->assertRidePatchEvent($ride, RideEventType::IN_PROGRESS_ID, $driver);
+        $this->assertRidePatchEvent($ride, RideEventType::COMPLETED_ID, $driver);
+    }
+
+    /**
+     * @param Ride $ride
+     * @param string $eventId
+     * @param AppUser $driver
+     * @return Ride
+     * @throws ActingDriverIsNotAssignedDriverException
+     * @throws RideLifeCycleException
+     * @throws RideNotFoundException
+     * @throws UserNotInDriverRoleException
+     * @throws UserNotFoundException
+     */
+    public function assertRidePatchEvent(Ride $ride, string $eventId, AppUser $driver): Ride
+    {
+        /** @var Ride $patchedRide */
+        $patchedRide = $this->ride()->updateRideByEventId(
+            $ride,
+            $eventId,
+            $driver->getId()->toString()
+        );
+
+        self::assertTrue($ride->isDrivenBy($driver));
+        self::assertTrue(
+            RideEventType::newById(intval($eventId))->equals(
+                $this->ride()->getRideStatus($patchedRide)
+            )
+        );
+        return $patchedRide;
     }
 }
