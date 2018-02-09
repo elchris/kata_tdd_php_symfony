@@ -4,7 +4,6 @@
 namespace AppBundle\Controller;
 
 use AppBundle\DTO\RideDto;
-use AppBundle\Entity\AppLocation;
 use AppBundle\Entity\Ride;
 use AppBundle\Entity\RideEventType;
 use AppBundle\Exception\ActingDriverIsNotAssignedDriverException;
@@ -80,16 +79,14 @@ class RideController extends AppController
     {
         $rideToPatch = $this->getRide($id);
         $eventId = $request->get('eventId');
+        $driverId = $request->get('driverId');
         $destinationLat = $request->get('destinationLat');
         $destinationLong = $request->get('destinationLong');
-        $driverId = $request->get('driverId');
-        if (!is_null($eventId)) {
-            $this->rideTransition()->updateRideByEventId(
-                $rideToPatch,
-                $eventId,
-                $driverId
-            );
-        }
+        $this->rideTransition()->updateRideByEventId(
+            $rideToPatch,
+            $eventId,
+            $driverId
+        );
         $this->patchRideDestination($destinationLat, $destinationLong, $rideToPatch);
         return $rideToPatch->toDto();
     }

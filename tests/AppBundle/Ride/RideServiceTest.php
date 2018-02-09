@@ -277,11 +277,36 @@ class RideServiceTest extends AppTestCase
         $this->assertRidePatchEvent($ride, RideEventType::ACCEPTED_ID, $driver);
         $this->assertRidePatchEvent($ride, RideEventType::IN_PROGRESS_ID, $driver);
         $this->assertRidePatchEvent($ride, RideEventType::COMPLETED_ID, $driver);
+        $this->assertRidePatchEvent($ride, null, $driver);
+    }
+
+    /**
+     * @throws ActingDriverIsNotAssignedDriverException
+     * @throws DuplicateRoleAssignmentException
+     * @throws RideLifeCycleException
+     * @throws RideNotFoundException
+     * @throws UserNotFoundException
+     * @throws UserNotInDriverRoleException
+     * @throws UserNotInPassengerRoleException
+     */
+    public function testPatchRideLifeCycleNullDriverIdAndEventId()
+    {
+        $ride = $this->ride()->getSavedNewRideWithPassengerAndDestination();
+        $patchedRide = $this->ride()->updateRideByEventId(
+            $ride,
+            null,
+            null
+        );
+        self::assertTrue(
+            RideEventType::requested()->equals(
+                $this->ride()->getRideStatus($patchedRide)
+            )
+        );
     }
 
     /**
      * @param Ride $ride
-     * @param string $eventId
+     * @param string $eventId|null
      * @param AppUser $driver
      * @return Ride
      * @throws ActingDriverIsNotAssignedDriverException
@@ -290,9 +315,8 @@ class RideServiceTest extends AppTestCase
      * @throws UserNotInDriverRoleException
      * @throws UserNotFoundException
      */
-    public function assertRidePatchEvent(Ride $ride, string $eventId, AppUser $driver): Ride
+    public function assertRidePatchEvent(Ride $ride, string $eventId = null, AppUser $driver): Ride
     {
-        /** @var Ride $patchedRide */
         $patchedRide = $this->ride()->updateRideByEventId(
             $ride,
             $eventId,
@@ -300,11 +324,19 @@ class RideServiceTest extends AppTestCase
         );
 
         self::assertTrue($ride->isDrivenBy($driver));
-        self::assertTrue(
-            RideEventType::newById(intval($eventId))->equals(
-                $this->ride()->getRideStatus($patchedRide)
-            )
-        );
+        if (! is_null($eventId)) {
+            self::assertTrue(
+                RideEventType::newById(intval($eventId))->equals(
+                    $this->ride()->getRideStatus($patchedRide)
+                )
+            );
+        } else {
+            self::assertFalse(
+                RideEventType::newById(intval($eventId))->equals(
+                    $this->ride()->getRideStatus($patchedRide)
+                )
+            );
+        }
         return $patchedRide;
     }
 }
