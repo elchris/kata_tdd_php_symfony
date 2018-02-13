@@ -60,6 +60,16 @@ abstract class AppTestCase extends WebTestCase
     }
 
     /**
+     * @param string $class
+     * @param string $message
+     */
+    protected function verifyExceptionWithMessage(string $class, string $message): void
+    {
+        $this->expectException($class);
+        $this->expectExceptionMessage($message);
+    }
+
+    /**
      * @return UserApi
      */
     protected function user()

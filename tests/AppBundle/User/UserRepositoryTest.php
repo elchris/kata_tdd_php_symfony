@@ -48,7 +48,10 @@ class UserRepositoryTest extends AppTestCase
         /** @var Uuid $nonExistentId */
         $nonExistentId = Uuid::uuid4();
 
-        $this->expectException(UserNotFoundException::class);
+        $this->verifyExceptionWithMessage(
+            UserNotFoundException::class,
+            UserNotFoundException::MESSAGE
+        );
         $this->getRepoUserById($nonExistentId);
     }
 
@@ -95,7 +98,10 @@ class UserRepositoryTest extends AppTestCase
         $savedUser = $this->user()->getSavedUser();
 
         $this->assignRepoRoleToUser($savedUser, AppRole::driver());
-        $this->expectException(DuplicateRoleAssignmentException::class);
+        $this->verifyExceptionWithMessage(
+            DuplicateRoleAssignmentException::class,
+            DuplicateRoleAssignmentException::MESSAGE
+        );
 
         $this->assignRepoRoleToUser($savedUser, AppRole::driver());
     }
