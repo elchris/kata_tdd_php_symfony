@@ -19,8 +19,10 @@ class RideRepositoryTest extends AppTestCase
             $this->user()->getSavedUser(),
             $this->location()->getSavedHomeLocation()
         );
-
-        $this->expectException(RideNotFoundException::class);
+        $this->verifyExceptionWithMessage(
+            RideNotFoundException::class,
+            RideNotFoundException::MESSAGE
+        );
 
         $this->ride()->getRepoRideById($nonExistentRide->getId());
     }
