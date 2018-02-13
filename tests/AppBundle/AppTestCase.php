@@ -2,6 +2,8 @@
 
 namespace Tests\AppBundle;
 
+use AppBundle\Entity\AppUser;
+use FOS\UserBundle\Doctrine\UserManager;
 use Tests\AppBundle\Production\LocationApi;
 use Tests\AppBundle\Production\RideApi;
 use Tests\AppBundle\Production\UserApi;
@@ -10,6 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\ToolsException;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Tests\AppBundle\User\FakeUser;
 
 abstract class AppTestCase extends WebTestCase
 {
@@ -25,10 +28,16 @@ abstract class AppTestCase extends WebTestCase
     /** @var  EntityManagerInterface */
     private $em;
 
+    /** @var UserManager */
+    private $userManager;
+
     protected function setUp()
     {
         parent::setUp();
         self::bootKernel();
+        if (is_null($this->userManager)) {
+            $this->userManager = static::$kernel->getContainer()->get('fos_user.user_manager.public');
+        }
         $this->em = static::$kernel->getContainer()->get('doctrine')->getManager();
         $this->setUpEntityManager();
 
@@ -48,6 +57,16 @@ abstract class AppTestCase extends WebTestCase
         return $entity;
     }
 
+    /**
+     * @param $firstName
+     * @param $lastName
+     * @return AppUser
+     */
+    protected function newNamedUser($firstName, $lastName): AppUser
+    {
+        return (new FakeUser($firstName, $lastName))->toEntity();
+    }
+
     private function setUpEntityManager()
     {
         $classes = $this->em()->getMetadataFactory()->getAllMetadata();
@@ -65,7 +84,10 @@ abstract class AppTestCase extends WebTestCase
     protected function user()
     {
         if (is_null($this->userApi)) {
-            $this->userApi = new UserApi($this->em());
+            $this->userApi = new UserApi(
+                $this->em(),
+                $this->userManager
+            );
         }
         return $this->userApi;
     }

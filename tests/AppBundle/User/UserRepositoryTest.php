@@ -83,8 +83,8 @@ class UserRepositoryTest extends AppTestCase
 
         $retrievedUser = $this->getRepoUserById($savedUser->getId());
 
-        self::assertTrue($retrievedUser->hasRole(AppRole::driver()));
-        self::assertTrue($retrievedUser->hasRole(AppRole::passenger()));
+        self::assertTrue($retrievedUser->userHasRole(AppRole::driver()));
+        self::assertTrue($retrievedUser->userHasRole(AppRole::passenger()));
     }
 
     /**
@@ -112,7 +112,7 @@ class UserRepositoryTest extends AppTestCase
         $this->assignRepoRoleToUser($savedUser, $role);
         $retrievedUser = $this->getRepoUserById($savedUser->getId());
 
-        self::assertTrue($retrievedUser->hasRole($role));
+        self::assertTrue($retrievedUser->userHasRole($role));
     }
 
     /**

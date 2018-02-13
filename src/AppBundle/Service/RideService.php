@@ -166,7 +166,7 @@ class RideService
      */
     private function validateUserHasPassengerRole(AppUser $passenger)
     {
-        if (!$passenger->hasRole(AppRole::passenger())) {
+        if (!$passenger->userHasRole(AppRole::passenger())) {
             throw new UserNotInPassengerRoleException();
         }
     }
@@ -177,7 +177,7 @@ class RideService
      */
     private function validateUserHasDriverRole(AppUser $driver)
     {
-        if (!$driver->hasRole(AppRole::driver())) {
+        if (!$driver->userHasRole(AppRole::driver())) {
             throw new UserNotInDriverRoleException();
         }
     }

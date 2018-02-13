@@ -24,5 +24,9 @@ interface UserRepositoryInterface
      */
     public function assignRoleToUser(AppUser $user, AppRole $role);
 
-    public function saveUser(AppUser $user);
+    /**
+     * @param AppUser $passedUser
+     * @return AppUser
+     */
+    public function saveNewUser(AppUser $passedUser);
 }

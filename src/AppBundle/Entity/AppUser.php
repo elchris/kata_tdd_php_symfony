@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
+use FOS\UserBundle\Model\User as BaseUser;
 
 /**
  * Class AppUser
@@ -15,17 +16,17 @@ use Ramsey\Uuid\Uuid;
  * @ORM\Entity()
  * @ORM\Table(name="users")
  */
-class AppUser
+class AppUser extends BaseUser
 {
     /**
      * @var string $firstName
-     * @ORM\Column(name="first_name", type="string", nullable=false)
+     * @ORM\Column(name="first_name", type="string", nullable=true)
      */
     private $firstName;
 
     /**
      * @var string $lastName
-     * @ORM\Column(name="last_name", type="string", nullable=false)
+     * @ORM\Column(name="last_name", type="string", nullable=true)
      */
     private $lastName;
 
@@ -36,7 +37,7 @@ class AppUser
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var ArrayCollection $roles
@@ -47,7 +48,7 @@ class AppUser
      *     inverseJoinColumns={@ORM\JoinColumn(name="roleId", referencedColumnName="id")}
      * )
      */
-    private $roles;
+    private $appRoles;
 
     /**
      * @var \DateTime $created
@@ -64,13 +65,25 @@ class AppUser
      * AppUser constructor.
      * @param string $firstName
      * @param string $lastName
+     * @param string $email
+     * @param $username
+     * @param $password
      */
-    public function __construct($firstName, $lastName)
-    {
+    public function __construct(
+        $firstName = null,
+        $lastName = null,
+        $email = null,
+        $username = null,
+        $password = null
+    ) {
+        parent::__construct();
         $this->id = Uuid::uuid4();
         $this->firstName = $firstName;
         $this->lastName = $lastName;
-        $this->roles = new ArrayCollection();
+        $this->email = $email;
+        $this->username = $username;
+        $this->setPlainPassword($password);
+        $this->appRoles = new ArrayCollection();
         $this->created = new \DateTime(null, new \DateTimeZone('UTC'));
     }
 
@@ -84,10 +97,10 @@ class AppUser
 
     public function assignRole(AppRole $role)
     {
-        $this->roles->add($role);
+        $this->appRoles->add($role);
     }
 
-    public function hasRole(AppRole $role)
+    public function userHasRole(AppRole $role)
     {
         $hasRoleCriteria =
         Criteria::create()->andWhere(
@@ -96,7 +109,7 @@ class AppUser
                 $role->getId()
             )
         );
-        return $this->roles->matching($hasRoleCriteria)->count() > 0;
+        return $this->appRoles->matching($hasRoleCriteria)->count() > 0;
     }
 
     public function isNamed(string $nameToCheck)
@@ -113,9 +126,11 @@ class AppUser
     {
         return new UserDto(
             $this->id->toString(),
-            $this->hasRole(AppRole::driver()),
-            $this->hasRole(AppRole::passenger()),
-            $this->getFullName()
+            $this->userHasRole(AppRole::driver()),
+            $this->userHasRole(AppRole::passenger()),
+            $this->getFullName(),
+            $this->getUsername(),
+            $this->getEmail()
         );
     }
 
@@ -125,5 +140,31 @@ class AppUser
     private function getFullName(): string
     {
         return trim($this->firstName . ' ' . $this->lastName);
+    }
+
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * @param string $firstName
+     */
+    public function setFirstName(string $firstName): void
+    {
+        $this->firstName = $firstName;
+    }
+
+    /**
+     * @param string $lastName
+     */
+    public function setLastName(string $lastName): void
+    {
+        $this->lastName = $lastName;
     }
 }

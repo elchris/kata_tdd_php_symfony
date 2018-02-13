@@ -4,6 +4,8 @@ use AppBundle\Entity\AppRole;
 use AppBundle\Entity\RideEventType;
 use Codeception\Util\HttpCode;
 use Tests\AppBundle\Production\LocationApi;
+use Tests\AppBundle\Production\UserApi;
+use Tests\AppBundle\User\FakeUser;
 
 /**
  * Inherited Methods
@@ -32,6 +34,7 @@ class ApiTester extends \Codeception\Actor
             'Content-Type',
             'application/x-www-form-urlencoded'
         );
+        $this->injectToken();
         $this->sendPOST($uri, $params);
 
         return $this->validateAndReturnResponse();
@@ -39,12 +42,14 @@ class ApiTester extends \Codeception\Actor
 
     public function sendGetApiRequest($uri, $params = [])
     {
+        $this->injectToken();
         $this->sendGET($uri, $params);
         return $this->validateAndReturnResponse();
     }
 
     public function sendPatchApiRequest($uri, $params)
     {
+        $this->injectToken();
         $this->sendPATCH($uri, $params);
         return $this->validateAndReturnResponse();
     }
@@ -154,8 +159,8 @@ class ApiTester extends \Codeception\Actor
 
     public function getNewPassenger()
     {
-        $newUser = $this->createNewUser('Joe', 'Passenger');
-        $userId = $newUser['id'];
+        $newUser = $this->getRegisteredUserWithToken('Joe', 'Passenger');
+        $userId = $newUser['user']['id'];
 
         $retrievedUser = $this->retrieveUser($userId);
         $userId = $retrievedUser['id'];
@@ -220,10 +225,36 @@ class ApiTester extends \Codeception\Actor
 
     protected function createNewUser(string $first, string $last)
     {
-        $response = $this->sendPostApiRequest('/user', [
+        $fakedUser = new FakeUser($first, $last);
+        $response = $this->sendPostApiRequest('/register-user', [
             'firstName' => $first,
-            'lastName' => $last
+            'lastName' => $last,
+            'email' => $fakedUser->email,
+            'username' => $fakedUser->username,
+            'password' => $fakedUser->password
         ]);
+        return $response;
+    }
+
+    private $token;
+
+    protected function getRegisteredUserWithToken($first, $last)
+    {
+        $createdUser = $this->createNewUser($first, $last);
+        $username = $createdUser['username'];
+        $response = $this->sendPostApiRequest('/../../oauth/v2/token', [
+            'grant_type' => 'password',
+            'client_id' => UserApi::CLIENT_ID,
+            'client_secret' => UserApi::CLIENT_SECRET,
+            'username' => $username,
+            'password' => 'password'
+
+        ]);
+        $this->seeResponseContainsJson([
+           'token_type' => 'bearer'
+        ]);
+        $response['user'] = $createdUser;
+        $this->token = $response['access_token'];
         return $response;
     }
 
@@ -288,5 +319,12 @@ class ApiTester extends \Codeception\Actor
         $this->seeResponseContainsJson([
             'passenger_id' => $passengerId
         ]);
+    }
+
+    private function injectToken(): void
+    {
+        if (!is_null($this->token)) {
+            $this->amBearerAuthenticated($this->token);
+        }
     }
 }

@@ -23,7 +23,6 @@ framework:
         engines: ['twig']
     default_locale:  "%locale%"
     trusted_hosts:   ~
-    trusted_proxies: ~
     session:
         # http://symfony.com/doc/current/reference/configuration/framework.html#handler-id
         handler_id:  session.handler.native_file
@@ -97,6 +96,9 @@ nelmio_cors:
 
 # FOSRest Configuration
 fos_rest:
+    routing_loader:
+        default_format: json
+        include_format: false
     exception:
       enabled: true
     body_listener: true
@@ -108,3 +110,21 @@ fos_rest:
         view_response_listener: 'force'
         formats:
           json: true
+
+fos_user:
+    db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
+    firewall_name: api
+    user_class: AppBundle\Entity\AppUser
+    from_email:
+          address: "noreply@yourcompany.com"
+          sender_name: "No Reply"
+
+fos_oauth_server:
+    db_driver:           orm
+    client_class:        AppBundle\Entity\Client
+    access_token_class:  AppBundle\Entity\AccessToken
+    refresh_token_class: AppBundle\Entity\RefreshToken
+    auth_code_class:     AppBundle\Entity\AuthCode
+    service:
+        user_provider: fos_user.user_provider.username             # This property will be used when valid credentials are given to load the user upon access token creation
+

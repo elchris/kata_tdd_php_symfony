@@ -25,11 +25,18 @@ class UserService
         $this->userRepository = $userRepository;
     }
 
-    public function newUser($firstName, $lastName)
+    /**
+     * @param $firstName
+     * @param $lastName
+     * @param $email
+     * @param $username
+     * @param $password
+     * @return AppUser
+     */
+    public function newUser($firstName, $lastName, $email, $username, $password)
     {
-        $newUser = new AppUser($firstName, $lastName);
-        $this->userRepository->saveUser($newUser);
-        return $newUser;
+        $newUser = new AppUser($firstName, $lastName, $email, $username, $password);
+        return $this->userRepository->saveNewUser($newUser);
     }
 
     /**
@@ -53,7 +60,7 @@ class UserService
 
     public function isDriver(AppUser $user)
     {
-        return $user->hasRole(AppRole::driver());
+        return $user->userHasRole(AppRole::driver());
     }
 
     /**
@@ -67,7 +74,7 @@ class UserService
 
     public function isPassenger(AppUser $user)
     {
-        return $user->hasRole(AppRole::passenger());
+        return $user->userHasRole(AppRole::passenger());
     }
 
     /**

@@ -24,7 +24,10 @@ class AppController extends FOSRestController
      */
     protected function user() : UserService
     {
-        return new UserService(new UserRepository($this->em()));
+        return new UserService(new UserRepository(
+            $this->em(),
+            $this->container->get('fos_user.user_manager.public')
+        ));
     }
 
     /**
