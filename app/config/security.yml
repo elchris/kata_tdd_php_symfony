@@ -9,30 +9,30 @@ security:
     providers:
         in_memory:
             memory: ~
-        fos_userbundle:
-                id: fos_user.user_provider.username
+#        fos_userbundle:
+#                id: fos_user.user_provider.username
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
-        dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: false
+#        dev:
+#            pattern: ^/(_(profiler|wdt)|css|images|js)/
+#            security: false
 
-        oauth_token:                                   # Everyone can access the access token URL.
-            pattern: ^/oauth/v2/token
-            security: false
+#        oauth_token:                                   # Everyone can access the access token URL.
+#            pattern: ^/oauth/v2/token
+#            security: false
 
-        api-public:
-            pattern: ^/api/v1/register-user
-            security: false
+#        api-public:
+#            pattern: ^/api/v1/register-user
+#            security: false
 
-        api:
-            pattern: ^/api/v1                          # All URLs are protected
-            fos_oauth: true                            # OAuth2 protected resource
-            stateless: true                            # Do no set session cookies
-            anonymous: false
+#        api:
+#            pattern: ^/api/v1                          # All URLs are protected
+#            fos_oauth: true                            # OAuth2 protected resource
+#            stateless: true                            # Do no set session cookies
+#            anonymous: false
 
-        main:
+       main:
             anonymous: ~
             # activate different ways to authenticate
 

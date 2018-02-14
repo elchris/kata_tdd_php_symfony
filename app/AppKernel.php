@@ -20,9 +20,9 @@ class AppKernel extends Kernel
             new JMS\SerializerBundle\JMSSerializerBundle(),
             new Nelmio\CorsBundle\NelmioCorsBundle(),
             new AppBundle\AppBundle(),
-            new Symfony\Bundle\WebServerBundle\WebServerBundle(),
-            new FOS\UserBundle\FOSUserBundle(),
-            new FOS\OAuthServerBundle\FOSOAuthServerBundle()
+//            new Symfony\Bundle\WebServerBundle\WebServerBundle(),
+//            new FOS\UserBundle\FOSUserBundle(),
+//            new FOS\OAuthServerBundle\FOSOAuthServerBundle()
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

@@ -65,17 +65,17 @@ class UserRepository extends AppRepository implements UserRepositoryInterface
     public function saveNewUser(AppUser $passedUser)
     {
         /** @var AppUser $user */
-        $user = $this->userManager->createUser();
-        $user->setFirstName($passedUser->getFirstName());
-        $user->setLastName($passedUser->getLastName());
-        $user->setUsername($passedUser->getUsername());
-        $user->setEmail($passedUser->getEmail());
-        $user->setPlainPassword($passedUser->getPlainPassword());
-        $user->setEnabled(true);
-        $this->userManager->updateUser($user, true);
-        return $user;
-//        $this->save($passedUser);
-//        return $passedUser;
+//        $user = $this->userManager->createUser();
+//        $user->setFirstName($passedUser->getFirstName());
+//        $user->setLastName($passedUser->getLastName());
+//        $user->setUsername($passedUser->getUsername());
+//        $user->setEmail($passedUser->getEmail());
+//        $user->setPlainPassword($passedUser->getPlainPassword());
+//        $user->setEnabled(true);
+//        $this->userManager->updateUser($user, true);
+//        return $user;
+        $this->save($passedUser);
+        return $passedUser;
     }
 
     /**
