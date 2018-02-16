@@ -207,9 +207,7 @@ class ApiTester extends \Codeception\Actor
      */
     protected function assignPassengerRoleToUser($userId)
     {
-        $roleToAssign = AppRole::PASSENGER;
-
-        return $this->assignRoleToUser($userId, $roleToAssign);
+        return $this->assignRoleToUser($userId, AppRole::PASSENGER);
     }
 
     /**
@@ -218,9 +216,7 @@ class ApiTester extends \Codeception\Actor
      */
     protected function assignDriverRoleToUser($userId)
     {
-        $roleToAssign = AppRole::DRIVER;
-
-        return $this->assignRoleToUser($userId, $roleToAssign);
+        return $this->assignRoleToUser($userId, AppRole::DRIVER);
     }
 
     protected function createNewUser(string $first, string $last)
