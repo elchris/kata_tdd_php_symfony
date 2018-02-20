@@ -7,10 +7,6 @@ Introduction:
 * Consult Kata-Tasks.rtf to get an idea of the various tests you'll be writing and help shape your sequencing.
 * With this said, you do not have to follow the sequencing outlined.
 
-Alternatively:
-
-https://laravel.com/docs/5.5/homestead#first-steps
-
 Installation:
 
 * Install Brew: https://brew.sh
@@ -67,6 +63,8 @@ References:
 
 * https://www.jetbrains.com/help/phpstorm/testing-with-codeception.html
 * https://www.jetbrains.com/help/idea/testing-with-codeception.html
+* https://laravel.com/docs/5.5/homestead#first-steps
+* https://gist.github.com/diegonobre/341eb7b793fc841c0bba3f2b865b8d66
 
 
 Stats:

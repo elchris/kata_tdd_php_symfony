@@ -1,6 +1,10 @@
 imports:
     - { resource: config_dev.yml }
 
+security:
+    encoders:
+        AppBundle\Entity\AppUser: md5
+
 doctrine:
     dbal:
         driver:   pdo_sqlite

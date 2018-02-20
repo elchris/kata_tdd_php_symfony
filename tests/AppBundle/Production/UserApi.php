@@ -11,6 +11,8 @@ use AppBundle\Repository\UserRepository;
 use AppBundle\Repository\UserRepositoryInterface;
 use AppBundle\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
+use FOS\UserBundle\Doctrine\UserManager;
+use Tests\AppBundle\User\FakeUser;
 
 class UserApi
 {
@@ -23,14 +25,22 @@ class UserApi
     /** @var EntityManagerInterface */
     private $entityManager;
 
-    public function __construct(EntityManagerInterface $entityManager)
-    {
-        $this->userRepository = new UserRepository($entityManager);
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        UserManager $userManager = null
+    ) {
+        $this->userRepository = new UserRepository(
+            $entityManager,
+            $userManager
+        );
         $this->userService = new UserService(
             $this->userRepository
         );
         $this->entityManager = $entityManager;
     }
+
+    const CLIENT_ID = '1_3bcbxd9e24g0gk4swg0kwgcwg4o8k8g4g888kwc44gcc0gwwk4';
+    const CLIENT_SECRET = '4ok2x70rlfokc8g0wws8c8kwcokw80k44sg48goc0ok4w0so0k';
 
     /**
      * @return UserRepositoryInterface
@@ -52,7 +62,14 @@ class UserApi
 
     public function getSavedUserWithName($first, $last)
     {
-        return $this->userService->newUser($first, $last);
+        $fakeUser = new FakeUser($first, $last);
+        return $this->userService->newUser(
+            $first,
+            $last,
+            $fakeUser->email,
+            $fakeUser->username,
+            $fakeUser->password
+        );
     }
 
     /**

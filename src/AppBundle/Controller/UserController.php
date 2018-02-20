@@ -12,18 +12,19 @@ use Symfony\Component\HttpFoundation\Request;
 class UserController extends AppController
 {
     /**
-     * @Rest\Post("/api/v1/user")
+     * @Rest\Post("/api/v1/register-user")
      * @param Request $request
      * @return UserDto
      */
     public function postAction(Request $request)
     {
-        $createdUser = $this->user()->newUser(
+        return $this->user()->newUser(
             $request->get('firstName'),
-            $request->get('lastName')
-        );
-
-        return $createdUser->toDto();
+            $request->get('lastName'),
+            $request->get('email'),
+            $request->get('username'),
+            $request->get('password')
+        )->toDto();
     }
 
     /**

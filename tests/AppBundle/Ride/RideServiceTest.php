@@ -53,7 +53,10 @@ class RideServiceTest extends AppTestCase
         self::assertFalse($this->user()->isPassenger($notPassengerUser));
         $departure = $this->location()->getSavedHomeLocation();
 
-        $this->expectException(UserNotInPassengerRoleException::class);
+        $this->verifyExceptionWithMessage(
+            UserNotInPassengerRoleException::class,
+            UserNotInPassengerRoleException::MESSAGE
+        );
 
         $this->ride()->getNewRide($notPassengerUser, $departure);
     }
@@ -104,7 +107,10 @@ class RideServiceTest extends AppTestCase
         $losingDriver = $this->user()->getNewDriverWithName('Losing', 'Driver');
         $this->ride()->acceptRide($newRide, $winningDriver);
 
-        $this->expectException(RideLifeCycleException::class);
+        $this->verifyExceptionWithMessage(
+            RideLifeCycleException::class,
+            RideLifeCycleException::MESSAGE
+        );
         $this->ride()->acceptRide($newRide, $losingDriver);
     }
 
@@ -120,7 +126,10 @@ class RideServiceTest extends AppTestCase
         $newRide = $this->ride()->getSavedNewRideWithPassengerAndDestination();
         $attemptingDriver = $this->user()->getNewPassenger();
 
-        $this->expectException(UserNotInDriverRoleException::class);
+        $this->verifyExceptionWithMessage(
+            UserNotInDriverRoleException::class,
+            UserNotInDriverRoleException::MESSAGE
+        );
         $this->ride()->acceptRide($newRide, $attemptingDriver);
     }
 
@@ -153,7 +162,10 @@ class RideServiceTest extends AppTestCase
         $newRide = $this->ride()->getSavedNewRideWithPassengerAndDestination();
         $newDriver = $this->user()->getNewDriver();
 
-        $this->expectException(RideLifeCycleException::class);
+        $this->verifyExceptionWithMessage(
+            RideLifeCycleException::class,
+            RideLifeCycleException::MESSAGE
+        );
         $this->ride()->markRideInProgress($newRide, $newDriver);
     }
 
@@ -170,7 +182,10 @@ class RideServiceTest extends AppTestCase
         $acceptedRide = $this->ride()->getAcceptedRide();
         $nonDriverUser = $this->user()->getSavedUserWithName('Non', 'Driver');
 
-        $this->expectException(UserNotInDriverRoleException::class);
+        $this->verifyExceptionWithMessage(
+            UserNotInDriverRoleException::class,
+            UserNotInDriverRoleException::MESSAGE
+        );
         $this->ride()->markRideInProgress($acceptedRide, $nonDriverUser);
     }
 
@@ -187,7 +202,10 @@ class RideServiceTest extends AppTestCase
         $acceptedRide = $this->ride()->getAcceptedRide();
         $rogueDriverUser = $this->user()->getNewDriverWithName('Rogue', 'Driver');
 
-        $this->expectException(ActingDriverIsNotAssignedDriverException::class);
+        $this->verifyExceptionWithMessage(
+            ActingDriverIsNotAssignedDriverException::class,
+            ActingDriverIsNotAssignedDriverException::MESSAGE
+        );
         $this->ride()->markRideInProgress($acceptedRide, $rogueDriverUser);
     }
 
@@ -224,7 +242,10 @@ class RideServiceTest extends AppTestCase
         $rideInProgress= $this->ride()->getRideInProgress($newDriver);
         $rogueDriver = $this->user()->getNewDriverWithName('Rogue', 'Driver');
 
-        $this->expectException(ActingDriverIsNotAssignedDriverException::class);
+        $this->verifyExceptionWithMessage(
+            ActingDriverIsNotAssignedDriverException::class,
+            ActingDriverIsNotAssignedDriverException::MESSAGE
+        );
         $this->ride()->markRideCompleted($rideInProgress, $rogueDriver);
     }
 
@@ -241,7 +262,10 @@ class RideServiceTest extends AppTestCase
         $newDriver = $this->user()->getNewDriver();
         $acceptedRide = $this->ride()->getAcceptedRideWithDriver($newDriver);
 
-        $this->expectException(RideLifeCycleException::class);
+        $this->verifyExceptionWithMessage(
+            RideLifeCycleException::class,
+            RideLifeCycleException::MESSAGE
+        );
         $this->ride()->markRideCompleted($acceptedRide, $newDriver);
     }
 

@@ -11,7 +11,7 @@ class UserDtoTest extends AppTestCase
     public function testUserDtoWithNoRoles()
     {
         $userDto =
-            (new AppUser(
+            ($this->newNamedUser(
                 'chris',
                 'holland'
             ))->toDto();
@@ -25,16 +25,17 @@ class UserDtoTest extends AppTestCase
 
     public function testUserDtoDriver()
     {
-        $driver = new AppUser('Joe', 'Driver');
+        $driver = $this->newNamedUser('Joe', 'Driver');
         $driver->assignRole(AppRole::driver());
         $userDto = $driver->toDto();
         self::assertTrue($userDto->isDriver);
         self::assertFalse($userDto->isPassenger);
+        self::assertSame($driver->getUsername(), $userDto->username);
     }
 
     public function testUserDtoPassenger()
     {
-        $passenger = new AppUser('Bob', 'Passenger');
+        $passenger = $this->newNamedUser('Bob', 'Passenger');
         $passenger->assignRole(AppRole::passenger());
         $userDto = $passenger->toDto();
         self::assertTrue($userDto->isPassenger);

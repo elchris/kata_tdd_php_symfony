@@ -13,7 +13,9 @@ class RideDtoTest extends AppTestCase
 {
     public function testRideDtoNoDriverNoDestination()
     {
-        $passenger = new AppUser('Joe', 'Passenger');
+        $firstName = 'Joe';
+        $lastName = 'Passenger';
+        $passenger = $this->newNamedUser($firstName, $lastName);
         $passenger->assignRole(AppRole::passenger());
         $home = new AppLocation(
             LocationApi::HOME_LOCATION_LAT,
@@ -32,9 +34,9 @@ class RideDtoTest extends AppTestCase
 
     public function testRideDtoWithDriverAndDestination()
     {
-        $passenger = new AppUser('Joe', 'Passenger');
+        $passenger = $this->newNamedUser('Joe', 'Passenger');
         $passenger->assignRole(AppRole::passenger());
-        $driver = new AppUser('Bob', 'Driver');
+        $driver = $this->newNamedUser('Bob', 'Driver');
         $driver->assignRole(AppRole::driver());
         $home = new AppLocation(
             LocationApi::HOME_LOCATION_LAT,

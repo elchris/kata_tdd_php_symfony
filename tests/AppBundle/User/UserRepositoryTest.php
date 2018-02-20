@@ -48,7 +48,10 @@ class UserRepositoryTest extends AppTestCase
         /** @var Uuid $nonExistentId */
         $nonExistentId = Uuid::uuid4();
 
-        $this->expectException(UserNotFoundException::class);
+        $this->verifyExceptionWithMessage(
+            UserNotFoundException::class,
+            UserNotFoundException::MESSAGE
+        );
         $this->getRepoUserById($nonExistentId);
     }
 
@@ -83,8 +86,8 @@ class UserRepositoryTest extends AppTestCase
 
         $retrievedUser = $this->getRepoUserById($savedUser->getId());
 
-        self::assertTrue($retrievedUser->hasRole(AppRole::driver()));
-        self::assertTrue($retrievedUser->hasRole(AppRole::passenger()));
+        self::assertTrue($retrievedUser->userHasRole(AppRole::driver()));
+        self::assertTrue($retrievedUser->userHasRole(AppRole::passenger()));
     }
 
     /**
@@ -95,7 +98,10 @@ class UserRepositoryTest extends AppTestCase
         $savedUser = $this->user()->getSavedUser();
 
         $this->assignRepoRoleToUser($savedUser, AppRole::driver());
-        $this->expectException(DuplicateRoleAssignmentException::class);
+        $this->verifyExceptionWithMessage(
+            DuplicateRoleAssignmentException::class,
+            DuplicateRoleAssignmentException::MESSAGE
+        );
 
         $this->assignRepoRoleToUser($savedUser, AppRole::driver());
     }
@@ -112,7 +118,7 @@ class UserRepositoryTest extends AppTestCase
         $this->assignRepoRoleToUser($savedUser, $role);
         $retrievedUser = $this->getRepoUserById($savedUser->getId());
 
-        self::assertTrue($retrievedUser->hasRole($role));
+        self::assertTrue($retrievedUser->userHasRole($role));
     }
 
     /**
