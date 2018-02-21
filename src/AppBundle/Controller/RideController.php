@@ -9,6 +9,7 @@ use AppBundle\Entity\RideEventType;
 use AppBundle\Exception\ActingDriverIsNotAssignedDriverException;
 use AppBundle\Exception\RideLifeCycleException;
 use AppBundle\Exception\RideNotFoundException;
+use AppBundle\Exception\UnauthorizedOperationException;
 use AppBundle\Exception\UserNotFoundException;
 use AppBundle\Exception\UserNotInDriverRoleException;
 use AppBundle\Exception\UserNotInPassengerRoleException;
@@ -23,6 +24,7 @@ class RideController extends AppController
      * @return RideDto
      * @throws UserNotFoundException
      * @throws UserNotInPassengerRoleException
+     * @throws UnauthorizedOperationException
      */
     public function postAction(Request $request)
     {
@@ -74,6 +76,7 @@ class RideController extends AppController
      * @throws RideLifeCycleException
      * @throws UserNotInDriverRoleException
      * @throws ActingDriverIsNotAssignedDriverException
+     * @throws UnauthorizedOperationException
      */
     public function patchAction(string $id, Request $request)
     {

@@ -7,6 +7,7 @@ use AppBundle\Entity\RideEvent;
 use AppBundle\Entity\RideEventType;
 use AppBundle\Exception\DuplicateRoleAssignmentException;
 use AppBundle\Exception\RideNotFoundException;
+use AppBundle\Exception\UnauthorizedOperationException;
 use AppBundle\Exception\UserNotFoundException;
 
 class RideEventRepositoryTest extends AppTestCase
@@ -17,6 +18,7 @@ class RideEventRepositoryTest extends AppTestCase
     /**
      * @throws DuplicateRoleAssignmentException
      * @throws UserNotFoundException
+     * @throws UnauthorizedOperationException
      */
     public function setUp()
     {
@@ -40,6 +42,7 @@ class RideEventRepositoryTest extends AppTestCase
     /**
      * @throws DuplicateRoleAssignmentException
      * @throws UserNotFoundException
+     * @throws UnauthorizedOperationException
      */
     public function testSaveNewRideEvent()
     {
@@ -51,6 +54,7 @@ class RideEventRepositoryTest extends AppTestCase
     /**
      * @throws DuplicateRoleAssignmentException
      * @throws UserNotFoundException
+     * @throws UnauthorizedOperationException
      */
     public function testRideIsCurrentlyRequested()
     {
@@ -64,6 +68,7 @@ class RideEventRepositoryTest extends AppTestCase
     /**
      * @throws DuplicateRoleAssignmentException
      * @throws UserNotFoundException
+     * @throws UnauthorizedOperationException
      */
     public function testRideIsCurrentlyAccepted()
     {
@@ -73,6 +78,7 @@ class RideEventRepositoryTest extends AppTestCase
     /**
      * @throws DuplicateRoleAssignmentException
      * @throws UserNotFoundException
+     * @throws UnauthorizedOperationException
      */
     public function testRideIsCurrentlyInProgress()
     {
@@ -82,6 +88,7 @@ class RideEventRepositoryTest extends AppTestCase
     /**
      * @throws DuplicateRoleAssignmentException
      * @throws UserNotFoundException
+     * @throws UnauthorizedOperationException
      */
     public function testRideIsCurrentlyCancelled()
     {
@@ -91,6 +98,7 @@ class RideEventRepositoryTest extends AppTestCase
     /**
      * @throws DuplicateRoleAssignmentException
      * @throws UserNotFoundException
+     * @throws UnauthorizedOperationException
      */
     public function testRideIsCurrentlyCompleted()
     {
@@ -100,6 +108,7 @@ class RideEventRepositoryTest extends AppTestCase
     /**
      * @throws DuplicateRoleAssignmentException
      * @throws UserNotFoundException
+     * @throws UnauthorizedOperationException
      */
     public function testRideIsCurrentlyRejected()
     {
@@ -109,6 +118,7 @@ class RideEventRepositoryTest extends AppTestCase
     /**
      * @throws DuplicateRoleAssignmentException
      * @throws UserNotFoundException
+     * @throws UnauthorizedOperationException
      */
     public function testMarkRideAsStatus()
     {
@@ -126,6 +136,7 @@ class RideEventRepositoryTest extends AppTestCase
      * @return RideEvent
      * @throws DuplicateRoleAssignmentException
      * @throws UserNotFoundException
+     * @throws UnauthorizedOperationException
      */
     private function getSavedRequestedRideEvent()
     {
@@ -141,6 +152,7 @@ class RideEventRepositoryTest extends AppTestCase
      * @return mixed
      * @throws DuplicateRoleAssignmentException
      * @throws UserNotFoundException
+     * @throws UnauthorizedOperationException
      */
     private function assertLastEventIsOfType(RideEventType $eventTypeToAssert)
     {

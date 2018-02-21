@@ -175,6 +175,7 @@ class ApiTester extends \Codeception\Actor
         $newUser = $this->createNewUser('Bob', 'Driver');
         $userId = $newUser['id'];
 
+        $this->loginWithUserName($newUser['username']);
         $retrievedUser = $this->retrieveUser($userId);
         $userId = $retrievedUser['id'];
 
@@ -238,19 +239,8 @@ class ApiTester extends \Codeception\Actor
     {
         $createdUser = $this->createNewUser($first, $last);
         $username = $createdUser['username'];
-        $response = $this->sendPostApiRequest('/../../oauth/v2/token', [
-            'grant_type' => 'password',
-            'client_id' => UserApi::CLIENT_ID,
-            'client_secret' => UserApi::CLIENT_SECRET,
-            'username' => $username,
-            'password' => 'password'
-
-        ]);
-        $this->seeResponseContainsJson([
-           'token_type' => 'bearer'
-        ]);
+        $response = $this->loginWithUserName($username);
         $response['user'] = $createdUser;
-        $this->token = $response['access_token'];
         return $response;
     }
 
@@ -322,5 +312,27 @@ class ApiTester extends \Codeception\Actor
         if (!is_null($this->token)) {
             $this->amBearerAuthenticated($this->token);
         }
+    }
+
+    /**
+     * @param $username
+     * @return array
+     */
+    protected function loginWithUserName($username) : array
+    {
+        $response = $this->sendPostApiRequest('/../../oauth/v2/token', [
+            'grant_type' => 'password',
+            'client_id' => UserApi::CLIENT_ID,
+            'client_secret' => UserApi::CLIENT_SECRET,
+            'username' => $username,
+            'password' => 'password'
+
+        ]);
+        $this->seeResponseContainsJson([
+            'token_type' => 'bearer'
+        ]);
+        $this->token = $response['access_token'];
+
+        return $response;
     }
 }

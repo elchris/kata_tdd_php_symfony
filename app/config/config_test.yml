@@ -3,7 +3,7 @@ imports:
 
 security:
     encoders:
-        AppBundle\Entity\AppUser: md5
+        AppBundle\Entity\AppUser: plaintext
 
 doctrine:
     dbal:

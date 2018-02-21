@@ -2,6 +2,7 @@
 
 namespace Tests\AppBundle;
 
+use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
 use AppBundle\Entity\RideEventType;
@@ -9,6 +10,7 @@ use AppBundle\Exception\ActingDriverIsNotAssignedDriverException;
 use AppBundle\Exception\DuplicateRoleAssignmentException;
 use AppBundle\Exception\RideLifeCycleException;
 use AppBundle\Exception\RideNotFoundException;
+use AppBundle\Exception\UnauthorizedOperationException;
 use AppBundle\Exception\UserNotFoundException;
 use AppBundle\Exception\UserNotInDriverRoleException;
 use AppBundle\Exception\UserNotInPassengerRoleException;
@@ -18,6 +20,7 @@ class RideServiceTest extends AppTestCase
     /**
      * @throws UserNotInPassengerRoleException
      * @throws DuplicateRoleAssignmentException
+     * @throws UnauthorizedOperationException
      */
     public function testCreateRide()
     {
@@ -31,6 +34,7 @@ class RideServiceTest extends AppTestCase
      * @throws DuplicateRoleAssignmentException
      * @throws UserNotInPassengerRoleException
      * @throws RideNotFoundException
+     * @throws UnauthorizedOperationException
      */
     public function testGetRideById()
     {
@@ -50,7 +54,7 @@ class RideServiceTest extends AppTestCase
     public function testRideUserNotPassengerThrowsRoleException()
     {
         $notPassengerUser = $this->user()->getSavedUser();
-        self::assertFalse($this->user()->isPassenger($notPassengerUser));
+        self::assertFalse($notPassengerUser->userHasRole(AppRole::passenger()));
         $departure = $this->location()->getSavedHomeLocation();
 
         $this->verifyExceptionWithMessage(
@@ -65,6 +69,7 @@ class RideServiceTest extends AppTestCase
      * @throws UserNotInPassengerRoleException
      * @throws DuplicateRoleAssignmentException
      * @throws RideNotFoundException
+     * @throws UnauthorizedOperationException
      */
     public function testGetRideStatusIsRequestedWhenNew()
     {
@@ -80,6 +85,7 @@ class RideServiceTest extends AppTestCase
      * @throws UserNotInPassengerRoleException
      * @throws DuplicateRoleAssignmentException
      * @throws RideNotFoundException
+     * @throws UnauthorizedOperationException
      */
     public function testAcceptRideByProspectiveDriver()
     {
@@ -99,6 +105,7 @@ class RideServiceTest extends AppTestCase
      * @throws UserNotInPassengerRoleException
      * @throws DuplicateRoleAssignmentException
      * @throws RideNotFoundException
+     * @throws UnauthorizedOperationException
      */
     public function testAcceptingNonRequestedRideThrowsException()
     {
@@ -120,6 +127,7 @@ class RideServiceTest extends AppTestCase
      * @throws UserNotInPassengerRoleException
      * @throws DuplicateRoleAssignmentException
      * @throws RideNotFoundException
+     * @throws UnauthorizedOperationException
      */
     public function testAcceptingRideByNonDriverThrowsUserNotDriverException()
     {
@@ -140,6 +148,7 @@ class RideServiceTest extends AppTestCase
      * @throws UserNotInPassengerRoleException
      * @throws DuplicateRoleAssignmentException
      * @throws RideNotFoundException
+     * @throws UnauthorizedOperationException
      */
     public function testMarkRideInProgressByDriver()
     {
@@ -156,6 +165,7 @@ class RideServiceTest extends AppTestCase
      * @throws UserNotInPassengerRoleException
      * @throws DuplicateRoleAssignmentException
      * @throws RideNotFoundException
+     * @throws UnauthorizedOperationException
      */
     public function testMarkingRideInProgressIfNotAcceptedThrowsException()
     {
@@ -176,6 +186,7 @@ class RideServiceTest extends AppTestCase
      * @throws UserNotInPassengerRoleException
      * @throws DuplicateRoleAssignmentException
      * @throws RideNotFoundException
+     * @throws UnauthorizedOperationException
      */
     public function testMarkingRideInProgressByNonDriverThrowsException()
     {
@@ -196,6 +207,7 @@ class RideServiceTest extends AppTestCase
      * @throws UserNotInPassengerRoleException
      * @throws DuplicateRoleAssignmentException
      * @throws RideNotFoundException
+     * @throws UnauthorizedOperationException
      */
     public function testMarkingRideInProgressByDriverOtherThanAssignedDriverThrows()
     {
@@ -216,6 +228,7 @@ class RideServiceTest extends AppTestCase
      * @throws UserNotInPassengerRoleException
      * @throws DuplicateRoleAssignmentException
      * @throws RideNotFoundException
+     * @throws UnauthorizedOperationException
      */
     public function testMarkRideAsCompletedByDriver()
     {
@@ -235,6 +248,7 @@ class RideServiceTest extends AppTestCase
      * @throws UserNotInPassengerRoleException
      * @throws DuplicateRoleAssignmentException
      * @throws RideNotFoundException
+     * @throws UnauthorizedOperationException
      */
     public function testCompletingRideByDriverOtherThanAssignedDriverThrows()
     {
@@ -256,6 +270,7 @@ class RideServiceTest extends AppTestCase
      * @throws UserNotInPassengerRoleException
      * @throws DuplicateRoleAssignmentException
      * @throws RideNotFoundException
+     * @throws UnauthorizedOperationException
      */
     public function testCompletingRideIfNotInProgressThrowsException()
     {
@@ -272,6 +287,7 @@ class RideServiceTest extends AppTestCase
     /**
      * @throws DuplicateRoleAssignmentException
      * @throws UserNotInPassengerRoleException
+     * @throws UnauthorizedOperationException
      */
     public function testAssignDestinationToRide()
     {
@@ -292,6 +308,7 @@ class RideServiceTest extends AppTestCase
      * @throws UserNotInDriverRoleException
      * @throws UserNotInPassengerRoleException
      * @throws UserNotFoundException
+     * @throws UnauthorizedOperationException
      */
     public function testPatchRideLifeCycle()
     {
@@ -312,6 +329,7 @@ class RideServiceTest extends AppTestCase
      * @throws UserNotFoundException
      * @throws UserNotInDriverRoleException
      * @throws UserNotInPassengerRoleException
+     * @throws UnauthorizedOperationException
      */
     public function testPatchRideLifeCycleNullDriverIdAndEventId()
     {
@@ -330,7 +348,7 @@ class RideServiceTest extends AppTestCase
 
     /**
      * @param Ride $ride
-     * @param string $eventId|null
+     * @param string $eventId |null
      * @param AppUser $driver
      * @return Ride
      * @throws ActingDriverIsNotAssignedDriverException
@@ -338,6 +356,7 @@ class RideServiceTest extends AppTestCase
      * @throws RideNotFoundException
      * @throws UserNotInDriverRoleException
      * @throws UserNotFoundException
+     * @throws UnauthorizedOperationException
      */
     public function assertRidePatchEvent(Ride $ride, string $eventId = null, AppUser $driver): Ride
     {

@@ -11,6 +11,7 @@ use AppBundle\Exception\ActingDriverIsNotAssignedDriverException;
 use AppBundle\Exception\DuplicateRoleAssignmentException;
 use AppBundle\Exception\RideLifeCycleException;
 use AppBundle\Exception\RideNotFoundException;
+use AppBundle\Exception\UnauthorizedOperationException;
 use AppBundle\Exception\UserNotFoundException;
 use AppBundle\Exception\UserNotInDriverRoleException;
 use AppBundle\Exception\UserNotInPassengerRoleException;
@@ -77,6 +78,7 @@ class RideApi
     /**
      * @throws DuplicateRoleAssignmentException
      * @throws UserNotFoundException
+     * @throws UnauthorizedOperationException
      */
     public function getRepoSavedRide()
     {
@@ -152,6 +154,7 @@ class RideApi
      * @return Ride
      * @throws DuplicateRoleAssignmentException
      * @throws UserNotInPassengerRoleException
+     * @throws UnauthorizedOperationException
      */
     public function getSavedNewRideWithPassengerAndDestination()
     {
@@ -178,6 +181,7 @@ class RideApi
      * @throws UserNotInDriverRoleException
      * @throws UserNotInPassengerRoleException
      * @throws RideNotFoundException
+     * @throws UnauthorizedOperationException
      */
     public function getRideInProgress(AppUser $driver)
     {
@@ -193,6 +197,7 @@ class RideApi
      * @throws UserNotInDriverRoleException
      * @throws UserNotInPassengerRoleException
      * @throws RideNotFoundException
+     * @throws UnauthorizedOperationException
      */
     public function getAcceptedRide()
     {
@@ -208,6 +213,7 @@ class RideApi
      * @throws UserNotInDriverRoleException
      * @throws UserNotInPassengerRoleException
      * @throws RideNotFoundException
+     * @throws UnauthorizedOperationException
      */
     public function getAcceptedRideWithDriver(AppUser $driver)
     {
@@ -242,6 +248,7 @@ class RideApi
      * @return Ride
      * @throws DuplicateRoleAssignmentException
      * @throws UserNotFoundException
+     * @throws UnauthorizedOperationException
      */
     public function getRepoRideWithDestination()
     {
@@ -292,17 +299,21 @@ class RideApi
 
     /**
      * @param Ride $ride
-     * @param string $eventId|null
-     * @param string $driverId|null
+     * @param string $eventId |null
+     * @param string $driverId |null
      * @return Ride
      * @throws ActingDriverIsNotAssignedDriverException
      * @throws RideLifeCycleException
      * @throws RideNotFoundException
      * @throws UserNotFoundException
      * @throws UserNotInDriverRoleException
+     * @throws UnauthorizedOperationException
      */
     public function updateRideByEventId(Ride $ride, string $eventId = null, string $driverId = null)
     {
+        if (! is_null($driverId)) {
+            $this->user->authById(Uuid::fromString($driverId));
+        }
         return $this->rideTransitionService->updateRideByEventId(
             $ride,
             $eventId,

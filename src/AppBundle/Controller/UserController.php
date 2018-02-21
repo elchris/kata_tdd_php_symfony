@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\DTO\UserDto;
 use AppBundle\Entity\AppRole;
 use AppBundle\Exception\DuplicateRoleAssignmentException;
+use AppBundle\Exception\UnauthorizedOperationException;
 use AppBundle\Exception\UserNotFoundException;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,6 +33,7 @@ class UserController extends AppController
      * @param string $id
      * @return UserDto
      * @throws UserNotFoundException
+     * @throws UnauthorizedOperationException
      */
     public function idAction(string $id)
     {
@@ -45,6 +47,7 @@ class UserController extends AppController
      * @return UserDto
      * @throws UserNotFoundException
      * @throws DuplicateRoleAssignmentException
+     * @throws UnauthorizedOperationException
      */
     public function patchAction(string $id, Request $request)
     {
@@ -57,6 +60,7 @@ class UserController extends AppController
      * @param Request $request
      * @param $userToPatch
      * @throws DuplicateRoleAssignmentException
+     * @throws UnauthorizedOperationException
      */
     private function patchRole(Request $request, $userToPatch): void
     {

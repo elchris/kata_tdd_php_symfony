@@ -6,6 +6,7 @@ namespace Tests\AppBundle\Production;
 use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
 use AppBundle\Exception\DuplicateRoleAssignmentException;
+use AppBundle\Exception\UnauthorizedOperationException;
 use AppBundle\Exception\UserNotFoundException;
 use AppBundle\Repository\UserRepository;
 use AppBundle\Repository\UserRepositoryInterface;
@@ -24,6 +25,9 @@ class UserApi
 
     /** @var EntityManagerInterface */
     private $entityManager;
+
+    /** @var boolean $authUserIsSet */
+    private $authUserIsSet = false;
 
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -54,9 +58,11 @@ class UserApi
      * @param $userId
      * @return AppUser
      * @throws UserNotFoundException
+     * @throws UnauthorizedOperationException
      */
     public function getServiceUserById($userId)
     {
+        $this->authById($userId);
         return $this->userService->getUserById($userId);
     }
 
@@ -83,6 +89,7 @@ class UserApi
     /**
      * @return AppUser
      * @throws DuplicateRoleAssignmentException
+     * @throws UnauthorizedOperationException
      */
     public function getNewPassenger()
     {
@@ -94,9 +101,11 @@ class UserApi
     /**
      * @param AppUser $user
      * @throws DuplicateRoleAssignmentException
+     * @throws UnauthorizedOperationException
      */
     public function makeUserPassenger(AppUser $user)
     {
+        $this->auth($user);
         $this->userService->makeUserPassenger($user);
     }
 
@@ -104,6 +113,7 @@ class UserApi
      * @return AppUser
      * @throws DuplicateRoleAssignmentException
      * @throws UserNotFoundException
+     * @throws UnauthorizedOperationException
      */
     public function getSavedPassenger(): AppUser
     {
@@ -116,33 +126,18 @@ class UserApi
     /**
      * @param AppUser $driver
      * @throws DuplicateRoleAssignmentException
+     * @throws UnauthorizedOperationException
      */
     public function makeUserDriver(AppUser $driver)
     {
+        $this->auth($driver);
         $this->userService->makeUserDriver($driver);
-    }
-
-    /**
-     * @param $user
-     * @return bool
-     */
-    public function isPassenger(AppUser $user)
-    {
-        return $this->userService->isPassenger($user);
-    }
-
-    /**
-     * @param AppUser $user
-     * @return bool
-     */
-    public function isDriver(AppUser $user)
-    {
-        return $this->userService->isDriver($user);
     }
 
     /**
      * @return AppUser
      * @throws DuplicateRoleAssignmentException
+     * @throws UnauthorizedOperationException
      */
     public function getNewDriver()
     {
@@ -154,6 +149,7 @@ class UserApi
      * @param $last
      * @return AppUser
      * @throws DuplicateRoleAssignmentException
+     * @throws UnauthorizedOperationException
      */
     public function getNewDriverWithName($first, $last)
     {
@@ -180,5 +176,31 @@ class UserApi
     public function getService() : UserService
     {
         return $this->userService;
+    }
+
+    public function setAuthenticatedUser(AppUser $user)
+    {
+        $this->authUserIsSet = true;
+        $this->userService->setAuthenticatedUser($user);
+    }
+
+    private function auth(AppUser $user)
+    {
+        if (! $this->authUserIsSet) {
+            $this->userService->setAuthenticatedUser($user);
+        }
+    }
+
+    /**
+     * @param $userId
+     * @throws UserNotFoundException
+     */
+    public function authById($userId): void
+    {
+        if (! $this->authUserIsSet) {
+            $this->userService->setAuthenticatedUser(
+                $this->userRepository->getUserById($userId)
+            );
+        }
     }
 }
