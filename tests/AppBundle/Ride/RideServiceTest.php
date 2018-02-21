@@ -358,7 +358,7 @@ class RideServiceTest extends AppTestCase
      * @throws UserNotFoundException
      * @throws UnauthorizedOperationException
      */
-    public function assertRidePatchEvent(Ride $ride, string $eventId = null, AppUser $driver): Ride
+    private function assertRidePatchEvent(Ride $ride, string $eventId = null, AppUser $driver): Ride
     {
         $patchedRide = $this->ride()->updateRideByEventId(
             $ride,
