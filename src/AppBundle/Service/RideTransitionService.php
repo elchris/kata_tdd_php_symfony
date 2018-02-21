@@ -9,6 +9,7 @@ use AppBundle\Entity\RideEventType;
 use AppBundle\Exception\ActingDriverIsNotAssignedDriverException;
 use AppBundle\Exception\RideLifeCycleException;
 use AppBundle\Exception\RideNotFoundException;
+use AppBundle\Exception\UnauthorizedOperationException;
 use AppBundle\Exception\UserNotFoundException;
 use AppBundle\Exception\UserNotInDriverRoleException;
 use Ramsey\Uuid\Uuid;
@@ -36,14 +37,15 @@ class RideTransitionService
 
     /**
      * @param Ride $ride
-     * @param string $eventId|null
-     * @param string $driverId|null
+     * @param string $eventId |null
+     * @param string $driverId |null
      * @return Ride
      * @throws ActingDriverIsNotAssignedDriverException
      * @throws RideLifeCycleException
      * @throws RideNotFoundException
      * @throws UserNotFoundException
      * @throws UserNotInDriverRoleException
+     * @throws UnauthorizedOperationException
      */
     public function updateRideByEventId(Ride $ride, string $eventId = null, string $driverId = null)
     {
