@@ -99,6 +99,7 @@ class RideTransitionService
      * @throws ActingDriverIsNotAssignedDriverException
      * @throws RideLifeCycleException
      * @throws RideNotFoundException
+     * @throws UserNotInDriverRoleException
      */
     private function patchRideCompleted(RideEventType $eventToProcess, Ride $rideToPatch, AppUser $driver)
     {
