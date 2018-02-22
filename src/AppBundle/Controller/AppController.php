@@ -20,7 +20,12 @@ use Ramsey\Uuid\Uuid;
 
 class AppController extends FOSRestController
 {
+    /** @var LocationService $locationService */
+    private $locationService;
+
+    /** @var RideTransitionService $rideTransitionService */
     private $rideTransitionService;
+
     /** @var RideService $rideService */
     private $rideService;
 
@@ -79,9 +84,13 @@ class AppController extends FOSRestController
      */
     protected function location() : LocationService
     {
-        return new LocationService(
-            new LocationRepository($this->em())
-        );
+        if (is_null($this->locationService)) {
+            $this->locationService = new LocationService(
+                new LocationRepository($this->em())
+            );
+        }
+
+        return $this->locationService;
     }
 
     /**

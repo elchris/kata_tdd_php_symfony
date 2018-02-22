@@ -107,6 +107,7 @@ class RideApi
      * @throws ActingDriverIsNotAssignedDriverException
      * @throws RideLifeCycleException
      * @throws RideNotFoundException
+     * @throws UserNotInDriverRoleException
      */
     public function markRideCompleted(Ride $rideInProgress, AppUser $driver)
     {

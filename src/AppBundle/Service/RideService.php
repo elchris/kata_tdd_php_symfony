@@ -71,6 +71,15 @@ class RideService
         return $this->rideRepository->getRideById($id);
     }
 
+    public function assignDestinationToRide(Ride $ride, AppLocation $destination)
+    {
+        $this->rideRepository->assignDestinationToRide(
+            $ride,
+            $destination
+        );
+        return $ride;
+    }
+
     /**
      * @param Ride $ride
      * @return RideEventType
@@ -85,57 +94,51 @@ class RideService
     }
 
     /**
-     * @param Ride $ride
+     * @param Ride $requestedRide
      * @param AppUser $driver
      * @return Ride
      * @throws RideLifeCycleException
      * @throws RideNotFoundException
      * @throws UserNotInDriverRoleException
      */
-    public function acceptRide(Ride $ride, AppUser $driver)
+    public function acceptRide(Ride $requestedRide, AppUser $driver)
     {
-        $this->validateUserHasDriverRole($driver);
-        $this->validateRideIsRequested($ride);
+        $this->validateRideIsRequested($requestedRide);
 
-        $this->markRide($ride, $driver, RideEventType::accepted());
+        $this->validateUserHasDriverRole($driver);
+        $this->markRide(
+            $requestedRide,
+            $driver,
+            RideEventType::accepted()
+        );
 
         $this->rideRepository->assignDriverToRide(
-            $ride,
+            $requestedRide,
             $driver
         );
 
-        return $ride;
-    }
-
-    public function assignDestinationToRide(Ride $ride, AppLocation $destination)
-    {
-        $this->rideRepository->assignDestinationToRide(
-            $ride,
-            $destination
-        );
-        return $ride;
+        return $requestedRide;
     }
 
     /**
      * @param Ride $acceptedRide
      * @param AppUser $driver
      * @return Ride
-     * @throws ActingDriverIsNotAssignedDriverException
      * @throws RideLifeCycleException
      * @throws UserNotInDriverRoleException
      * @throws RideNotFoundException
+     * @throws ActingDriverIsNotAssignedDriverException
      */
     public function markRideInProgress(Ride $acceptedRide, AppUser $driver)
     {
         $this->validateRideIsAccepted($acceptedRide);
-        $this->validateUserHasDriverRole($driver);
-        $this->validateAttemptingDriverIsAssignedDriver($acceptedRide, $driver);
 
-        $this->markRide(
+        $this->transitionToStatusByAssignedDriver(
             $acceptedRide,
             $driver,
             RideEventType::inProgress()
         );
+
         return $acceptedRide;
     }
 
@@ -146,13 +149,13 @@ class RideService
      * @throws ActingDriverIsNotAssignedDriverException
      * @throws RideLifeCycleException
      * @throws RideNotFoundException
+     * @throws UserNotInDriverRoleException
      */
     public function markRideCompleted(Ride $rideInProgress, AppUser $driver)
     {
-        $this->validateAttemptingDriverIsAssignedDriver($rideInProgress, $driver);
         $this->validateRideIsInProgress($rideInProgress);
 
-        $this->markRide(
+        $this->transitionToStatusByAssignedDriver(
             $rideInProgress,
             $driver,
             RideEventType::completed()
@@ -240,6 +243,24 @@ class RideService
             $ride,
             $driver,
             $status
+        );
+    }
+
+    /**
+     * @param Ride $ride
+     * @param AppUser $driver
+     * @param $statusToTransition
+     * @throws UserNotInDriverRoleException
+     * @throws ActingDriverIsNotAssignedDriverException
+     */
+    private function transitionToStatusByAssignedDriver(Ride $ride, AppUser $driver, $statusToTransition): void
+    {
+        $this->validateUserHasDriverRole($driver);
+        $this->validateAttemptingDriverIsAssignedDriver($ride, $driver);
+        $this->markRide(
+            $ride,
+            $driver,
+            $statusToTransition
         );
     }
 }
