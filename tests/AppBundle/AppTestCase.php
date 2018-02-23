@@ -3,7 +3,7 @@
 namespace Tests\AppBundle;
 
 use AppBundle\Entity\AppUser;
-use FOS\UserBundle\Doctrine\UserManager;
+use FOS\UserBundle\Model\UserManagerInterface;
 use Tests\AppBundle\Production\LocationApi;
 use Tests\AppBundle\Production\RideApi;
 use Tests\AppBundle\Production\UserApi;
@@ -29,7 +29,7 @@ abstract class AppTestCase extends WebTestCase
     /** @var  EntityManagerInterface */
     private $em;
 
-    /** @var UserManager */
+    /** @var UserManagerInterface */
     private $userManager;
 
     protected function setUp()
