@@ -26,6 +26,13 @@ class UserDtoTest extends AppTestCase
     public function testUserDtoDriver()
     {
         $driver = $this->newNamedUser('Joe', 'Driver');
+        self::assertTrue($driver->isNamed('Joe Driver'));
+        $newFirstName = 'NotJoe';
+        $newLastName = 'NotDriver';
+        $driver->setFirstName($newFirstName);
+        $driver->setLastName($newLastName);
+        self::assertSame($newFirstName, $driver->getFirstName());
+        self::assertSame($newLastName, $driver->getLastName());
         $driver->assignRole(AppRole::driver());
         $userDto = $driver->toDto();
         self::assertTrue($userDto->isDriver);

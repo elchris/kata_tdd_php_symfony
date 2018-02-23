@@ -7,19 +7,19 @@ use AppBundle\Entity\AppUser;
 use AppBundle\Exception\DuplicateRoleAssignmentException;
 use AppBundle\Exception\UserNotFoundException;
 use Doctrine\ORM\EntityManagerInterface;
-use FOS\UserBundle\Doctrine\UserManager;
+use FOS\UserBundle\Model\UserManagerInterface;
 use Ramsey\Uuid\Uuid;
 
 class UserRepository extends AppRepository implements UserRepositoryInterface
 {
     /**
-     * @var UserManager
+     * @var UserManagerInterface
      */
     private $userManager;
 
     public function __construct(
         EntityManagerInterface $entityManager,
-        UserManager $userManager = null
+        UserManagerInterface $userManager = null
     ) {
         parent::__construct($entityManager);
         $this->userManager = $userManager;
@@ -74,8 +74,6 @@ class UserRepository extends AppRepository implements UserRepositoryInterface
         $user->setEnabled(true);
         $this->userManager->updateUser($user, true);
         return $user;
-//        $this->save($passedUser);
-//        return $passedUser;
     }
 
     /**

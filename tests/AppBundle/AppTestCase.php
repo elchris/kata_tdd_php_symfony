@@ -13,6 +13,7 @@ use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\ToolsException;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Tests\AppBundle\User\FakeUser;
+use Tests\AppBundle\User\FakeUserManager;
 
 abstract class AppTestCase extends WebTestCase
 {
@@ -35,10 +36,9 @@ abstract class AppTestCase extends WebTestCase
     {
         parent::setUp();
         self::bootKernel();
-        if (is_null($this->userManager)) {
-            $this->userManager = static::$kernel->getContainer()->get('fos_user.user_manager.public');
-        }
+        //static::$kernel->getContainer()->get('fos_user.user_manager.public');
         $this->em = static::$kernel->getContainer()->get('doctrine')->getManager();
+        $this->userManager = new FakeUserManager($this->em());
         $this->setUpEntityManager();
 
         $this->ride()->bootStrapRideEventTypes();

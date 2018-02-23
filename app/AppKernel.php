@@ -16,14 +16,17 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
-            new FOS\RestBundle\FOSRestBundle(),
-            new JMS\SerializerBundle\JMSSerializerBundle(),
-            new Nelmio\CorsBundle\NelmioCorsBundle(),
             new AppBundle\AppBundle(),
-            new Symfony\Bundle\WebServerBundle\WebServerBundle(),
-            new FOS\UserBundle\FOSUserBundle(),
-            new FOS\OAuthServerBundle\FOSOAuthServerBundle()
         ];
+
+        if (! in_array($this->getEnvironment(), ['test'], true)) {
+            $bundles[] = new FOS\RestBundle\FOSRestBundle();
+            $bundles[] = new JMS\SerializerBundle\JMSSerializerBundle();
+            $bundles[] = new Nelmio\CorsBundle\NelmioCorsBundle();
+            $bundles[] = new Symfony\Bundle\WebServerBundle\WebServerBundle();
+            $bundles[] = new FOS\UserBundle\FOSUserBundle();
+            $bundles[] = new FOS\OAuthServerBundle\FOSOAuthServerBundle();
+        }
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
             $bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();

@@ -1,11 +1,430 @@
 <component name="InspectionProjectProfileManager">
   <profile version="1.0">
     <option name="myName" value="Project Default" />
+    <inspection_tool class="AnnotationMissingUseInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="Annotator" enabled="true" level="ERROR" enabled_by_default="false">
+      <scope name="psr2-scope" level="ERROR" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="CheckDtdRefs" enabled="true" level="ERROR" enabled_by_default="false">
+      <scope name="psr2-scope" level="ERROR" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="CheckEmptyScriptTag" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="CheckImageSize" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="CheckTagEmptyBody" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="CheckValidXmlInScriptTagBody" enabled="true" level="ERROR" enabled_by_default="false">
+      <scope name="psr2-scope" level="ERROR" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="CheckXmlFileWithXercesValidator" enabled="true" level="ERROR" enabled_by_default="false">
+      <scope name="psr2-scope" level="ERROR" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="CssConvertColorToHexInspection" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="CssConvertColorToRgbInspection" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="CssFloatPxLength" enabled="true" level="WEAK WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WEAK WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="CssInvalidAtRule" enabled="true" level="ERROR" enabled_by_default="false">
+      <scope name="psr2-scope" level="ERROR" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="CssInvalidCharsetRule" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="CssInvalidElement" enabled="true" level="ERROR" enabled_by_default="false">
+      <scope name="psr2-scope" level="ERROR" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="CssInvalidFunction" enabled="true" level="ERROR" enabled_by_default="false">
+      <scope name="psr2-scope" level="ERROR" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="CssInvalidHtmlTagReference" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="CssInvalidImport" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="CssInvalidMediaFeature" enabled="true" level="ERROR" enabled_by_default="false">
+      <scope name="psr2-scope" level="ERROR" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="CssInvalidPropertyValue" enabled="true" level="ERROR" enabled_by_default="false">
+      <scope name="psr2-scope" level="ERROR" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="CssInvalidPseudoSelector" enabled="true" level="ERROR" enabled_by_default="false">
+      <scope name="psr2-scope" level="ERROR" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="CssMissingComma" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="CssMissingSemicolon" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="CssNegativeValue" enabled="true" level="ERROR" enabled_by_default="false">
+      <scope name="psr2-scope" level="ERROR" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="CssNoGenericFontName" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="CssOptimizeSimilarProperties" enabled="true" level="WEAK WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WEAK WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="CssOverwrittenProperties" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="CssRedundantUnit" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="CssUnitlessNumber" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="CssUnknownProperty" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true">
+        <option name="myCustomPropertiesEnabled" value="false" />
+        <option name="myIgnoreVendorSpecificProperties" value="false" />
+        <option name="myCustomPropertiesList">
+          <value>
+            <list size="0" />
+          </value>
+        </option>
+      </scope>
+      <option name="myCustomPropertiesEnabled" value="false" />
+      <option name="myIgnoreVendorSpecificProperties" value="false" />
+      <option name="myCustomPropertiesList">
+        <value>
+          <list size="0" />
+        </value>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="CssUnknownTarget" enabled="true" level="ERROR" enabled_by_default="false">
+      <scope name="psr2-scope" level="ERROR" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="CssUnresolvedClass" enabled="true" level="ERROR" enabled_by_default="false">
+      <scope name="psr2-scope" level="ERROR" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="CssUnresolvedCustomProperty" enabled="true" level="ERROR" enabled_by_default="false">
+      <scope name="psr2-scope" level="ERROR" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="CssUnresolvedCustomPropertySet" enabled="true" level="ERROR" enabled_by_default="false">
+      <scope name="psr2-scope" level="ERROR" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="CssUnusedSymbol" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="Duplicates" enabled="true" level="WEAK WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WEAK WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="ES6CheckImport" enabled="true" level="WEAK WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WEAK WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="HtmlDeprecatedTag" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="HtmlExtraClosingTag" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="HtmlFormInputWithoutLabel" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="HtmlMissingClosingTag" enabled="true" level="INFORMATION" enabled_by_default="false">
+      <scope name="psr2-scope" level="INFORMATION" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="HtmlNonExistentInternetResource" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="HtmlPresentationalElement" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="HtmlUnknownAnchorTarget" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="HtmlUnknownAttribute" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true">
+        <option name="myValues">
+          <value>
+            <list size="0" />
+          </value>
+        </option>
+        <option name="myCustomValuesEnabled" value="true" />
+      </scope>
+      <option name="myValues">
+        <value>
+          <list size="0" />
+        </value>
+      </option>
+      <option name="myCustomValuesEnabled" value="true" />
+    </inspection_tool>
+    <inspection_tool class="HtmlUnknownBooleanAttribute" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="HtmlUnknownTag" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true">
+        <option name="myValues">
+          <value>
+            <list size="6">
+              <item index="0" class="java.lang.String" itemvalue="nobr" />
+              <item index="1" class="java.lang.String" itemvalue="noembed" />
+              <item index="2" class="java.lang.String" itemvalue="comment" />
+              <item index="3" class="java.lang.String" itemvalue="noscript" />
+              <item index="4" class="java.lang.String" itemvalue="embed" />
+              <item index="5" class="java.lang.String" itemvalue="script" />
+            </list>
+          </value>
+        </option>
+        <option name="myCustomValuesEnabled" value="true" />
+      </scope>
+      <option name="myValues">
+        <value>
+          <list size="6">
+            <item index="0" class="java.lang.String" itemvalue="nobr" />
+            <item index="1" class="java.lang.String" itemvalue="noembed" />
+            <item index="2" class="java.lang.String" itemvalue="comment" />
+            <item index="3" class="java.lang.String" itemvalue="noscript" />
+            <item index="4" class="java.lang.String" itemvalue="embed" />
+            <item index="5" class="java.lang.String" itemvalue="script" />
+          </list>
+        </value>
+      </option>
+      <option name="myCustomValuesEnabled" value="true" />
+    </inspection_tool>
+    <inspection_tool class="HtmlUnknownTarget" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="InconsistentLineSeparators" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="InjectedReferences" enabled="true" level="ERROR" enabled_by_default="false">
+      <scope name="psr2-scope" level="ERROR" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="LongLine" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="PhpAbstractStaticMethodInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpAssignmentReplaceableWithOperatorAssignmentInspection" enabled="false" level="INFORMATION" enabled_by_default="false" />
+    <inspection_tool class="PhpAssignmentReplaceableWithPrefixExpressionInspection" enabled="false" level="INFORMATION" enabled_by_default="false" />
     <inspection_tool class="PhpCSValidationInspection" enabled="true" level="WEAK WARNING" enabled_by_default="false">
       <scope name="psr2-scope" level="WEAK WARNING" enabled="true">
         <option name="CODING_STANDARD" value="PSR2" />
       </scope>
       <option name="CODING_STANDARD" value="PSR2" />
+    </inspection_tool>
+    <inspection_tool class="PhpConstantReassignmentInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpConstructorStyleInspection" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="PhpDeprecationInspection" enabled="true" level="WEAK WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WEAK WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="PhpDisabledExtensionStubsInspection" enabled="true" level="INFORMATION" enabled_by_default="false">
+      <scope name="psr2-scope" level="INFORMATION" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="PhpDocMissingReturnTagInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpDocMissingThrowsInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpDocRedundantThrowsInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpDocSignatureInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpDuplicateArrayKeysInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpDuplicateCaseInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpDynamicAsStaticMethodCallInspection" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="PhpExpressionResultUnusedInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpForeachArrayIsUsedAsValueInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpForeachNestedOuterKeyValueVariablesConflictInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpGotoIntoLoopInspection" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="PhpHierarchyChecksInspection" enabled="true" level="ERROR" enabled_by_default="false">
+      <scope name="psr2-scope" level="ERROR" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="PhpIllegalArrayKeyTypeInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpIllegalPsrClassPathInspection" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="PhpIllegalStringOffsetInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpIncludeInspection" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="PhpIncompatibleReturnTypeInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpInconsistentReturnPointsInspection" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="PhpInternalEntityUsedInspection" enabled="true" level="WEAK WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WEAK WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="PhpInvalidMagicMethodModifiersInspection" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="PhpLanguageLevelInspection" enabled="true" level="ERROR" enabled_by_default="false">
+      <scope name="psr2-scope" level="ERROR" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="PhpMethodOrClassCallIsNotCaseSensitiveInspection" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="PhpMethodParametersCountMismatchInspection" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="PhpMissingBreakStatementInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpMissingParentConstructorInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpMultipleClassesDeclarationsInOneFile" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="PhpNonCompoundUseInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpNonStrictObjectEqualityInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpParamsInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpPassByRefInspection" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="PhpRedundantCatchClauseInspection" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="PhpRedundantClosingTagInspection" enabled="true" level="WEAK WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WEAK WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="PhpShortOpenTagInspection" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="PhpSignatureMismatchDuringInheritanceInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpSillyAssignmentInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpStatementHasEmptyBodyInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpStaticAsDynamicMethodCallInspection" enabled="true" level="WEAK WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WEAK WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="PhpStrictTypeCheckingInspection" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="PhpSuperClassIncompatibleWithInterfaceInspection" enabled="true" level="ERROR" enabled_by_default="false">
+      <scope name="psr2-scope" level="ERROR" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="PhpToStringImplementationInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpToStringReturnInspection" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="PhpTooManyParametersInspection" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="PhpTraditionalSyntaxArrayLiteralInspection" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="PhpUndefinedClassConstantInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpUndefinedClassInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpUndefinedConstantInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpUndefinedFieldInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpUndefinedFunctionInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpUndefinedGotoLabelInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpUndefinedMethodInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpUndefinedNamespaceInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpUndefinedVariableInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpUnhandledExceptionInspection" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="PhpUnitUndefinedDataProviderInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpUnnecessaryFullyQualifiedNameInspection" enabled="true" level="WEAK WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WEAK WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="PhpUnreachableStatementInspection" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="PhpUnusedAliasInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpUnusedLocalVariableInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpUnusedParameterInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpUnusedPrivateFieldInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpUnusedPrivateMethodInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpUsageOfSilenceOperatorInspection" enabled="true" level="WEAK WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WEAK WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="PhpVariableVariableInspection" enabled="true" level="WEAK WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WEAK WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="PhpVoidFunctionResultUsedInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpWrongCatchClausesOrderInspection" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="PhpWrongForeachArgumentTypeInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpWrongStringConcatenationInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="ProblematicWhitespace" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="QuirksModeInspectionTool" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true">
+        <option name="IE50" value="false" />
+        <option name="IE55" value="false" />
+        <option name="IE6" value="true" />
+        <option name="IE7" value="true" />
+        <option name="IE_MAC" value="false" />
+        <option name="MOZILLA" value="true" />
+        <option name="OPERA7" value="false" />
+        <option name="OPERA8" value="false" />
+        <option name="OPERA85" value="true" />
+        <option name="OPERA9" value="true" />
+        <option name="SAFARI" value="true" />
+      </scope>
+      <option name="IE50" value="false" />
+      <option name="IE55" value="false" />
+      <option name="IE6" value="true" />
+      <option name="IE7" value="true" />
+      <option name="IE_MAC" value="false" />
+      <option name="MOZILLA" value="true" />
+      <option name="OPERA7" value="false" />
+      <option name="OPERA8" value="false" />
+      <option name="OPERA85" value="true" />
+      <option name="OPERA9" value="true" />
+      <option name="SAFARI" value="true" />
+    </inspection_tool>
+    <inspection_tool class="RepositoryClassInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="RequiredAttributes" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true">
+        <option name="myAdditionalRequiredHtmlAttributes" value="" />
+      </scope>
+      <option name="myAdditionalRequiredHtmlAttributes" value="" />
+    </inspection_tool>
+    <inspection_tool class="SSBasedInspection" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="SpellCheckingInspection" enabled="true" level="TYPO" enabled_by_default="false">
+      <scope name="psr2-scope" level="TYPO" enabled="true">
+        <option name="processCode" value="true" />
+        <option name="processLiterals" value="true" />
+        <option name="processComments" value="true" />
+      </scope>
+      <option name="processCode" value="true" />
+      <option name="processLiterals" value="true" />
+      <option name="processComments" value="true" />
+    </inspection_tool>
+    <inspection_tool class="Stylelint" enabled="true" level="ERROR" enabled_by_default="false">
+      <scope name="psr2-scope" level="ERROR" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="SyntaxError" enabled="true" level="ERROR" enabled_by_default="false">
+      <scope name="psr2-scope" level="ERROR" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="TodoComment" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="W3CssValidation" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true">
+        <option name="myCssVersion" value="css3" />
+        <option name="myIgnoreVendorSpecificProperties" value="false" />
+      </scope>
+    </inspection_tool>
+    <inspection_tool class="XmlDefaultAttributeValue" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="XmlDuplicatedId" enabled="true" level="ERROR" enabled_by_default="false">
+      <scope name="psr2-scope" level="ERROR" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="XmlHighlighting" enabled="true" level="ERROR" enabled_by_default="false">
+      <scope name="psr2-scope" level="ERROR" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="XmlInvalidId" enabled="true" level="ERROR" enabled_by_default="false">
+      <scope name="psr2-scope" level="ERROR" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="XmlPathReference" enabled="true" level="ERROR" enabled_by_default="false">
+      <scope name="psr2-scope" level="ERROR" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="XmlUnboundNsPrefix" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="XmlUnusedNamespaceDeclaration" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="psr2-scope" level="WARNING" enabled="true" />
+    </inspection_tool>
+    <inspection_tool class="XmlWrongRootElement" enabled="true" level="ERROR" enabled_by_default="false">
+      <scope name="psr2-scope" level="ERROR" enabled="true" />
     </inspection_tool>
   </profile>
 </component>
