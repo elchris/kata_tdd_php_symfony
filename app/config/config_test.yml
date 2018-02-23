@@ -3,10 +3,28 @@ imports:
 
 framework:
     test: ~
+    secret:          "%secret%"
     router:
         resource: "%kernel.root_dir%/config/routing_test.yml"
+        strict_requirements: ~
+    form:            ~
+    csrf_protection: ~
+    validation:      { enable_annotations: true }
+    #serializer:      { enable_annotations: true }
+    templating:
+        engines: ['twig']
+    default_locale:  "%locale%"
+    trusted_hosts:   ~
     session:
-        handler_id: ~
+        # http://symfony.com/doc/current/reference/configuration/framework.html#handler-id
+        handler_id:  ~
+#        save_path:   "%kernel.root_dir%/../var/sessions/%kernel.environment%"
+    fragments:       ~
+    http_method_override: true
+    assets: ~
+    php_errors:
+        log: true
+
 
 security:
     encoders:
