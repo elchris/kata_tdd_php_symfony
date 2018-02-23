@@ -1,6 +1,13 @@
 imports:
     - { resource: config.yml }
 
+framework:
+    test: ~
+    router:
+        resource: "%kernel.root_dir%/config/routing_test.yml"
+    session:
+        handler_id: ~
+
 security:
     encoders:
         AppBundle\Entity\AppUser: plaintext
