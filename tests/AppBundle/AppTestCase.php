@@ -36,7 +36,6 @@ abstract class AppTestCase extends WebTestCase
     {
         parent::setUp();
         self::bootKernel();
-        //static::$kernel->getContainer()->get('fos_user.user_manager.public');
         $this->em = static::$kernel->getContainer()->get('doctrine')->getManager();
         $this->userManager = new FakeUserManager($this->em());
         $this->setUpEntityManager();
