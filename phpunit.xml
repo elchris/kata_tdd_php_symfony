@@ -8,10 +8,8 @@
          bootstrap="app/autoload.php"
 >
     <php>
+        <server name ="APP_ENV" value="test" />
         <ini name="error_reporting" value="-1" />
-        <!--
-        <server name="KERNEL_DIR" value="app/" />
-        -->
         <env name="KERNEL_CLASS" value="AppKernel" />
     </php>
 

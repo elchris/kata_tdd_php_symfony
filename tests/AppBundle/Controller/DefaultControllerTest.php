@@ -12,7 +12,7 @@ class DefaultControllerTest extends WebTestCase
         $client->request('GET', '/');
         self::assertEquals(200, $client->getResponse()->getStatusCode());
         self::assertContains(
-            '<h1><span>Welcome to</span> Symfony 3.4.0</h1>',
+            '<h1><span>Welcome to</span> Symfony 3.4.4</h1>',
             $client->getResponse()->getContent()
         );
     }
