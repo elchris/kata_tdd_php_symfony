@@ -6,6 +6,7 @@ use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
 use AppBundle\Exception\DuplicateRoleAssignmentException;
 use AppBundle\Exception\RideNotFoundException;
+use AppBundle\Exception\UnauthorizedOperationException;
 use AppBundle\Exception\UserNotFoundException;
 
 class RideRepositoryTest extends AppTestCase
@@ -30,6 +31,7 @@ class RideRepositoryTest extends AppTestCase
     /**
      * @throws DuplicateRoleAssignmentException
      * @throws UserNotFoundException
+     * @throws UnauthorizedOperationException
      */
     public function testCreateRideWithDepartureAndPassenger()
     {
@@ -41,6 +43,7 @@ class RideRepositoryTest extends AppTestCase
     /**
      * @throws DuplicateRoleAssignmentException
      * @throws UserNotFoundException
+     * @throws UnauthorizedOperationException
      */
     public function testAssignDestinationToRide()
     {
@@ -52,6 +55,7 @@ class RideRepositoryTest extends AppTestCase
     /**
      * @throws DuplicateRoleAssignmentException
      * @throws UserNotFoundException
+     * @throws UnauthorizedOperationException
      */
     public function testAssignDriverToRide()
     {

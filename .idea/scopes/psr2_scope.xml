@@ -1,3 +1,3 @@
 <component name="DependencyValidationManager">
-  <scope name="psr2-scope" pattern="(file[*]:src//*||file[*]:tests//*)&amp;&amp;!file[*]:tests/acceptance//*" />
+  <scope name="psr2-scope" pattern="(file[*]:src//*||file[*]:tests//*)&amp;&amp;!file[*]:tests/acceptance//*&amp;&amp;!file[*]:tests/_output//*&amp;&amp;!file[*]:tests/_data//*&amp;&amp;!file[*]:tests/_support/_generated//*" />
 </component>

@@ -12,7 +12,7 @@ use AppBundle\Repository\UserRepository;
 use AppBundle\Repository\UserRepositoryInterface;
 use AppBundle\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
-use FOS\UserBundle\Doctrine\UserManager;
+use FOS\UserBundle\Model\UserManagerInterface;
 use Tests\AppBundle\User\FakeUser;
 
 class UserApi
@@ -31,7 +31,7 @@ class UserApi
 
     public function __construct(
         EntityManagerInterface $entityManager,
-        UserManager $userManager = null
+        UserManagerInterface $userManager = null
     ) {
         $this->userRepository = new UserRepository(
             $entityManager,
