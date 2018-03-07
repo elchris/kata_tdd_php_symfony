@@ -1,6 +1,13 @@
 imports:
     - { resource: config.yml }
 
+#framework:
+#    test: ~
+#    session:
+#        storage_id: session.storage.mock_file
+#    profiler:
+#        collect: false
+
 framework:
     test: ~
     secret:          "%secret%"
@@ -16,6 +23,7 @@ framework:
     default_locale:  "%locale%"
     trusted_hosts:   ~
     session:
+        storage_id: session.storage.mock_file
         # http://symfony.com/doc/current/reference/configuration/framework.html#handler-id
         handler_id:  ~
 #        save_path:   "%kernel.root_dir%/../var/sessions/%kernel.environment%"
@@ -24,6 +32,8 @@ framework:
     assets: ~
     php_errors:
         log: true
+    profiler:
+            collect: false
 
 
 security:
@@ -39,27 +49,10 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        main:
-            anonymous: ~
-            # activate different ways to authenticate
-
-            # http_basic: ~
-            # http://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
-
-            # form_login: ~
-            # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
-
 
 doctrine:
     dbal:
         driver:   pdo_sqlite
-
-framework:
-    test: ~
-    session:
-        storage_id: session.storage.mock_file
-    profiler:
-        collect: false
 
 web_profiler:
     toolbar: false

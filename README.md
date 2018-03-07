@@ -65,3 +65,7 @@ References:
 * https://www.jetbrains.com/help/idea/testing-with-codeception.html
 * https://laravel.com/docs/5.5/homestead#first-steps
 * https://gist.github.com/diegonobre/341eb7b793fc841c0bba3f2b865b8d66
+
+Issues:
+
+* https://youtrack.jetbrains.com/issue/WI-40950
