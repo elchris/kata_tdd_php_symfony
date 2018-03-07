@@ -59,7 +59,11 @@ class ApiTester extends \Codeception\Actor
      */
     protected function validateAndReturnResponse()
     {
-        $this->seeResponseCodeIs(HttpCode::OK);
+        if ($this->expectAuthError) {
+            $this->seeResponseCodeIs(HttpCode::UNAUTHORIZED);
+        } else {
+            $this->seeResponseCodeIs(HttpCode::OK);
+        }
         $this->seeResponseIsJson();
 
         return json_decode($this->grabResponse(), true);
@@ -235,7 +239,7 @@ class ApiTester extends \Codeception\Actor
 
     private $token;
 
-    protected function getRegisteredUserWithToken($first, $last)
+    public function getRegisteredUserWithToken($first, $last)
     {
         $createdUser = $this->createNewUser($first, $last);
         $username = $createdUser['username'];
@@ -248,7 +252,7 @@ class ApiTester extends \Codeception\Actor
      * @param $userId
      * @return mixed
      */
-    protected function retrieveUser($userId)
+    public function retrieveUser($userId)
     {
         $response = $this->sendGetApiRequest('/user/' . $userId);
         $this->seeResponseContainsJson(['id' => $userId]);
@@ -305,6 +309,14 @@ class ApiTester extends \Codeception\Actor
         $this->seeResponseContainsJson([
             'passenger_id' => $passengerId
         ]);
+    }
+
+    private $expectAuthError = false;
+
+    public function nukeToken()
+    {
+        $this->token = null;
+        $this->expectAuthError = true;
     }
 
     private function injectToken(): void
