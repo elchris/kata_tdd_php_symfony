@@ -5,7 +5,7 @@
       <tool tool_name="Codeception">
         <settings>
           <configurations>
-            <local_configuration configuration_file_path="$PROJECT_DIR$/vendor/codeception/codeception/codeception.yml" executable_path="$PROJECT_DIR$/vendor/codeception/codeception/codecept" use_configuration_file="true" />
+            <local_configuration configuration_file_path="$PROJECT_DIR$/codeception.yml" executable_path="$PROJECT_DIR$/vendor/codeception/codeception/codecept" use_configuration_file="true" />
           </configurations>
         </settings>
       </tool>
