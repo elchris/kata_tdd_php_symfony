@@ -66,6 +66,10 @@ References:
 * https://laravel.com/docs/5.5/homestead#first-steps
 * https://gist.github.com/diegonobre/341eb7b793fc841c0bba3f2b865b8d66
 
+Issues:
+
+* https://youtrack.jetbrains.com/issue/WI-40950
+
 
 Stats:
 * [![](http://codescene.io/projects/2090/status.svg) Get more details at **codescene.io**.](http://codescene.io/projects/2090/jobs/latest-successful/results)

@@ -16,14 +16,14 @@
       <tool tool_name="Codeception">
         <cache>
           <versions>
-            <info id="Local" version="2.3.8" />
+            <info id="Local" version="2.4.0" />
           </versions>
         </cache>
       </tool>
       <tool tool_name="PHPUnit">
         <cache>
           <versions>
-            <info id="Local" version="6.5.6" />
+            <info id="Local" version="7.0.2" />
           </versions>
         </cache>
       </tool>

@@ -53,8 +53,8 @@
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
         "symfony/phpunit-bridge": "^3.0",
-        "phpunit/phpunit": "^6.5",
-        "codeception/codeception": "^2.3"
+        "phpunit/phpunit": "^7.0",
+        "codeception/codeception": "^2.4"
     },
     "scripts": {
         "symfony-scripts": [
