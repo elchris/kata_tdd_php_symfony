@@ -16,6 +16,7 @@ use AppBundle\Service\RideTransitionService;
 use AppBundle\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\FOSRestController;
+use FOS\UserBundle\Model\UserManagerInterface;
 use Ramsey\Uuid\Uuid;
 
 class AppController extends FOSRestController
@@ -32,6 +33,14 @@ class AppController extends FOSRestController
     /** @var UserService $userService */
     private $userService;
 
+    /** @var UserManagerInterface */
+    protected $userManager;
+
+    protected function getUserManager() : UserManagerInterface
+    {
+        return $this->container->get('fos_user.user_manager.public');
+    }
+
     /**
      * @return UserService
      */
@@ -41,7 +50,7 @@ class AppController extends FOSRestController
         if (is_null($this->userService)) {
             $this->userService = new UserService(new UserRepository(
                 $this->em(),
-                $this->container->get('fos_user.user_manager.public')
+                $this->getUserManager()
             ));
             if (! is_null($authenticatedUser)) {
                 $this->userService->setAuthenticatedUser(

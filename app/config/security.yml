@@ -30,6 +30,7 @@ security:
             fos_oauth: true                            # OAuth2 protected resource
             stateless: true                            # Do no set session cookies
             anonymous: false
+            provider: fos_userbundle
 
         main:
             anonymous: ~
@@ -37,6 +38,13 @@ security:
 
             # http_basic: ~
             # http://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
-
-            # form_login: ~
             # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+
+            pattern: ^/
+            form_login:
+                provider: fos_userbundle
+                check_path: fos_user_security_check
+                #csrf_provider: security.csrf.token_manager
+            logout:     true
+            anonymous:  true
+            logout_on_user_change: true
