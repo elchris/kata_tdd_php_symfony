@@ -3,6 +3,8 @@ namespace Tests\api;
 
 use ApiTester;
 use Codeception\Util\HttpCode;
+use PHPUnit\Framework\TestResult;
+use Tests\AppBundle\Production\UserApi;
 
 class AuthenticationCest
 {
@@ -20,10 +22,10 @@ class AuthenticationCest
             'error' => 'access_denied',
             'error_description' => 'OAuth2 authentication required'
         ]);
-//        $I->sendPOST('../../login_check', [
-//            'username' => $userName,
-//            'password' => 'password'
-//        ]);
-//        $I->canSeeResponseCodeIs(HttpCode::OK);
+
+        $authUrl =
+            'http://localhost:8000/oauth/v2/auth?client_id='
+            .UserApi::CLIENT_ID
+            .'&redirect_uri=http://localhost:8000/&response_type=token';
     }
 }
