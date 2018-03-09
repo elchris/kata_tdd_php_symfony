@@ -66,6 +66,11 @@ References:
 * https://laravel.com/docs/5.5/homestead#first-steps
 * https://gist.github.com/diegonobre/341eb7b793fc841c0bba3f2b865b8d66
 
+Testing:
+
+* Implicit:
+    * http://localhost:8000/oauth/v2/auth?client_id=1_3bcbxd9e24g0gk4swg0kwgcwg4o8k8g4g888kwc44gcc0gwwk4&redirect_uri=http://localhost:8000/&response_type=token
+
 Issues:
 
 * https://youtrack.jetbrains.com/issue/WI-40950
