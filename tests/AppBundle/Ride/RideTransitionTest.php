@@ -50,7 +50,7 @@ class RideTransitionTest extends AppTestCase
     public function testPatchRideLifeCycleNullDriverIdAndEventId()
     {
         $ride = $this->ride()->getSavedNewRideWithPassengerAndDestination();
-        $patchedRide = $this->ride()->updateRideByEventId(
+        $patchedRide = $this->ride()->updateRideByDriverAndEventId(
             $ride,
             null,
             null
@@ -76,7 +76,7 @@ class RideTransitionTest extends AppTestCase
      */
     private function assertRidePatchEvent(Ride $ride, string $eventId = null, AppUser $driver): Ride
     {
-        $patchedRide = $this->ride()->updateRideByEventId(
+        $patchedRide = $this->ride()->updateRideByDriverAndEventId(
             $ride,
             $eventId,
             $driver->getId()->toString()

@@ -43,32 +43,32 @@ class RideController extends AppController
     }
 
     /**
-     * @Rest\Get("/api/v1/ride/{id}")
-     * @param string $id
+     * @Rest\Get("/api/v1/ride/{rideId}")
+     * @param string $rideId
      * @return RideDto
      * @throws RideNotFoundException
      */
-    public function idAction(string $id)
+    public function idAction(string $rideId)
     {
-        return $this->getRide($id)->toDto();
+        return $this->getRide($rideId)->toDto();
     }
 
     /**
-     * @Rest\Get("/api/v1/ride/{id}/status")
-     * @param string $id
+     * @Rest\Get("/api/v1/ride/{rideId}/status")
+     * @param string $rideId
      * @return RideEventType
      * @throws RideNotFoundException
      */
-    public function statusAction(string $id)
+    public function statusAction(string $rideId)
     {
         return $this->ride()->getRideStatus(
-            $this->getRide($id)
+            $this->getRide($rideId)
         );
     }
 
     /**
-     * @Rest\Patch("/api/v1/ride/{id}")
-     * @param string $id
+     * @Rest\Patch("/api/v1/ride/{rideId}")
+     * @param string $rideId
      * @param Request $request
      * @return RideDto
      * @throws RideNotFoundException
@@ -78,14 +78,14 @@ class RideController extends AppController
      * @throws ActingDriverIsNotAssignedDriverException
      * @throws UnauthorizedOperationException
      */
-    public function patchAction(string $id, Request $request)
+    public function patchAction(string $rideId, Request $request)
     {
-        $rideToPatch = $this->getRide($id);
+        $rideToPatch = $this->getRide($rideId);
         $eventId = $request->get('eventId');
         $driverId = $request->get('driverId');
         $destinationLat = $request->get('destinationLat');
         $destinationLong = $request->get('destinationLong');
-        $this->rideTransition()->updateRideByEventId(
+        $this->rideTransition()->updateRideByDriverAndEventId(
             $rideToPatch,
             $eventId,
             $driverId
@@ -95,13 +95,13 @@ class RideController extends AppController
     }
 
     /**
-     * @param string $id
+     * @param string $rideId
      * @return Ride
      * @throws RideNotFoundException
      */
-    private function getRide(string $id): Ride
+    private function getRide(string $rideId): Ride
     {
-        return $this->ride()->getRide($this->id($id));
+        return $this->ride()->getRide($this->id($rideId));
     }
 
     /**

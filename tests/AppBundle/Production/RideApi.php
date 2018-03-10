@@ -310,12 +310,12 @@ class RideApi
      * @throws UserNotInDriverRoleException
      * @throws UnauthorizedOperationException
      */
-    public function updateRideByEventId(Ride $ride, string $eventId = null, string $driverId = null)
+    public function updateRideByDriverAndEventId(Ride $ride, string $eventId = null, string $driverId = null)
     {
         if (! is_null($driverId)) {
             $this->user->authById(Uuid::fromString($driverId));
         }
-        return $this->rideTransitionService->updateRideByEventId(
+        return $this->rideTransitionService->updateRideByDriverAndEventId(
             $ride,
             $eventId,
             $driverId
