@@ -2,6 +2,8 @@ actor: ApiTester
 modules:
     enabled:
         - \Helper\Api
+        - PhpBrowser:
+              url: http://127.0.0.1:8000/
         - REST:
               url: http://127.0.0.1:8000/api/v1
               depends: PhpBrowser

@@ -239,11 +239,13 @@ class ApiTester extends \Codeception\Actor
 
     private $token;
 
-    public function getRegisteredUserWithToken($first, $last)
+    public function getRegisteredUserWithToken($first, $last, $skipLogin = false)
     {
         $createdUser = $this->createNewUser($first, $last);
         $username = $createdUser['username'];
-        $response = $this->loginWithUserName($username);
+        if (! $skipLogin) {
+            $response = $this->loginWithUserName($username);
+        }
         $response['user'] = $createdUser;
         return $response;
     }
@@ -332,19 +334,29 @@ class ApiTester extends \Codeception\Actor
      */
     protected function loginWithUserName($username) : array
     {
-        $response = $this->sendPostApiRequest('/../../oauth/v2/token', [
-            'grant_type' => 'password',
-            'client_id' => UserApi::CLIENT_ID,
-            'client_secret' => UserApi::CLIENT_SECRET,
-            'username' => $username,
-            'password' => 'password'
 
-        ]);
-        $this->seeResponseContainsJson([
-            'token_type' => 'bearer'
-        ]);
-        $this->token = $response['access_token'];
+        $this->amOnPage('/logout');
+        $authUrl =
+            '/oauth/v2/auth?client_id='
+            .UserApi::CLIENT_ID
+            .'&redirect_uri=http://localhost:8000/&response_type=token';
 
-        return $response;
+        $this->amOnPage($authUrl);
+        $this->canSeeInFormFields('form', [
+            '_username' => '',
+            '_password' => ''
+        ]);
+        $this->submitForm('form', [
+            '_username' => $username,
+            '_password' => 'password'
+        ], '_submit');
+        $this->seeResponseCodeIs(HttpCode::OK);
+        $this->submitForm('form[name=fos_oauth_server_authorize_form]', [], 'accepted');
+        $token = $this->grabFromCurrentUrl('~.*&access_token=([^&]+)~');
+        $this->token = $token;
+        return [
+            'token_type' => 'bearer',
+            'access_token' => $token
+        ];
     }
 }

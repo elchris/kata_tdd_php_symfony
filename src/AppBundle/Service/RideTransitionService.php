@@ -47,7 +47,7 @@ class RideTransitionService
      * @throws UserNotInDriverRoleException
      * @throws UnauthorizedOperationException
      */
-    public function updateRideByEventId(Ride $ride, string $eventId = null, string $driverId = null)
+    public function updateRideByDriverAndEventId(Ride $ride, string $eventId = null, string $driverId = null)
     {
         if (! is_null($driverId)) {
             /** @var Uuid $uuid */

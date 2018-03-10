@@ -13,7 +13,11 @@ class AuthenticationCest
      */
     public function seeNewUserBadlyAuthenticatedUnAuthorized(ApiTester $I)
     {
-        $newUser = $I->getRegisteredUserWithToken('Joe', 'Passenger');
+        $newUser = $I->getRegisteredUserWithToken(
+            'Joe',
+            'Passenger',
+            true
+        );
         $userName = $newUser['user']['username'];
         $userId = $newUser['user']['id'];
         $I->nukeToken();
@@ -22,10 +26,5 @@ class AuthenticationCest
             'error' => 'access_denied',
             'error_description' => 'OAuth2 authentication required'
         ]);
-
-        $authUrl =
-            'http://localhost:8000/oauth/v2/auth?client_id='
-            .UserApi::CLIENT_ID
-            .'&redirect_uri=http://localhost:8000/&response_type=token';
     }
 }
