@@ -4,15 +4,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\AppUser;
-use AppBundle\Exception\UnauthorizedOperationException;
-use AppBundle\Exception\UserNotFoundException;
-use AppBundle\Repository\LocationRepository;
-use AppBundle\Repository\RideEventRepository;
-use AppBundle\Repository\RideRepository;
 use AppBundle\Repository\UserRepository;
-use AppBundle\Service\LocationService;
-use AppBundle\Service\RideService;
-use AppBundle\Service\RideTransitionService;
 use AppBundle\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\FOSRestController;
@@ -24,6 +16,13 @@ class AppController extends FOSRestController
     protected function getUserManager() : UserManagerInterface
     {
         return $this->container->get('fos_user.user_manager.public');
+    }
+
+    public function user()
+    {
+        return new UserService(
+            new UserRepository($this->em())
+        );
     }
 
     /**

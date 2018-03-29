@@ -26,6 +26,8 @@ class ApiTester extends \Codeception\Actor
 {
     use _generated\ApiTesterActions;
 
+    private $token = null;
+
     public function sendPostApiRequest(
         $uri,
         $params
