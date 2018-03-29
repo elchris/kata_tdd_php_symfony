@@ -39,9 +39,6 @@ abstract class AppTestCase extends WebTestCase
         $this->em = static::$kernel->getContainer()->get('doctrine')->getManager();
         $this->userManager = new FakeUserManager($this->em());
         $this->setUpEntityManager();
-
-        $this->ride()->bootStrapRideEventTypes();
-        $this->user()->bootStrapRoles();
     }
 
     protected function em()
@@ -54,16 +51,6 @@ abstract class AppTestCase extends WebTestCase
         $this->em->persist($entity);
         $this->em->flush();
         return $entity;
-    }
-
-    /**
-     * @param $firstName
-     * @param $lastName
-     * @return AppUser
-     */
-    protected function newNamedUser($firstName, $lastName): AppUser
-    {
-        return (new FakeUser($firstName, $lastName))->toEntity();
     }
 
     private function setUpEntityManager()
@@ -85,45 +72,5 @@ abstract class AppTestCase extends WebTestCase
     {
         $this->expectException($class);
         $this->expectExceptionMessage($message);
-    }
-
-    /**
-     * @return UserApi
-     */
-    protected function user()
-    {
-        if (is_null($this->userApi)) {
-            $this->userApi = new UserApi(
-                $this->em(),
-                $this->userManager
-            );
-        }
-        return $this->userApi;
-    }
-
-    /**
-     * @return LocationApi
-     */
-    protected function location()
-    {
-        if (is_null($this->locationApi)) {
-            $this->locationApi = new LocationApi($this->em());
-        }
-        return $this->locationApi;
-    }
-
-    /**
-     * @return RideApi
-     */
-    protected function ride()
-    {
-        if (is_null($this->rideApi)) {
-            $this->rideApi = new RideApi(
-                $this->em(),
-                $this->user(),
-                $this->location()
-            );
-        }
-        return $this->rideApi;
     }
 }
