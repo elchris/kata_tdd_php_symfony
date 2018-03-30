@@ -27,6 +27,16 @@ class AppController extends FOSRestController
     }
 
     /**
+     * @return UserService
+     */
+    public function user()
+    {
+        return new UserService(
+            new UserRepository($this->em())
+        );
+    }
+
+    /**
      * @param string $id
      * @return Uuid
      */

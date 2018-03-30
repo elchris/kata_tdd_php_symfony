@@ -13,5 +13,21 @@ class RegisterUserCest
      */
     public function seeNewUserCreated(ApiTester $I)
     {
+        $response = $I->sendPostApiRequest(
+            '/register-user',
+            [
+                'first' => 'Dan',
+                'last' => 'Fritcher'
+            ]
+        );
+
+        $I->canSeeResponseContainsJson(
+            [
+                'first' => 'Dan',
+                'last' => 'Fritcher'
+            ]
+        );
+
+        print_r($response);
     }
 }
