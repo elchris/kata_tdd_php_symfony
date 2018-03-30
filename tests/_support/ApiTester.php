@@ -1,11 +1,6 @@
 <?php
 
-use AppBundle\Entity\AppRole;
-use AppBundle\Entity\RideEventType;
 use Codeception\Util\HttpCode;
-use Tests\AppBundle\Production\LocationApi;
-use Tests\AppBundle\Production\UserApi;
-use Tests\AppBundle\User\FakeUser;
 
 /**
  * Inherited Methods

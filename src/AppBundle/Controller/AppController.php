@@ -3,17 +3,6 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\AppUser;
-use AppBundle\Exception\UnauthorizedOperationException;
-use AppBundle\Exception\UserNotFoundException;
-use AppBundle\Repository\LocationRepository;
-use AppBundle\Repository\RideEventRepository;
-use AppBundle\Repository\RideRepository;
-use AppBundle\Repository\UserRepository;
-use AppBundle\Service\LocationService;
-use AppBundle\Service\RideService;
-use AppBundle\Service\RideTransitionService;
-use AppBundle\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\UserBundle\Model\UserManagerInterface;

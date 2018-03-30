@@ -2,9 +2,6 @@
 
 namespace AppBundle\Entity;
 
-use AppBundle\DTO\UserDto;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use FOS\UserBundle\Model\User as BaseUser;
