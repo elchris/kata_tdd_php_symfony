@@ -9,7 +9,14 @@ use Doctrine\ORM\Mapping as ORM;
  * @package AppBundle\Entity
  *
  * @ORM\Entity()
- * @ORM\Table(name="rideEvents")
+ * @ORM\Table(
+ *     name="rideEvents",
+ *     indexes={
+ *          @ORM\Index(
+ *              name="events_idx", columns={"rideId", "created", "id"}
+ *          )
+ *     }
+ * )
  */
 class RideEvent
 {
