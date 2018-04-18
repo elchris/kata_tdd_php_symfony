@@ -3,6 +3,8 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Repository\UserRepository;
+use AppBundle\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\UserBundle\Model\UserManagerInterface;
@@ -34,5 +36,10 @@ class AppController extends FOSRestController
         /** @var EntityManagerInterface $em */
         $em = $this->getDoctrine()->getManager();
         return $em;
+    }
+
+    protected function user() : UserService
+    {
+        return new UserService(new UserRepository($this->em()));
     }
 }

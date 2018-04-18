@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\DTO\UserDto;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
@@ -84,5 +85,14 @@ class AppUser //extends BaseUser
     public function assignRole(AppRole $role)
     {
         $this->appRoles->add($role);
+    }
+
+    public function toDto()
+    {
+        return new UserDto(
+            $this->id->toString(),
+            $this->first,
+            $this->last
+        );
     }
 }

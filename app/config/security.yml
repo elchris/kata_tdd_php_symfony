@@ -25,12 +25,12 @@ security:
             pattern: ^/api/v1/register-user
             security: false
 
-        api:
-            pattern: ^/api/v1                          # All URLs are protected
-            fos_oauth: true                            # OAuth2 protected resource
-            stateless: true                            # Do no set session cookies
-            anonymous: false
-            provider: fos_userbundle
+#        api:
+#            pattern: ^/api/v1                          # All URLs are protected
+#            fos_oauth: true                            # OAuth2 protected resource
+#            stateless: true                            # Do no set session cookies
+#            anonymous: false
+#            provider: fos_userbundle
 
         main:
             anonymous: ~
