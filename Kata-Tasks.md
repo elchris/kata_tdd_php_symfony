@@ -27,9 +27,9 @@ Kata Tasks
     * Assign Driver Role
 
 * AssignRoleToUserCest
-    * POST /user/{id}
+    * PATCH /user/{id}
         role: 'Passenger'
-    * POST /user/{id}
+    * PATCH /user/{id}
         role: 'Driver'
 
 * Migration
