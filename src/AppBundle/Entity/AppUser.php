@@ -13,7 +13,7 @@ use FOS\UserBundle\Model\User as BaseUser;
  * @ORM\Entity()
  * @ORM\Table(name="users")
  */
-class AppUser extends BaseUser
+class AppUser //extends BaseUser
 {
     /**
      * @var Uuid $id
