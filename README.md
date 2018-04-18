@@ -26,7 +26,7 @@ OS X Installation: (Adapt to your OS)
 
 Checkout Code:
 
-* git checkout https://github.com/elchris/kata_tdd_php_symfony.git
+* git clone https://github.com/elchris/kata_tdd_php_symfony.git
 * switch to **clean-slate-with-acceptance** branch
 * create new working branch from **clean-slate-with-acceptance**
 
