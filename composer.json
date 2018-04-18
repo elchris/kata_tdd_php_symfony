@@ -15,8 +15,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "": "src/",
-            "Tests\\": "tests/"
+            "": "src/"
         },
         "classmap": [
             "app/AppKernel.php",
@@ -25,7 +24,6 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "": "src/",
             "Tests\\": "tests/"
         }
     },
