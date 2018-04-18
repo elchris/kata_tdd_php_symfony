@@ -7,9 +7,15 @@ Introduction:
 * Consult Kata-Tasks.rtf to get an idea of the various tests you'll be writing and help shape your sequencing.
 * With this said, you do not have to follow the sequencing outlined.
 
-Installation:
+^^ Start of Initial Set-Up
 
-* Install Brew: https://brew.sh
+OS X Installation: (Adapt to your OS)
+
+* ( Install Brew: https://brew.sh )
+* brew unlink php56 (if you already have php56)
+    * You can later undo this if you wish:
+        * brew unlink php72
+        * brew link php56
 * brew install php72
 * brew install php72-xdebug
 * brew install php72-yaml
@@ -21,31 +27,23 @@ Installation:
 Checkout Code:
 
 * https://github.com/elchris/kata_tdd_php_symfony
-* switch to clean-slate branch
-* create new working branch from clean-slate
+* switch to clean-slate-with-acceptance branch
+* create new working branch from clean-slate-with-acceptance
 * composer install
-
-Configure IDE:
-
-* PHP Interpreter Level 7.2
-* PHPUnit Run-Time
-* Annotations Plugin
-* Create PSR-2 Scope
-* Inspection: phpcs to PSR-2 Scope
-    * Exclude DoctrineMigrations
-    * Exclude tests\acceptance
     
 Configure DB
 
 * cp parameters.yml.dist parameters.yml
+* mysql.server start
 * create database symfony;
 
 Run:
 
 * vendor/bin/phpunit
-* mysql.server start | stop
 * bin/console server:start
 * vendor/bin/codecept run
+
+^^ End of Initial Set-Up
 
 Migrations:
 
