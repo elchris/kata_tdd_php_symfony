@@ -32,7 +32,16 @@ class UserRepository extends AppRepository
 
     public function assignRoleToUser(AppUser $user, AppRole $role)
     {
-        $user->assignRole($role);
+        $user->assignRole($this->getRoleReference($role));
         $this->saveUser($user);
+    }
+
+    private function getRoleReference(AppRole $role)
+    {
+        return $this->em->createQuery(
+            'select r from E:AppRole r where r = :role'
+        )
+        ->setParameter('role', $role)
+        ->getSingleResult();
     }
 }

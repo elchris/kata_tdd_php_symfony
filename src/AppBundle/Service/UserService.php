@@ -3,6 +3,7 @@
 
 namespace AppBundle\Service;
 
+use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
 use AppBundle\Repository\UserRepository;
 use Ramsey\Uuid\Uuid;
@@ -35,5 +36,15 @@ class UserService
     public function getById(Uuid $id)
     {
         return $this->userRepository->getById($id);
+    }
+
+    public function makeUserPassenger($newUser)
+    {
+        $this->userRepository->assignRoleToUser($newUser, AppRole::passenger());
+    }
+
+    public function makeUserDriver($newUser)
+    {
+        $this->userRepository->assignRoleToUser($newUser, AppRole::driver());
     }
 }

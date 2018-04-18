@@ -2,6 +2,7 @@
 
 namespace Tests\AppBundle;
 
+use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
 use FOS\UserBundle\Model\UserManagerInterface;
 use Tests\AppBundle\Production\LocationApi;
@@ -39,6 +40,9 @@ abstract class AppTestCase extends WebTestCase
         $this->em = static::$kernel->getContainer()->get('doctrine')->getManager();
         $this->userManager = new FakeUserManager($this->em());
         $this->setUpEntityManager();
+
+        $this->save(AppRole::passenger());
+        $this->save(AppRole::driver());
     }
 
     protected function em()

@@ -37,6 +37,11 @@ class AppRole
         return new self(1, 'Passenger');
     }
 
+    public static function driver()
+    {
+        return new self(2, 'Driver');
+    }
+
     public function getId()
     {
         return $this->id;

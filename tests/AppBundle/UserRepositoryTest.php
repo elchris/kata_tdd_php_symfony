@@ -38,13 +38,25 @@ class UserRepositoryTest extends AppTestCase
     public function testAssignPassengerRoleToUser()
     {
         $newUser = $this->getRepoNewUser();
-        $passengerRole = AppRole::passenger();
-        $this->save($passengerRole);
 
-        $this->userRepository->assignRoleToUser($newUser, $passengerRole);
+        $this->userRepository->assignRoleToUser($newUser, AppRole::passenger());
         $retrievedUser = $this->userRepository->getById($newUser->getId());
 
         self::assertTrue($retrievedUser->hasAppRole(AppRole::passenger()));
+    }
+
+    /**
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function testAssignDriverRoleToUser()
+    {
+        $newUser = $this->getRepoNewUser();
+
+        $this->userRepository->assignRoleToUser($newUser, AppRole::driver());
+        $retrievedUser = $this->userRepository->getById($newUser->getId());
+
+        self::assertTrue($retrievedUser->hasAppRole(AppRole::driver()));
     }
 
     /**
