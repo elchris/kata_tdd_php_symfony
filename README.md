@@ -27,18 +27,24 @@ OS X Installation: (Adapt to your OS)
 Checkout Code:
 
 * git clone https://github.com/elchris/kata_tdd_php_symfony.git
+* cd kata_tdd_php_symfony
 * switch to **clean-slate-with-acceptance** branch
+    * git checkout **clean-slate-with-acceptance** 
 * create new working branch from **clean-slate-with-acceptance**
+    * git branch kata-run-1
+    * git checkout kata-run-1
 
 Configure DB:
 
-* cp parameters.yml.dist parameters.yml
+* cd app/config
+    * cp parameters.yml.dist parameters.yml
 * mysql.server start
 * log into mysql
     * create database symfony;
 
 Run:
 
+* cd ../..
 * composer install
 * vendor/bin/phpunit
 * bin/console server:start
