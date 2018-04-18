@@ -29,9 +29,8 @@ Checkout Code:
 * git checkout https://github.com/elchris/kata_tdd_php_symfony.git
 * switch to **clean-slate-with-acceptance** branch
 * create new working branch from **clean-slate-with-acceptance**
-* composer install
-    
-Configure DB
+
+Configure DB:
 
 * cp parameters.yml.dist parameters.yml
 * mysql.server start
@@ -40,6 +39,7 @@ Configure DB
 
 Run:
 
+* composer install
 * vendor/bin/phpunit
 * bin/console server:start
 * vendor/bin/codecept run
