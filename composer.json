@@ -15,8 +15,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "": "src/",
-            "Tests\\": "tests/"
+            "": "src/"
         },
         "classmap": [
             "app/AppKernel.php",
@@ -25,12 +24,11 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "": "src/",
             "Tests\\": "tests/"
         }
     },
     "require": {
-        "php": ">=5.5.9",
+        "php": ">=7.2",
         "doctrine/orm": "^2.5",
         "doctrine/doctrine-bundle": "^1.6",
         "doctrine/doctrine-cache-bundle": "^1.2",
