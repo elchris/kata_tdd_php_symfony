@@ -35,7 +35,8 @@ Configure DB
 
 * cp parameters.yml.dist parameters.yml
 * mysql.server start
-* create database symfony;
+* log into mysql
+    * create database symfony;
 
 Run:
 
