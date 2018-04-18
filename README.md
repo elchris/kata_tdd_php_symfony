@@ -1,15 +1,21 @@
 TDD Kata with Symfony and Doctrine
 ==================================
 
-Introduction:
+## Introduction:
 
 * Consult ride-hailing.svg to digest some key application concepts.
-* Consult Kata-Tasks.rtf to get an idea of the various tests you'll be writing and help shape your sequencing.
+* Consult Kata-Tasks.md to get an idea of the various tests you'll be writing and help shape your sequencing.
 * With this said, you do not have to follow the sequencing outlined.
 
-Installation:
+## Initial Set-Up
 
-* Install Brew: https://brew.sh
+OS X Installation: (Adapt to your OS)
+
+* ( Install Brew: https://brew.sh )
+* brew unlink php56 (if you already have php56)
+    * You can later undo this if you wish:
+        * brew unlink php72
+        * brew link php56
 * brew install php72
 * brew install php72-xdebug
 * brew install php72-yaml
@@ -20,32 +26,31 @@ Installation:
 
 Checkout Code:
 
-* https://github.com/elchris/kata_tdd_php_symfony
-* switch to clean-slate branch
-* create new working branch from clean-slate
-* composer install
+* git clone https://github.com/elchris/kata_tdd_php_symfony.git
+* cd kata_tdd_php_symfony
+* switch to **clean-slate-with-acceptance** branch
+    * git checkout **clean-slate-with-acceptance** 
+* create new working branch from **clean-slate-with-acceptance**
+    * git branch kata-run-1
+    * git checkout kata-run-1
 
-Configure IDE:
+Configure DB:
 
-* PHP Interpreter Level 7.2
-* PHPUnit Run-Time
-* Annotations Plugin
-* Create PSR-2 Scope
-* Inspection: phpcs to PSR-2 Scope
-    * Exclude DoctrineMigrations
-    * Exclude tests\acceptance
-    
-Configure DB
-
-* cp parameters.yml.dist parameters.yml
-* create database symfony;
+* cd app/config
+    * cp parameters.yml.dist parameters.yml
+* mysql.server start
+* log into mysql
+    * create database symfony;
 
 Run:
 
+* cd ../..
+* composer install
 * vendor/bin/phpunit
-* mysql.server start | stop
 * bin/console server:start
 * vendor/bin/codecept run
+
+## References
 
 Migrations:
 
@@ -74,3 +79,7 @@ Testing:
 Issues:
 
 * https://youtrack.jetbrains.com/issue/WI-40950
+
+
+Stats:
+* [![](http://codescene.io/projects/2090/status.svg) Get more details at **codescene.io**.](http://codescene.io/projects/2090/jobs/latest-successful/results)
