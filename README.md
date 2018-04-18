@@ -1,13 +1,13 @@
 TDD Kata with Symfony and Doctrine
 ==================================
 
-Introduction:
+## Introduction:
 
 * Consult ride-hailing.svg to digest some key application concepts.
-* Consult Kata-Tasks.rtf to get an idea of the various tests you'll be writing and help shape your sequencing.
+* Consult Kata-Tasks.md to get an idea of the various tests you'll be writing and help shape your sequencing.
 * With this said, you do not have to follow the sequencing outlined.
 
-^^ Start of Initial Set-Up
+## Initial Set-Up
 
 OS X Installation: (Adapt to your OS)
 
@@ -44,7 +44,7 @@ Run:
 * bin/console server:start
 * vendor/bin/codecept run
 
-^^ End of Initial Set-Up
+## References
 
 Migrations:
 
