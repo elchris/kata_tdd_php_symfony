@@ -3,7 +3,11 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Repository\LocationRepository;
+use AppBundle\Repository\RideRepository;
 use AppBundle\Repository\UserRepository;
+use AppBundle\Service\LocationService;
+use AppBundle\Service\RideService;
 use AppBundle\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\FOSRestController;
@@ -41,5 +45,15 @@ class AppController extends FOSRestController
     protected function user() : UserService
     {
         return new UserService(new UserRepository($this->em()));
+    }
+
+    protected function ride() : RideService
+    {
+        return new RideService(new RideRepository($this->em()));
+    }
+
+    protected function location() : LocationService
+    {
+        return new LocationService(new LocationRepository($this->em()));
     }
 }

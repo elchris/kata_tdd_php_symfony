@@ -3,6 +3,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\DTO\RideDto;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 
@@ -59,5 +60,15 @@ class Ride
     public function hasDeparture(AppLocation $testDeparture)
     {
         return $this->departure->is($testDeparture);
+    }
+
+    public function is(Ride $testRide)
+    {
+        return $testRide->id->equals($this->id);
+    }
+
+    public function toDto()
+    {
+        return new RideDto($this->id->toString());
     }
 }

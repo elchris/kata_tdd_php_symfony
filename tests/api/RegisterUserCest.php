@@ -76,5 +76,15 @@ class RegisterUserCest
         );
 
         print_r($response);
+
+        $response = $I->sendPostApiRequest('/ride', [
+            'userId' => $userId,
+            'location' => [
+                'lat' => 37.7721718,
+                'long' => -122.4310872
+            ]
+        ]);
+
+        print_r($response);
     }
 }
