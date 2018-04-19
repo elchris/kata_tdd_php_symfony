@@ -2,30 +2,16 @@
 
 namespace Tests\AppBundle;
 
-use AppBundle\Entity\AppUser;
 use FOS\UserBundle\Model\UserManagerInterface;
-use Tests\AppBundle\Production\LocationApi;
-use Tests\AppBundle\Production\RideApi;
-use Tests\AppBundle\Production\UserApi;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\ToolsException;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Tests\AppBundle\User\FakeUser;
 use Tests\AppBundle\User\FakeUserManager;
 
 abstract class AppTestCase extends WebTestCase
 {
-    /** @var RideApi */
-    private $rideApi;
-
-    /** @var LocationApi */
-    private $locationApi;
-
-    /** @var UserApi */
-    private $userApi;
-
     /** @var  EntityManagerInterface */
     private $em;
 
