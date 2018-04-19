@@ -101,4 +101,9 @@ class AppUser //extends BaseUser
             $this->getRolesList()
         );
     }
+
+    public function is(AppUser $userToCompare)
+    {
+        return $userToCompare->id->equals($this->id);
+    }
 }

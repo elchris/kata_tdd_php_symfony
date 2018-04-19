@@ -61,4 +61,9 @@ class AppLocation
     {
         return $this->id;
     }
+
+    public function is(AppLocation $testLocation)
+    {
+        return $testLocation->id->equals($this->id);
+    }
 }
