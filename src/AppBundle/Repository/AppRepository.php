@@ -24,6 +24,6 @@ abstract class AppRepository
     {
         $this->em->persist($object);
         $this->em->flush();
-        $this->em->clear();
+        //$this->em->clear();
     }
 }
