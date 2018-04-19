@@ -3,8 +3,11 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Repository\UserRepository;
+use AppBundle\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Tests\Fixtures\User;
 use FOS\UserBundle\Model\UserManagerInterface;
 use Ramsey\Uuid\Uuid;
 
@@ -13,6 +16,11 @@ class AppController extends FOSRestController
     protected function getUserManager() : UserManagerInterface
     {
         return $this->container->get('fos_user.user_manager.public');
+    }
+
+    protected function user() : UserService
+    {
+        return new UserService(new UserRepository($this->em()));
     }
 
     /**
