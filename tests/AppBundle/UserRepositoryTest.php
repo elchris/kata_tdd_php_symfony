@@ -6,6 +6,8 @@ namespace Tests\AppBundle;
 use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
 use AppBundle\Repository\UserRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 
 class UserRepositoryTest extends AppTestCase
 {
@@ -20,8 +22,8 @@ class UserRepositoryTest extends AppTestCase
     }
 
     /**
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NoResultException
+     * @throws NonUniqueResultException
      */
     public function testCreateUser()
     {
@@ -32,8 +34,8 @@ class UserRepositoryTest extends AppTestCase
     }
 
     /**
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NoResultException
+     * @throws NonUniqueResultException
      */
     public function testAssignPassengerRoleToUser()
     {
@@ -46,8 +48,8 @@ class UserRepositoryTest extends AppTestCase
     }
 
     /**
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NoResultException
+     * @throws NonUniqueResultException
      */
     public function testAssignDriverRoleToUser()
     {
@@ -61,8 +63,8 @@ class UserRepositoryTest extends AppTestCase
 
     /**
      * @return AppUser
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NoResultException
+     * @throws NonUniqueResultException
      */
     protected function getRepoNewUser(): AppUser
     {

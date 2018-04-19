@@ -87,12 +87,18 @@ class AppUser //extends BaseUser
         $this->appRoles->add($role);
     }
 
+    private function getRolesList()
+    {
+        return $this->appRoles->getValues();
+    }
+
     public function toDto()
     {
         return new UserDto(
             $this->id->toString(),
             $this->first,
-            $this->last
+            $this->last,
+            $this->getRolesList()
         );
     }
 }
