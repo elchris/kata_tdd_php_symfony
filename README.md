@@ -9,20 +9,24 @@ TDD Kata with Symfony and Doctrine
 
 ## Initial Set-Up
 
-OS X Installation: (Adapt to your OS)
+What you need:
+
+* php 7.2
+* mysql 5.7
+* composer
+
+Possible OS X Installation: (Adapt to your OS)
 
 * ( Install Brew: https://brew.sh )
 * brew unlink php56 (if you already have php56)
     * You can later undo this if you wish:
         * brew unlink php72
         * brew link php56
-* brew install php72
-* brew install php72-xdebug
-* brew install php72-yaml
+* brew link php72
+    * or brew install php72
 * brew install sqlite
-* brew install mysql
+* brew install mysql@5.7
 * brew install composer
-* brew install php-code-sniffer
 
 Checkout Code:
 
