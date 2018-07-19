@@ -29,7 +29,6 @@ abstract class AppTestCase extends WebTestCase
 
         $this->save(AppRole::passenger());
         $this->save(AppRole::driver());
-
     }
 
     protected function em()
