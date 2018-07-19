@@ -24,7 +24,7 @@ class UserServiceTest extends AppTestCase
     public function testRegisterNewUser()
     {
         /** @var AppUser $createdUser */
-        $createdUser = $this->getSvcNewUser($this->userService);
+        $createdUser = $this->getSvcNewUser();
         $retrievedUser = $this->userService->byId($createdUser->getId());
 
         self::assertTrue($retrievedUser->is($createdUser));
