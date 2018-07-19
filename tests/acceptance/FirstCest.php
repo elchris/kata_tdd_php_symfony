@@ -19,5 +19,6 @@ class FirstCest
     {
         $I->amOnPage("/");
         $I->see('Welcome');
+        $I->see('Symfony 3.4.12');
     }
 }
