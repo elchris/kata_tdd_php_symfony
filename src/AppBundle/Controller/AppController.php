@@ -3,6 +3,8 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Repository\UserRepository;
+use AppBundle\Service\UserSvc;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\UserBundle\Model\UserManagerInterface;
@@ -13,6 +15,13 @@ class AppController extends FOSRestController
     protected function getUserManager() : UserManagerInterface
     {
         return $this->container->get('fos_user.user_manager.public');
+    }
+
+    public function user() : UserSvc
+    {
+        return new UserSvc(
+            new UserRepository($this->em())
+        );
     }
 
     /**

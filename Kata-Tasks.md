@@ -18,7 +18,7 @@ Kata Tasks
         * last: 'last name'
         
 * Doctrine Diff & Migrate
-    * users, roles, users_roles
+    * users, appRoles, users_roles
 
 
 ### Users & Roles
@@ -33,7 +33,7 @@ Kata Tasks
         role: 'Driver'
 
 * Migration
-    * roles:
+    * appRoles:
         1 - Passenger
         2 - Driver
  
