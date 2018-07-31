@@ -28,6 +28,9 @@ class AppRole
     const PASSENGER = 'Passenger';
     const DRIVER = 'Driver';
 
+    const PASSENGER_ID = 1;
+    const DRIVER_ID = 2;
+
     private function __construct(int $id, string $name)
     {
         $this->id = $id;
@@ -36,12 +39,21 @@ class AppRole
 
     public static function passenger()
     {
-        return new self(1, self::PASSENGER);
+        return new self(self::PASSENGER_ID, self::PASSENGER);
     }
 
     public static function driver()
     {
-        return new self(2, self::DRIVER);
+        return new self(self::DRIVER_ID, self::DRIVER);
+    }
+
+    public static function fromKey(string $roleToPatch)
+    {
+        $roleDefinitions = [
+            self::PASSENGER => self::PASSENGER_ID,
+            self::DRIVER => self::DRIVER_ID
+        ];
+        return new self($roleDefinitions[$roleToPatch], $roleToPatch);
     }
 
     public function getId()

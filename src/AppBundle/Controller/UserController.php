@@ -33,16 +33,9 @@ class UserController extends AppController
         $userToPatch = $this->user()->byId($this->id($userId));
         $roleToPatch = $request->get('role');
 
-        if ($roleToPatch === AppRole::PASSENGER) {
-            return $this->user()->assignRoleToUser(
-                $userToPatch,
-                AppRole::passenger()
-            )->toDto();
-        } else if ($roleToPatch === AppRole::DRIVER) {
-            return $this->user()->assignRoleToUser(
-                $userToPatch,
-                AppRole::driver()
-            )->toDto();
-        }
+        return $this->user()->assignRoleToUser(
+            $userToPatch,
+            AppRole::fromKey($roleToPatch)
+        )->toDto();
     }
 }
