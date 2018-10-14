@@ -4,7 +4,10 @@ namespace Tests\AppBundle\User;
 
 use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
+use AppBundle\Exception\UserNotFoundException;
 use AppBundle\Repository\UserRepository;
+use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Tests\AppBundle\AppTestCase;
 
 class UserRepositoryTest extends AppTestCase
@@ -26,6 +29,20 @@ class UserRepositoryTest extends AppTestCase
 
         self::assertTrue($retrievedUser->isNamed('chris holland'));
         self::assertFalse($retrievedUser->isNamed('rogue'));
+    }
+
+    /**
+     * @throws UserNotFoundException
+     */
+    public function testBogusUserIdThrowsException()
+    {
+        $legitimateUser = $this->getRepoNewUser();
+        /** @var Uuid $bogusUserId */
+        $bogusUserId = Uuid::uuid4();
+
+        $this->expectException(UserNotFoundException::class);
+
+        $this->userRepository->byId($bogusUserId);
     }
 
     public function testAssignPassengerRoleToUser()
