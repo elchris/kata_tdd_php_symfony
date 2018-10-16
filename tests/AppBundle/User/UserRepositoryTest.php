@@ -39,6 +39,8 @@ class UserRepositoryTest extends AppTestCase
         $legitimateUser = $this->getRepoNewUser();
         /** @var Uuid $bogusUserId */
         $bogusUserId = Uuid::uuid4();
+        self::assertNotNull($legitimateUser->getId());
+        self::assertFalse($legitimateUser->getId()->equals($bogusUserId));
 
         $this->expectException(UserNotFoundException::class);
 
