@@ -30,7 +30,7 @@ class UserRepository extends AppRepository implements UserRepositoryInterface
      * @return AppUser
      * @throws UserNotFoundException
      */
-    public function getUserById(Uuid $userId)
+    public function getUserById(Uuid $userId): AppUser
     {
         try {
             return $this->em->createQuery(
@@ -48,7 +48,7 @@ class UserRepository extends AppRepository implements UserRepositoryInterface
      * @param AppRole $role
      * @throws DuplicateRoleAssignmentException
      */
-    public function assignRoleToUser(AppUser $user, AppRole $role)
+    public function assignRoleToUser(AppUser $user, AppRole $role): void
     {
         if ($user->userHasRole($role)) {
             throw new DuplicateRoleAssignmentException();
@@ -62,7 +62,7 @@ class UserRepository extends AppRepository implements UserRepositoryInterface
      * @param AppUser $passedUser
      * @return AppUser
      */
-    public function saveNewUser(AppUser $passedUser)
+    public function saveNewUser(AppUser $passedUser): AppUser
     {
         /** @var AppUser $user */
         $user = $this->userManager->createUser();
@@ -72,7 +72,7 @@ class UserRepository extends AppRepository implements UserRepositoryInterface
         $user->setEmail($passedUser->getEmail());
         $user->setPlainPassword($passedUser->getPlainPassword());
         $user->setEnabled(true);
-        $this->userManager->updateUser($user, true);
+        $this->userManager->updateUser($user);
         return $user;
     }
 
@@ -80,7 +80,7 @@ class UserRepository extends AppRepository implements UserRepositoryInterface
      * @param AppRole $role
      * @return null | AppRole
      */
-    private function getRoleReference(AppRole $role)
+    private function getRoleReference(AppRole $role): AppRole
     {
         /** @var AppRole $role */
         $role = $this->em->getRepository(AppRole::class)->findOneBy(

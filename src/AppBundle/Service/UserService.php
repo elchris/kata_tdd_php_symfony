@@ -27,7 +27,7 @@ class UserService
         $this->userRepository = $userRepository;
     }
 
-    public function setAuthenticatedUser(AppUser $user)
+    public function setAuthenticatedUser(AppUser $user): void
     {
         $this->authenticatedUser = $user;
     }
@@ -39,8 +39,9 @@ class UserService
      * @param $username
      * @param $password
      * @return AppUser
+     * @throws \Exception
      */
-    public function newUser($firstName, $lastName, $email, $username, $password)
+    public function newUser($firstName, $lastName, $email, $username, $password) : AppUser
     {
         $newUser = new AppUser($firstName, $lastName, $email, $username, $password);
         return $this->userRepository->saveNewUser($newUser);
@@ -52,7 +53,7 @@ class UserService
      * @throws UserNotFoundException
      * @throws UnauthorizedOperationException
      */
-    public function getUserById(Uuid $userId)
+    public function getUserById(Uuid $userId) : AppUser
     {
         $this->verifyAuthenticatedId($userId);
         return $this->userRepository->getUserById($userId);
@@ -63,7 +64,7 @@ class UserService
      * @throws DuplicateRoleAssignmentException
      * @throws UnauthorizedOperationException
      */
-    public function makeUserDriver(AppUser $user)
+    public function makeUserDriver(AppUser $user): void
     {
         $this->assignRole($user, AppRole::driver());
     }
@@ -73,7 +74,7 @@ class UserService
      * @throws DuplicateRoleAssignmentException
      * @throws UnauthorizedOperationException
      */
-    public function makeUserPassenger(AppUser $user)
+    public function makeUserPassenger(AppUser $user): void
     {
         $this->assignRole($user, AppRole::passenger());
     }
@@ -84,7 +85,7 @@ class UserService
      * @throws DuplicateRoleAssignmentException
      * @throws UnauthorizedOperationException
      */
-    private function assignRole(AppUser $user, AppRole $role)
+    private function assignRole(AppUser $user, AppRole $role): void
     {
         $this->verifyAuthenticatedUser($user);
         $this->userRepository->assignRoleToUser($user, $role);

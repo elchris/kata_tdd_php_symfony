@@ -36,27 +36,27 @@ class AppRole
         $this->name = $name;
     }
 
-    public static function driver()
+    public static function driver(): AppRole
     {
         return new self(self::DRIVER_ID, self::DRIVER);
     }
 
-    public static function passenger()
+    public static function passenger(): AppRole
     {
         return new self(self::PASSENGER_ID, self::PASSENGER);
     }
 
-    public static function isPassenger($role)
+    public static function isPassenger($role): bool
     {
         return $role === self::PASSENGER;
     }
 
-    public static function isDriver($role)
+    public static function isDriver($role): bool
     {
         return $role === self::DRIVER;
     }
 
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }

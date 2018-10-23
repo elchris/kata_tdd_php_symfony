@@ -62,6 +62,7 @@ class Ride
      * Ride constructor.
      * @param AppUser $passenger
      * @param AppLocation $departure
+     * @throws \Exception
      */
     public function __construct(AppUser $passenger, AppLocation $departure)
     {
@@ -71,45 +72,42 @@ class Ride
         $this->created = new \DateTime(null, new \DateTimeZone('UTC'));
     }
 
-    /**
-     * @return Uuid
-     */
-    public function getId()
+    public function getId(): Uuid
     {
         return $this->id;
     }
 
-    public function assignDestination(AppLocation $destination)
+    public function assignDestination(AppLocation $destination): void
     {
         $this->destination = $destination;
     }
 
-    public function hasDestination()
+    public function hasDestination(): bool
     {
         return ! is_null($this->destination);
     }
 
-    public function assignDriver(AppUser $driver)
+    public function assignDriver(AppUser $driver): void
     {
         $this->driver = $driver;
     }
 
-    public function isDrivenBy(AppUser $driver)
+    public function isDrivenBy(AppUser $driver): bool
     {
         return $this->driver->is($driver);
     }
 
-    public function hasDriver()
+    public function hasDriver(): bool
     {
         return ! is_null($this->driver);
     }
 
-    public function isDestinedFor(AppLocation $destinationLocation)
+    public function isDestinedFor(AppLocation $destinationLocation): bool
     {
         return $this->destination->isSameAs($destinationLocation);
     }
 
-    public function getPassengerTransaction(RideEventType $status)
+    public function getPassengerTransaction(RideEventType $status): RideEvent
     {
         return new RideEvent(
             $this,
@@ -118,12 +116,12 @@ class Ride
         );
     }
 
-    public function is(Ride $rideToCompare)
+    public function is(Ride $rideToCompare): bool
     {
         return $this->id->equals($rideToCompare->id);
     }
 
-    public function toDto()
+    public function toDto(): RideDto
     {
         return new RideDto(
             $this,

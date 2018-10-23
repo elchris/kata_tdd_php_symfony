@@ -69,17 +69,17 @@ class RideEvent
         $this->created = new \DateTime();
     }
 
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function is(RideEventType $typeToCompare)
+    public function is(RideEventType $typeToCompare): bool
     {
         return $this->type->equals($typeToCompare);
     }
 
-    public function getStatus()
+    public function getStatus(): RideEventType
     {
         return $this->type;
     }

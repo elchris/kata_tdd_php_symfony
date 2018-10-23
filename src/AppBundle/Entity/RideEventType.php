@@ -45,47 +45,47 @@ class RideEventType
         $this->name = $name;
     }
 
-    public static function requested()
+    public static function requested(): RideEventType
     {
         return new self(self::REQUESTED_ID, self::REQUESTED);
     }
 
-    public static function accepted()
+    public static function accepted(): RideEventType
     {
         return new self(self::ACCEPTED_ID, self::ACCEPTED);
     }
 
-    public static function inProgress()
+    public static function inProgress(): RideEventType
     {
         return new self(self::IN_PROGRESS_ID, self::IN_PROGRESS_STATUS);
     }
 
-    public static function cancelled()
+    public static function cancelled(): RideEventType
     {
         return new self(self::CANCELLED_ID, self::CANCELLED);
     }
 
-    public static function completed()
+    public static function completed(): RideEventType
     {
         return new self(self::COMPLETED_ID, self::COMPLETED);
     }
 
-    public static function rejected()
+    public static function rejected(): RideEventType
     {
         return new self(self::REJECTED_ID, self::REJECTED);
     }
 
-    public static function newById($eventTypeId)
+    public static function newById($eventTypeId): RideEventType
     {
         return new self($eventTypeId, '');
     }
 
-    public function equals(RideEventType $typeToCompare)
+    public function equals(RideEventType $typeToCompare): bool
     {
         return $this->id === $typeToCompare->getId();
     }
 
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }

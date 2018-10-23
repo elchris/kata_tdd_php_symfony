@@ -15,18 +15,18 @@ interface UserRepositoryInterface
      * @return AppUser
      * @throws UserNotFoundException
      */
-    public function getUserById(Uuid $userId);
+    public function getUserById(Uuid $userId): AppUser;
 
     /**
      * @param AppUser $user
      * @param AppRole $role
      * @throws DuplicateRoleAssignmentException
      */
-    public function assignRoleToUser(AppUser $user, AppRole $role);
+    public function assignRoleToUser(AppUser $user, AppRole $role): void;
 
     /**
      * @param AppUser $passedUser
      * @return AppUser
      */
-    public function saveNewUser(AppUser $passedUser);
+    public function saveNewUser(AppUser $passedUser): AppUser;
 }

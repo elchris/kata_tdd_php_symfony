@@ -83,6 +83,7 @@ Testing:
 Issues:
 
 * https://youtrack.jetbrains.com/issue/WI-40950
+* https://github.com/doctrine/doctrine2/issues/7306
 
 
 Stats:

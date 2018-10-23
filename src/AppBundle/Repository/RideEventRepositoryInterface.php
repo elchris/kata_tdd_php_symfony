@@ -15,9 +15,9 @@ interface RideEventRepositoryInterface
      * @return RideEvent
      * @throws RideNotFoundException
      */
-    public function getLastEventForRide(Ride $ride);
+    public function getLastEventForRide(Ride $ride): RideEvent;
 
-    public function markRideStatusByActor(Ride $ride, AppUser $actor, RideEventType $status);
+    public function markRideStatusByActor(Ride $ride, AppUser $actor, RideEventType $status): RideEvent;
 
-    public function markRideStatusByPassenger(Ride $ride, RideEventType $status);
+    public function markRideStatusByPassenger(Ride $ride, RideEventType $status): RideEvent;
 }

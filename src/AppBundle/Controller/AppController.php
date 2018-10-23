@@ -36,15 +36,17 @@ class AppController extends FOSRestController
     /** @var UserManagerInterface */
     protected $userManager;
 
-    protected function getUserManager() : UserManagerInterface
+    protected function getUserManager(): UserManagerInterface
     {
-        return $this->container->get('fos_user.user_manager.public');
+        /** @var UserManagerInterface $manager */
+        $manager = $this->container->get('fos_user.user_manager.public');
+        return $manager;
     }
 
     /**
      * @return UserService
      */
-    protected function user() : UserService
+    protected function user(): UserService
     {
         $authenticatedUser = $this->getUser();
         if (is_null($this->userService)) {
@@ -64,7 +66,7 @@ class AppController extends FOSRestController
     /**
      * @return RideService
      */
-    protected function ride() : RideService
+    protected function ride(): RideService
     {
         if (is_null($this->rideService)) {
             $this->rideService = new RideService(
@@ -76,7 +78,7 @@ class AppController extends FOSRestController
         return $this->rideService;
     }
 
-    protected function rideTransition() : RideTransitionService
+    protected function rideTransition(): RideTransitionService
     {
         if (is_null($this->rideTransitionService)) {
             $this->rideTransitionService = new RideTransitionService(
@@ -91,7 +93,7 @@ class AppController extends FOSRestController
     /**
      * @return LocationService
      */
-    protected function location() : LocationService
+    protected function location(): LocationService
     {
         if (is_null($this->locationService)) {
             $this->locationService = new LocationService(
@@ -106,7 +108,7 @@ class AppController extends FOSRestController
      * @param string $id
      * @return Uuid
      */
-    protected function id(string $id)
+    protected function id(string $id): Uuid
     {
         /** @var Uuid $uuid */
         $uuid = Uuid::fromString($id);
@@ -116,7 +118,7 @@ class AppController extends FOSRestController
     /**
      * @return EntityManagerInterface
      */
-    private function em()
+    private function em(): EntityManagerInterface
     {
         /** @var EntityManagerInterface $em */
         $em = $this->getDoctrine()->getManager();

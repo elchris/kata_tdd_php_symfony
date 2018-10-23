@@ -25,10 +25,6 @@ class RideTransitionService
      */
     private $userService;
 
-    /**
-     * @param RideService $rideService
-     * @param UserService $userService
-     */
     public function __construct(RideService $rideService, UserService $userService)
     {
         $this->rideService = $rideService;
@@ -47,7 +43,7 @@ class RideTransitionService
      * @throws UserNotInDriverRoleException
      * @throws UnauthorizedOperationException
      */
-    public function updateRideByDriverAndEventId(Ride $ride, string $eventId = null, string $driverId = null)
+    public function updateRideByDriverAndEventId(Ride $ride, string $eventId = null, string $driverId = null) : Ride
     {
         if (! is_null($driverId)) {
             /** @var Uuid $uuid */
@@ -85,7 +81,7 @@ class RideTransitionService
      * @throws RideNotFoundException
      * @throws UserNotInDriverRoleException
      */
-    private function patchRideInProgress(RideEventType $eventToProcess, Ride $rideToPatch, AppUser $driver)
+    private function patchRideInProgress(RideEventType $eventToProcess, Ride $rideToPatch, AppUser $driver): void
     {
         if (RideEventType::inProgress()->equals($eventToProcess)) {
             $this->rideService->markRideInProgress($rideToPatch, $driver);
@@ -101,7 +97,7 @@ class RideTransitionService
      * @throws RideNotFoundException
      * @throws UserNotInDriverRoleException
      */
-    private function patchRideCompleted(RideEventType $eventToProcess, Ride $rideToPatch, AppUser $driver)
+    private function patchRideCompleted(RideEventType $eventToProcess, Ride $rideToPatch, AppUser $driver): void
     {
         if (RideEventType::completed()->equals($eventToProcess)) {
             $this->rideService->markRideCompleted($rideToPatch, $driver);

@@ -44,6 +44,7 @@ class AppLocation
      * AppLocation constructor.
      * @param float $lat
      * @param float $long
+     * @throws \Exception
      */
     public function __construct($lat, $long)
     {
@@ -53,22 +54,27 @@ class AppLocation
         $this->created = new \DateTime();
     }
 
-    public static function cloneFrom(AppLocation $toClone)
+    /**
+     * @param AppLocation $toClone
+     * @return AppLocation
+     * @throws \Exception
+     */
+    public static function cloneFrom(AppLocation $toClone): AppLocation
     {
         return new self($toClone->lat, $toClone->long);
     }
 
-    public function getLat()
+    public function getLat(): float
     {
         return $this->lat;
     }
 
-    public function getLong()
+    public function getLong(): float
     {
         return $this->long;
     }
 
-    public function isSameAs(AppLocation $compareLocation)
+    public function isSameAs(AppLocation $compareLocation): bool
     {
         return (
             ($compareLocation->lat === $this->lat)
@@ -77,12 +83,12 @@ class AppLocation
         );
     }
 
-    public function preDates(AppLocation $compareLocation)
+    public function preDates(AppLocation $compareLocation): bool
     {
         return $this->created < $compareLocation->created;
     }
 
-    public function equals(AppLocation $compareLocation)
+    public function equals(AppLocation $compareLocation): bool
     {
         return $this->id->equals($compareLocation->id);
     }

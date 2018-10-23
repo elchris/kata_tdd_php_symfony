@@ -16,6 +16,7 @@ class UserController extends AppController
      * @Rest\Post("/api/v1/register-user")
      * @param Request $request
      * @return UserDto
+     * @throws \Exception
      */
     public function postAction(Request $request)
     {
@@ -35,7 +36,7 @@ class UserController extends AppController
      * @throws UserNotFoundException
      * @throws UnauthorizedOperationException
      */
-    public function idAction(string $id)
+    public function idAction(string $id): UserDto
     {
         return $this->getUserById($id)->toDto();
     }
@@ -49,7 +50,7 @@ class UserController extends AppController
      * @throws DuplicateRoleAssignmentException
      * @throws UnauthorizedOperationException
      */
-    public function patchAction(string $id, Request $request)
+    public function patchAction(string $id, Request $request): UserDto
     {
         $userToPatch = $this->getUserById($id);
         $this->patchRole($request, $userToPatch);

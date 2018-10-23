@@ -19,9 +19,7 @@ interface RideRepositoryInterface
      */
     public function getRideById(Uuid $id) : Ride;
 
-    public function assignDriverToRide(Ride $ride, AppUser $driver);
+    public function assignDriverToRide(Ride $ride, AppUser $driver): void;
 
-    public function save(Ride $newRide);
-
-    public function saveRide(Ride $newRide);
+    public function saveRide(Ride $newRide): void;
 }

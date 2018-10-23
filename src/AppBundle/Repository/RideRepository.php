@@ -16,7 +16,7 @@ class RideRepository extends AppRepository implements RideRepositoryInterface
         $this->save($ride);
     }
 
-    public function saveRide(Ride $ride)
+    public function saveRide(Ride $ride): void
     {
         $this->save($ride);
     }
@@ -26,7 +26,7 @@ class RideRepository extends AppRepository implements RideRepositoryInterface
      * @return Ride
      * @throws RideNotFoundException
      */
-    public function getRideById(Uuid $id) : Ride
+    public function getRideById(Uuid $id): Ride
     {
         try {
             return $this->em->createQuery(
@@ -39,7 +39,7 @@ class RideRepository extends AppRepository implements RideRepositoryInterface
         }
     }
 
-    public function assignDriverToRide(Ride $ride, AppUser $driver)
+    public function assignDriverToRide(Ride $ride, AppUser $driver): void
     {
         $ride->assignDriver($driver);
         $this->save($ride);

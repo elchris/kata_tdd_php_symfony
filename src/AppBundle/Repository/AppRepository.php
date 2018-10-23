@@ -20,7 +20,7 @@ abstract class AppRepository
         $this->em = $em;
     }
 
-    public function save($object)
+    public function save($object): void
     {
         $this->em->persist($object);
         $this->em->flush();

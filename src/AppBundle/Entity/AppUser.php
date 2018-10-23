@@ -68,6 +68,7 @@ class AppUser extends BaseUser
      * @param string $email
      * @param $username
      * @param $password
+     * @throws \Exception
      */
     public function __construct(
         $firstName = null,
@@ -90,17 +91,17 @@ class AppUser extends BaseUser
     /**
      * @return Uuid
      */
-    public function getId() : Uuid
+    public function getId(): Uuid
     {
-        return $this->id;
+        return parent::getId();
     }
 
-    public function assignRole(AppRole $role)
+    public function assignRole(AppRole $role): void
     {
         $this->appRoles->add($role);
     }
 
-    public function userHasRole(AppRole $role)
+    public function userHasRole(AppRole $role): bool
     {
         $hasRoleCriteria =
         Criteria::create()->andWhere(
@@ -112,17 +113,17 @@ class AppUser extends BaseUser
         return $this->appRoles->matching($hasRoleCriteria)->count() > 0;
     }
 
-    public function isNamed(string $nameToCheck)
+    public function isNamed(string $nameToCheck): bool
     {
         return $this->getFullName() === $nameToCheck;
     }
 
-    public function is(AppUser $userToCompare)
+    public function is(AppUser $userToCompare): bool
     {
         return $this->getId()->equals($userToCompare->getId());
     }
 
-    public function toDto()
+    public function toDto(): UserDto
     {
         return new UserDto(
             $this->id->toString(),
@@ -142,12 +143,12 @@ class AppUser extends BaseUser
         return trim($this->firstName . ' ' . $this->lastName);
     }
 
-    public function getFirstName()
+    public function getFirstName(): string
     {
         return $this->firstName;
     }
 
-    public function getLastName()
+    public function getLastName(): string
     {
         return $this->lastName;
     }

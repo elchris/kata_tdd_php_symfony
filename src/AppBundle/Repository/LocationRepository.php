@@ -13,7 +13,7 @@ class LocationRepository extends AppRepository implements LocationRepositoryInte
      * @param AppLocation $lookupLocation
      * @return AppLocation
      */
-    public function getLocation(AppLocation $lookupLocation)
+    public function getLocation(AppLocation $lookupLocation) : AppLocation
     {
         try {
             return $this
