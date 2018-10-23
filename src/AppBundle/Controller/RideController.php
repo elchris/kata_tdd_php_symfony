@@ -25,8 +25,9 @@ class RideController extends AppController
      * @throws UserNotFoundException
      * @throws UserNotInPassengerRoleException
      * @throws UnauthorizedOperationException
+     * @throws \Exception
      */
-    public function postAction(Request $request)
+    public function postAction(Request $request): RideDto
     {
         $passenger = $this->getUserById(
             $request->get('passengerId')
@@ -48,7 +49,7 @@ class RideController extends AppController
      * @return RideDto
      * @throws RideNotFoundException
      */
-    public function idAction(string $rideId)
+    public function idAction(string $rideId): RideDto
     {
         return $this->getRide($rideId)->toDto();
     }
@@ -59,7 +60,7 @@ class RideController extends AppController
      * @return RideEventType
      * @throws RideNotFoundException
      */
-    public function statusAction(string $rideId)
+    public function statusAction(string $rideId): RideEventType
     {
         return $this->ride()->getRideStatus(
             $this->getRide($rideId)
@@ -77,8 +78,9 @@ class RideController extends AppController
      * @throws UserNotInDriverRoleException
      * @throws ActingDriverIsNotAssignedDriverException
      * @throws UnauthorizedOperationException
+     * @throws \Exception
      */
-    public function patchAction(string $rideId, Request $request)
+    public function patchAction(string $rideId, Request $request): RideDto
     {
         $rideToPatch = $this->getRide($rideId);
         $eventId = $request->get('eventId');
@@ -108,6 +110,7 @@ class RideController extends AppController
      * @param $destinationLat
      * @param $destinationLong
      * @param Ride $rideToPatch
+     * @throws \Exception
      */
     private function patchRideDestination($destinationLat, $destinationLong, Ride $rideToPatch): void
     {

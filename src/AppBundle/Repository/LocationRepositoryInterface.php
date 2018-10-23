@@ -10,5 +10,5 @@ interface LocationRepositoryInterface
      * @param AppLocation $lookupLocation
      * @return AppLocation
      */
-    public function getLocation(AppLocation $lookupLocation);
+    public function getLocation(AppLocation $lookupLocation) : AppLocation;
 }

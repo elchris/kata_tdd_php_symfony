@@ -25,8 +25,9 @@ class LocationService
      * @param $lat
      * @param $long
      * @return AppLocation
+     * @throws \Exception
      */
-    public function getLocation($lat, $long)
+    public function getLocation($lat, $long): AppLocation
     {
         return $this->locationRepository->getLocation(
             new AppLocation(

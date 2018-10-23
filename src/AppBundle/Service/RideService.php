@@ -46,7 +46,7 @@ class RideService
      * @return Ride
      * @throws UserNotInPassengerRoleException
      */
-    public function newRide(AppUser $passenger, AppLocation $departure)
+    public function newRide(AppUser $passenger, AppLocation $departure): Ride
     {
         $this->validateUserHasPassengerRole($passenger);
 
@@ -63,10 +63,10 @@ class RideService
 
     /**
      * @param Uuid $id
-     * @return mixed
+     * @return Ride
      * @throws RideNotFoundException
      */
-    public function getRide(Uuid $id)
+    public function getRide(Uuid $id): Ride
     {
         return $this->rideRepository->getRideById($id);
     }
@@ -85,7 +85,7 @@ class RideService
      * @return RideEventType
      * @throws RideNotFoundException
      */
-    public function getRideStatus(Ride $ride)
+    public function getRideStatus(Ride $ride): RideEventType
     {
         return
             $this->rideEventRepository
@@ -101,7 +101,7 @@ class RideService
      * @throws RideNotFoundException
      * @throws UserNotInDriverRoleException
      */
-    public function acceptRide(Ride $requestedRide, AppUser $driver)
+    public function acceptRide(Ride $requestedRide, AppUser $driver): Ride
     {
         $this->validateRideIsRequested($requestedRide);
 
@@ -129,7 +129,7 @@ class RideService
      * @throws RideNotFoundException
      * @throws ActingDriverIsNotAssignedDriverException
      */
-    public function markRideInProgress(Ride $acceptedRide, AppUser $driver)
+    public function markRideInProgress(Ride $acceptedRide, AppUser $driver): Ride
     {
         $this->validateRideIsAccepted($acceptedRide);
 
@@ -151,7 +151,7 @@ class RideService
      * @throws RideNotFoundException
      * @throws UserNotInDriverRoleException
      */
-    public function markRideCompleted(Ride $rideInProgress, AppUser $driver)
+    public function markRideCompleted(Ride $rideInProgress, AppUser $driver): Ride
     {
         $this->validateRideIsInProgress($rideInProgress);
 
@@ -167,7 +167,7 @@ class RideService
      * @param AppUser $passenger
      * @throws UserNotInPassengerRoleException
      */
-    private function validateUserHasPassengerRole(AppUser $passenger)
+    private function validateUserHasPassengerRole(AppUser $passenger): void
     {
         if (!$passenger->userHasRole(AppRole::passenger())) {
             throw new UserNotInPassengerRoleException();
@@ -178,7 +178,7 @@ class RideService
      * @param AppUser $driver
      * @throws UserNotInDriverRoleException
      */
-    private function validateUserHasDriverRole(AppUser $driver)
+    private function validateUserHasDriverRole(AppUser $driver): void
     {
         if (!$driver->userHasRole(AppRole::driver())) {
             throw new UserNotInDriverRoleException();
@@ -190,7 +190,7 @@ class RideService
      * @throws RideLifeCycleException
      * @throws RideNotFoundException
      */
-    private function validateRideIsRequested(Ride $ride)
+    private function validateRideIsRequested(Ride $ride): void
     {
         if (!RideEventType::requested()->equals(
             $this->getRideStatus($ride)
@@ -204,7 +204,7 @@ class RideService
      * @throws RideLifeCycleException
      * @throws RideNotFoundException
      */
-    private function validateRideIsAccepted(Ride $acceptedRide)
+    private function validateRideIsAccepted(Ride $acceptedRide): void
     {
         if (!RideEventType::accepted()->equals(
             $this->getRideStatus($acceptedRide)
@@ -218,7 +218,7 @@ class RideService
      * @param AppUser $driver
      * @throws ActingDriverIsNotAssignedDriverException
      */
-    private function validateAttemptingDriverIsAssignedDriver(Ride $acceptedRide, AppUser $driver)
+    private function validateAttemptingDriverIsAssignedDriver(Ride $acceptedRide, AppUser $driver): void
     {
         if (!$acceptedRide->isDrivenBy($driver)) {
             throw new ActingDriverIsNotAssignedDriverException();
@@ -230,14 +230,14 @@ class RideService
      * @throws RideLifeCycleException
      * @throws RideNotFoundException
      */
-    private function validateRideIsInProgress(Ride $rideInProgress)
+    private function validateRideIsInProgress(Ride $rideInProgress): void
     {
         if (!RideEventType::inProgress()->equals($this->getRideStatus($rideInProgress))) {
             throw new RideLifeCycleException();
         }
     }
 
-    private function markRide(Ride $ride, AppUser $driver, RideEventType $status)
+    private function markRide(Ride $ride, AppUser $driver, RideEventType $status): void
     {
         $this->rideEventRepository->markRideStatusByActor(
             $ride,

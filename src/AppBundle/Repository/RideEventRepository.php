@@ -15,7 +15,7 @@ class RideEventRepository extends AppRepository implements RideEventRepositoryIn
      * @return RideEvent
      * @throws RideNotFoundException
      */
-    public function getLastEventForRide(Ride $ride)
+    public function getLastEventForRide(Ride $ride): RideEvent
     {
         try {
             return $this->em->createQuery(
@@ -33,7 +33,7 @@ class RideEventRepository extends AppRepository implements RideEventRepositoryIn
         Ride $ride,
         AppUser $actor,
         RideEventType $status
-    ) {
+    ): RideEvent {
         $newEvent = new RideEvent(
             $ride,
             $actor,
@@ -45,7 +45,7 @@ class RideEventRepository extends AppRepository implements RideEventRepositoryIn
         return $newEvent;
     }
 
-    public function markRideStatusByPassenger(Ride $ride, RideEventType $status)
+    public function markRideStatusByPassenger(Ride $ride, RideEventType $status): RideEvent
     {
         $passengerEvent = $ride->getPassengerTransaction($this->getStatusReference($status));
         $this->save($passengerEvent);
@@ -56,7 +56,7 @@ class RideEventRepository extends AppRepository implements RideEventRepositoryIn
      * @param RideEventType $status
      * @return RideEventType
      */
-    private function getStatusReference(RideEventType $status)
+    private function getStatusReference(RideEventType $status) : RideEventType
     {
         /** @var RideEventType $status */
         $status = $this->em->getRepository(
