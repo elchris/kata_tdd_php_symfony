@@ -29,6 +29,7 @@ class FakeUserManager implements UserManagerInterface
      * Creates an empty user instance.
      *
      * @return UserInterface
+     * @throws \Exception
      */
     public function createUser()
     {
