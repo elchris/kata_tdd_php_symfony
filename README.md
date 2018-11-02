@@ -75,6 +75,10 @@ References:
 * https://laravel.com/docs/5.5/homestead#first-steps
 * https://gist.github.com/diegonobre/341eb7b793fc841c0bba3f2b865b8d66
 
+Alternatives:
+
+* https://github.com/msgphp/user-bundle
+
 Testing:
 
 * Implicit:
