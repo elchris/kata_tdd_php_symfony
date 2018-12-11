@@ -18,12 +18,12 @@ What you need:
 Possible OS X Installation: (Adapt to your OS)
 
 * ( Install Brew: https://brew.sh )
-* brew unlink php56 (if you already have php56)
+* brew unlink php@5.6 (if you already have php56)
     * You can later undo this if you wish:
-        * brew unlink php72
-        * brew link php56
-* brew link php72
-    * or brew install php72
+        * brew unlink php@7.2
+        * brew link php@5.6
+* brew link php@7.2
+    * or brew install php@7.2
 * brew install sqlite
 * brew install mysql@5.7
 * brew install composer
@@ -75,6 +75,10 @@ References:
 * https://laravel.com/docs/5.5/homestead#first-steps
 * https://gist.github.com/diegonobre/341eb7b793fc841c0bba3f2b865b8d66
 
+Alternatives:
+
+* https://github.com/msgphp/user-bundle
+
 Testing:
 
 * Implicit:
@@ -83,6 +87,7 @@ Testing:
 Issues:
 
 * https://youtrack.jetbrains.com/issue/WI-40950
+* https://github.com/doctrine/doctrine2/issues/7306
 
 
 Stats:
