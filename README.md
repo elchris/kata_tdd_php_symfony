@@ -18,12 +18,12 @@ What you need:
 Possible OS X Installation: (Adapt to your OS)
 
 * ( Install Brew: https://brew.sh )
-* brew unlink php56 (if you already have php56)
+* brew unlink php@5.6 (if you already have php56)
     * You can later undo this if you wish:
-        * brew unlink php72
-        * brew link php56
-* brew link php72
-    * or brew install php72
+        * brew unlink php@7.2
+        * brew link php@5.6
+* brew link php@7.2
+    * or brew install php@7.2
 * brew install sqlite
 * brew install mysql@5.7
 * brew install composer
