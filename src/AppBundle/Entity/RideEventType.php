@@ -82,7 +82,7 @@ class RideEventType
 
     public function equals(RideEventType $typeToCompare): bool
     {
-        return $this->id === $typeToCompare->getId();
+        return $this->id === $typeToCompare->id;
     }
 
     public function getId(): int

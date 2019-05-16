@@ -88,14 +88,6 @@ class AppUser extends BaseUser
         $this->created = new \DateTime(null, new \DateTimeZone('UTC'));
     }
 
-    /**
-     * @return Uuid
-     */
-    public function getId(): Uuid
-    {
-        return parent::getId();
-    }
-
     public function assignRole(AppRole $role): void
     {
         $this->appRoles->add($role);
