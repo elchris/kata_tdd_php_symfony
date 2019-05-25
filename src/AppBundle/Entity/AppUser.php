@@ -23,4 +23,35 @@ class AppUser //extends BaseUser
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      */
     protected $id;
+    /**
+     * @var string
+     * @ORM\Column(name="first", type="string", nullable=false)
+     */
+    private $first;
+    /**
+     * @var string
+     * @ORM\Column(name="last", type="string", nullable=false)
+     */
+    private $last;
+
+    public function __construct(string $first, string $last)
+    {
+        $this->first = $first;
+        $this->last = $last;
+    }
+
+    public function getId() : Uuid
+    {
+        return $this->id;
+    }
+
+    public function isNamed(string $nameToCheck)
+    {
+        return $nameToCheck === $this->first.' '.$this->last;
+    }
+
+    public function is(AppUser $userToTest)
+    {
+        return $userToTest->id->equals($this->id);
+    }
 }
