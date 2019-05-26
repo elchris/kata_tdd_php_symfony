@@ -16,17 +16,16 @@ class UserDto
      * @var string
      */
     private $last;
-
     /**
-     * UserDto constructor.
-     * @param string $id
-     * @param string $first
-     * @param string $last
+     * @var array
      */
-    public function __construct(string $id, string $first, string $last)
+    private $roles;
+
+    public function __construct(string $id, string $first, string $last, array $roles)
     {
         $this->id = $id;
         $this->first = $first;
         $this->last = $last;
+        $this->roles = $roles;
     }
 }

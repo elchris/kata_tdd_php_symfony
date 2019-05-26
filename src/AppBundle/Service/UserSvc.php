@@ -42,7 +42,7 @@ class UserSvc
         return $this->userRepository->byId($id);
     }
 
-    public function assignRoleToUser(AppUser $user, AppRole $role)
+    public function assignRoleToUser(AppUser $user, AppRole $role) : AppUser
     {
         $user->assignRole(
             $this->userRepository->getRoleReference(
@@ -50,5 +50,6 @@ class UserSvc
             )
         );
         $this->userRepository->saveUser($user);
+        return $user;
     }
 }

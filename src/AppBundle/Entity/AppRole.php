@@ -46,6 +46,15 @@ class AppRole
         return new self(self::DRIVER_ID, self::DRIVER_NAME);
     }
 
+    public static function fromName($roleStringToAssign)
+    {
+        if ($roleStringToAssign === AppRole::PASSENGER_NAME) {
+            return self::passenger();
+        } elseif ($roleStringToAssign === AppRole::DRIVER_NAME) {
+            return self::driver();
+        }
+    }
+
     public function getId()
     {
         return $this->id;
