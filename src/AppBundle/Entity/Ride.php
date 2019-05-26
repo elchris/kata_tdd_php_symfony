@@ -23,6 +23,13 @@ class Ride
     private $passenger;
 
     /**
+     * @var AppUser
+     * @ORM\ManyToOne(targetEntity="AppUser", fetch="EAGER")
+     * @ORM\JoinColumn(name="driverId", referencedColumnName="id")
+     */
+    private $driver;
+
+    /**
      * @var AppLocation
      * @ORM\ManyToOne(targetEntity="AppLocation", fetch="EAGER")
      * @ORM\JoinColumn(name="departureId", referencedColumnName="id")
@@ -43,6 +50,7 @@ class Ride
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      */
     private $id;
+
 
     /**
      * Ride constructor.
@@ -68,7 +76,7 @@ class Ride
         return $rideToTest->id->equals($this->id);
     }
 
-    public function isDestinedFor(AppLocation $locationToCompare)
+    public function isLeavingFrom(AppLocation $locationToCompare)
     {
         return $this->departureLocation->isSameAs($locationToCompare);
     }
@@ -78,12 +86,23 @@ class Ride
         return $this->passenger->is($userToCompare);
     }
 
+    public function isDrivenBy(AppUser $userToCompare)
+    {
+        return $this->driver->is($userToCompare);
+    }
+
     public function toDto() : RideDto
     {
         return new RideDto(
+            $this->id->toString(),
             $this->passenger->getId()->toString(),
             $this->departureLocation->getLat(),
             $this->departureLocation->getLong()
         );
+    }
+
+    public function assignDriver(AppUser $driver)
+    {
+        $this->driver = $driver;
     }
 }

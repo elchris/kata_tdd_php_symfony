@@ -116,27 +116,51 @@ class ApiTester extends \Codeception\Actor
 
     public function getNewPassenger()
     {
+        $first = 'chris passenger';
+        $last = 'holland';
+        $role = AppRole::PASSENGER_NAME;
+
+        return $this->getNewUserWithRole($first, $last, $role);
+    }
+
+    public function getNewDriver()
+    {
+        $first = 'joe driver';
+        $last = 'black';
+        $role = AppRole::DRIVER_NAME;
+
+        return $this->getNewUserWithRole($first, $last, $role);
+    }
+
+    /**
+     * @param string $first
+     * @param string $last
+     * @param string $role
+     * @return mixed
+     */
+    protected function getNewUserWithRole(string $first, string $last, string $role)
+    {
         $response = $this->sendPostApiRequest(
             '/register-user',
             [
-                'first' => 'chris',
-                'last' => 'holland'
+                'first' => $first,
+                'last' => $last
             ]
         );
 
         $this->canSeeResponseContainsJson(
             [
-                'first' => 'chris',
-                'last' => 'holland'
+                'first' => $first,
+                'last' => $last
             ]
         );
 
         $userId = $response['id'];
 
-        $patched = $this->sendPatchApiRequest(
+        $this->sendPatchApiRequest(
             '/user/' . $userId,
             [
-                'role' => AppRole::PASSENGER_NAME
+                'role' => $role
             ]
         );
 

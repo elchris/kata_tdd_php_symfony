@@ -133,6 +133,23 @@ abstract class AppTestCase extends WebTestCase
     }
 
     /**
+     * @return AppUser
+     * @throws NoResultException
+     * @throws NonUniqueResultException
+     */
+    protected function getRepoNewDriver(): AppUser
+    {
+        $newUser = $this->getRepoNewUser();
+        $newUser->assignRole(
+            $this->userRepo->getRoleReference(
+                AppRole::driver()
+            )
+        );
+        $this->userRepo->saveUser($newUser);
+        return $newUser;
+    }
+
+    /**
      * @return AppLocation
      * @throws NonUniqueResultException
      */

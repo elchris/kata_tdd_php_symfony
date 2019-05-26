@@ -2,7 +2,6 @@
 
 namespace Tests\api;
 use ApiTester;
-use AppBundle\Repository\LocationRepository;
 use Tests\AppBundle\Location\LocationRepositoryTest;
 
 class CreateRideCest
@@ -10,6 +9,7 @@ class CreateRideCest
     public function seeNewRideCreated(ApiTester $I)
     {
         $createdPassengerId = $I->getNewPassenger();
+        $createdDriverId = $I->getNewDriver();
 
         $createdRide = $I->sendPostApiRequest(
             '/ride',
@@ -27,5 +27,23 @@ class CreateRideCest
                 'departure_long' => LocationRepositoryTest::HOME_LOCATION_LONG
             ]
         );
+        $createdRideId = $createdRide['id'];
+
+        $I->sendPatchApiRequest(
+            '/ride/'.$createdRideId,
+            [
+                'driverId' => $createdDriverId
+            ]
+        );
+
+        $I->seeResponseContainsJson(
+            [
+                'passenger_id' => $createdPassengerId,
+                'departure_lat' => LocationRepositoryTest::HOME_LOCATION_LAT,
+                'departure_long' => LocationRepositoryTest::HOME_LOCATION_LONG,
+                'driver_id' => $createdDriverId
+            ]
+        );
+
     }
 }

@@ -34,6 +34,6 @@ class RideServiceTest extends AppTestCase
         $retrievedRide = $rideService->byId($newRide->getId());
 
         self::assertTrue($retrievedRide->isRiddenBy($passenger));
-        self::assertTrue($retrievedRide->isDestinedFor($destination));
+        self::assertTrue($retrievedRide->isLeavingFrom($destination));
     }
 }
