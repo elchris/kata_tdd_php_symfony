@@ -20,9 +20,10 @@ class UserRepository extends AppRepository
         parent::__construct($em);
     }
 
-    public function saveUser(AppUser $newUser)
+    public function saveUser(AppUser $newUser) : AppUser
     {
         $this->save($newUser);
+        return $newUser;
     }
 
     /**
