@@ -13,6 +13,12 @@ use Tests\AppBundle\User\FakeUserManager;
 
 abstract class AppTestCase extends WebTestCase
 {
+    const HOME_LOCATION_LAT = 37.773160;
+    const HOME_LOCATION_LONG = -122.432444;
+
+    const WORK_LOCATION_LAT = 37.7721718;
+    const WORK_LOCATION_LONG = -122.4310872;
+
     /** @var  EntityManagerInterface */
     private $em;
 

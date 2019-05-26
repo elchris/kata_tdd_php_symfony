@@ -4,21 +4,19 @@ namespace Tests\AppBundle\Location;
 
 use AppBundle\Entity\AppLocation;
 use AppBundle\Repository\LocationRepository;
+use AppBundle\Service\LocationService;
 use Doctrine\ORM\NonUniqueResultException;
 use Tests\AppBundle\AppTestCase;
 
-class LocationRepositoryTest extends AppTestCase
+class LocationServiceTest extends AppTestCase
 {
     /**
      * @throws NonUniqueResultException
      */
-    public function testCreateNewLocation()
+    public function testGetOrCreateLocation()
     {
-        $locationRepo = new LocationRepository($this->em());
-
-        $retrievedLocation = $locationRepo->getOrCreateLocation(
-            self::HOME_LOCATION_LAT,
-            self::HOME_LOCATION_LONG
+        $locationService = new LocationService(
+            new LocationRepository($this->em())
         );
 
         $lookupLocation = new AppLocation(
@@ -26,6 +24,11 @@ class LocationRepositoryTest extends AppTestCase
             self::HOME_LOCATION_LONG
         );
 
+        /** @var AppLocation $retrievedLocation */
+        $retrievedLocation = $locationService->getLocation(
+            self::HOME_LOCATION_LAT,
+            self::HOME_LOCATION_LONG
+        );
         self::assertTrue($retrievedLocation->isSameAs($lookupLocation));
     }
 }
