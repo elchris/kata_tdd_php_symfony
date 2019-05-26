@@ -2,6 +2,7 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
@@ -38,6 +39,15 @@ class UserRepository extends AppRepository
             'select u from E:AppUser u where u.id = :id'
         )
         ->setParameter('id', $userId)
+        ->getSingleResult();
+    }
+
+    public function getRoleReference(AppRole $roleToGet) : AppRole
+    {
+        return $this->em->createQuery(
+            'select r from E:AppRole r where r = :role'
+        )
+        ->setParameter('role', $roleToGet)
         ->getSingleResult();
     }
 }
