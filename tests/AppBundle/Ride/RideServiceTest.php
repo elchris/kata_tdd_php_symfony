@@ -3,11 +3,12 @@
 namespace Tests\AppBundle\Ride;
 
 use AppBundle\Entity\Ride;
+use AppBundle\Service\RideService;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Tests\AppBundle\AppTestCase;
 
-class RideRepositoryTest extends AppTestCase
+class RideServiceTest extends AppTestCase
 {
     /**
      * @throws NoResultException
@@ -17,16 +18,22 @@ class RideRepositoryTest extends AppTestCase
     public function testCreateNewRide()
     {
         $passenger = $this->getRepoNewPassenger();
-        $departureLocation = $this->getHomeLocation();
-        $newRide = new Ride(
-            $passenger,
-            $departureLocation
-        );
-        $this->rideRepository->saveRide($newRide);
-        $retrievedRide = $this->rideRepository->byId($newRide->getId());
+        $destination = $this->getHomeLocation();
 
-        self::assertTrue($retrievedRide->is($newRide));
-        self::assertTrue($retrievedRide->isDestinedFor($departureLocation));
+        $rideService = new RideService(
+            $this->rideRepository
+        );
+
+        /** @var Ride $newRide */
+        $newRide = $rideService->newRide(
+            $passenger,
+            $destination
+        );
+
+        /** @var Ride $retrievedRide */
+        $retrievedRide = $rideService->byId($newRide->getId());
+
         self::assertTrue($retrievedRide->isRiddenBy($passenger));
+        self::assertTrue($retrievedRide->isDestinedFor($destination));
     }
 }

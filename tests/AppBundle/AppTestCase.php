@@ -6,6 +6,7 @@ use AppBundle\Entity\AppLocation;
 use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
 use AppBundle\Repository\LocationRepository;
+use AppBundle\Repository\RideRepository;
 use AppBundle\Repository\UserRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
@@ -39,6 +40,10 @@ abstract class AppTestCase extends WebTestCase
      * @var LocationRepository
      */
     protected $locationRepo;
+    /**
+     * @var RideRepository
+     */
+    protected $rideRepository;
 
     protected function setUp()
     {
@@ -53,6 +58,7 @@ abstract class AppTestCase extends WebTestCase
 
         $this->userRepo = new UserRepository($this->em());
         $this->locationRepo = new LocationRepository($this->em());
+        $this->rideRepository = new RideRepository($this->em());
     }
 
     protected function em()
