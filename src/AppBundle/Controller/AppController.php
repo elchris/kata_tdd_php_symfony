@@ -3,6 +3,8 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Repository\UserRepository;
+use AppBundle\Service\UserSvc;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\UserBundle\Model\UserManagerInterface;
@@ -24,6 +26,15 @@ class AppController extends AbstractFOSRestController
         /** @var Uuid $uuid */
         $uuid = Uuid::fromString($id);
         return $uuid;
+    }
+
+    protected function user() : UserSvc
+    {
+        return new UserSvc(
+            new UserRepository(
+                $this->em()
+            )
+        );
     }
 
     /**

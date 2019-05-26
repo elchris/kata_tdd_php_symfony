@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\DTO\UserDto;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use FOS\UserBundle\Model\User as BaseUser;
@@ -53,5 +54,14 @@ class AppUser //extends BaseUser
     public function is(AppUser $userToTest)
     {
         return $userToTest->id->equals($this->id);
+    }
+
+    public function toDto() : UserDto
+    {
+        return new UserDto(
+            $this->id->toString(),
+            $this->first,
+            $this->last
+        );
     }
 }
