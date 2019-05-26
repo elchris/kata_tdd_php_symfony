@@ -1,5 +1,6 @@
 <?php
 
+use AppBundle\Entity\AppRole;
 use Codeception\Util\HttpCode;
 
 /**
@@ -111,5 +112,34 @@ class ApiTester extends \Codeception\Actor
             'token_type' => 'bearer',
             'access_token' => $token
         ];
+    }
+
+    public function getNewPassenger()
+    {
+        $response = $this->sendPostApiRequest(
+            '/register-user',
+            [
+                'first' => 'chris',
+                'last' => 'holland'
+            ]
+        );
+
+        $this->canSeeResponseContainsJson(
+            [
+                'first' => 'chris',
+                'last' => 'holland'
+            ]
+        );
+
+        $userId = $response['id'];
+
+        $patched = $this->sendPatchApiRequest(
+            '/user/' . $userId,
+            [
+                'role' => AppRole::PASSENGER_NAME
+            ]
+        );
+
+        return $userId;
     }
 }
