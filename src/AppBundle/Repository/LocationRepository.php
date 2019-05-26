@@ -3,7 +3,6 @@
 namespace AppBundle\Repository;
 
 use AppBundle\Entity\AppLocation;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 
@@ -11,12 +10,12 @@ class LocationRepository extends AppRepository
 {
     /**
      * @param float $lat
-     * @param int $long
+     * @param float $long
      * @return AppLocation
      * @throws NonUniqueResultException
      * @throws \Exception
      */
-    public function getOrCreateLocation(float $lat, int $long) : AppLocation
+    public function getOrCreateLocation(float $lat, float $long) : AppLocation
     {
         try {
             return $this->em->createQuery(

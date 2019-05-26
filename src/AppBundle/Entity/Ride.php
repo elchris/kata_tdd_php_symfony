@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\DTO\RideDto;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 
@@ -75,5 +76,14 @@ class Ride
     public function isRiddenBy(AppUser $userToCompare)
     {
         return $this->passenger->is($userToCompare);
+    }
+
+    public function toDto() : RideDto
+    {
+        return new RideDto(
+            $this->passenger->getId()->toString(),
+            $this->departureLocation->getLat(),
+            $this->departureLocation->getLong()
+        );
     }
 }

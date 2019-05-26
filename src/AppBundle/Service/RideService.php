@@ -28,15 +28,15 @@ class RideService
 
     /**
      * @param AppUser $passenger
-     * @param AppLocation $destination
+     * @param AppLocation $departureLocation
      * @return Ride
      * @throws \Exception
      */
-    public function newRide(AppUser $passenger, AppLocation $destination) : Ride
+    public function newRide(AppUser $passenger, AppLocation $departureLocation) : Ride
     {
         $newRide = new Ride(
             $passenger,
-            $destination
+            $departureLocation
         );
         $this->rideRepository->saveRide($newRide);
         return $newRide;

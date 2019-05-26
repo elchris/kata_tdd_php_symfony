@@ -43,10 +43,10 @@ class AppLocation
     /**
      * AppLocation constructor.
      * @param float $lat
-     * @param int $long
+     * @param float $long
      * @throws \Exception
      */
-    public function __construct(float $lat, int $long)
+    public function __construct(float $lat, float $long)
     {
         $this->id = Uuid::uuid4();
         $this->lat = $lat;
@@ -61,5 +61,15 @@ class AppLocation
             &&
             ($locationToCompare->long === $this->long)
             ;
+    }
+
+    public function getLat() : float
+    {
+        return $this->lat;
+    }
+
+    public function getLong() : float
+    {
+        return $this->long;
     }
 }

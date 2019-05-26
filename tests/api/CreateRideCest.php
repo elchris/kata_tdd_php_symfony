@@ -22,9 +22,9 @@ class CreateRideCest
 
         $I->seeResponseContainsJson(
             [
-                'passengerId' => $createdPassengerId,
-                'departureLat' => LocationRepositoryTest::HOME_LOCATION_LAT,
-                'departureLong' => LocationRepositoryTest::HOME_LOCATION_LONG
+                'passenger_id' => $createdPassengerId,
+                'departure_lat' => LocationRepositoryTest::HOME_LOCATION_LAT,
+                'departure_long' => LocationRepositoryTest::HOME_LOCATION_LONG
             ]
         );
     }

@@ -24,11 +24,11 @@ class LocationService
 
     /**
      * @param float $lat
-     * @param int $long
+     * @param float $long
      * @return AppLocation
      * @throws NonUniqueResultException
      */
-    public function getLocation(float $lat, int $long) : AppLocation
+    public function getLocation(float $lat, float $long) : AppLocation
     {
         return $this->locationRepository->getOrCreateLocation($lat, $long);
     }
