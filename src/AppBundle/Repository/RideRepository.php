@@ -9,7 +9,7 @@ use Ramsey\Uuid\Uuid;
 
 class RideRepository extends AppRepository
 {
-    public function saveRide(Ride $rideToSave)
+    public function saveRide(Ride $rideToSave) : Ride
     {
         $this->save($rideToSave);
         return $rideToSave;
