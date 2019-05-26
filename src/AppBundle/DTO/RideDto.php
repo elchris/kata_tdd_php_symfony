@@ -20,6 +20,10 @@ class RideDto
      * @var float
      */
     private $departureLong;
+    /**
+     * @var string
+     */
+    private $driverId;
 
     /**
      * RideDto constructor.
@@ -27,12 +31,19 @@ class RideDto
      * @param string $passengerId
      * @param float $lat
      * @param float $long
+     * @param string $driverId
      */
-    public function __construct(string $id, string $passengerId, float $lat, float $long)
-    {
+    public function __construct(
+        string $id,
+        string $passengerId,
+        float $lat,
+        float $long,
+        ?string $driverId
+    ) {
         $this->id = $id;
         $this->passengerId = $passengerId;
         $this->departureLat = $lat;
         $this->departureLong = $long;
+        $this->driverId = $driverId;
     }
 }

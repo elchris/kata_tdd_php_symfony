@@ -31,4 +31,28 @@ class RideController extends AppController
 
         return $this->ride()->newRide($passenger, $departure)->toDto();
     }
+
+    /**
+     * @Rest\Patch("/api/v1/ride/{rideId}")
+     * @param string $rideId
+     * @param Request $request
+     * @return RideDto
+     * @throws NoResultException
+     * @throws NonUniqueResultException
+     */
+    public function patchRide(string $rideId, Request $request) : RideDto
+    {
+        $rideToPatch = $this->ride()->byId(
+            $this->id($rideId)
+        );
+
+        $driverToAssignToRide = $this->user()->byId(
+            $this->id($request->get('driverId'))
+        );
+
+        return $this->ride()->assignDriverToRide(
+            $rideToPatch,
+            $driverToAssignToRide
+        )->toDto();
+    }
 }

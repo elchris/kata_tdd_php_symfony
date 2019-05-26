@@ -44,6 +44,5 @@ class CreateRideCest
                 'driver_id' => $createdDriverId
             ]
         );
-
     }
 }

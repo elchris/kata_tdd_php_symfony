@@ -93,11 +93,15 @@ class Ride
 
     public function toDto() : RideDto
     {
+
+        $driverId = ! is_null($this->driver) ? $this->driver->getId()->toString() : null;
+
         return new RideDto(
             $this->id->toString(),
             $this->passenger->getId()->toString(),
             $this->departureLocation->getLat(),
-            $this->departureLocation->getLong()
+            $this->departureLocation->getLong(),
+            $driverId
         );
     }
 
