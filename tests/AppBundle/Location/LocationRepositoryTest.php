@@ -3,7 +3,6 @@
 namespace Tests\AppBundle\Location;
 
 use AppBundle\Entity\AppLocation;
-use AppBundle\Repository\LocationRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Tests\AppBundle\AppTestCase;
 
@@ -14,12 +13,7 @@ class LocationRepositoryTest extends AppTestCase
      */
     public function testCreateNewLocation()
     {
-        $locationRepo = new LocationRepository($this->em());
-
-        $retrievedLocation = $locationRepo->getOrCreateLocation(
-            self::HOME_LOCATION_LAT,
-            self::HOME_LOCATION_LONG
-        );
+        $retrievedLocation = $this->getHomeLocation();
 
         $lookupLocation = new AppLocation(
             self::HOME_LOCATION_LAT,

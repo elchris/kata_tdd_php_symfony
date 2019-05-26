@@ -2,7 +2,13 @@
 
 namespace Tests\AppBundle;
 
+use AppBundle\Entity\AppLocation;
 use AppBundle\Entity\AppRole;
+use AppBundle\Entity\AppUser;
+use AppBundle\Repository\LocationRepository;
+use AppBundle\Repository\UserRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use FOS\UserBundle\Model\UserManagerInterface;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -25,6 +31,15 @@ abstract class AppTestCase extends WebTestCase
     /** @var UserManagerInterface */
     private $userManager;
 
+    /**
+     * @var UserRepository
+     */
+    protected $userRepo;
+    /**
+     * @var LocationRepository
+     */
+    protected $locationRepo;
+
     protected function setUp()
     {
         parent::setUp();
@@ -33,9 +48,11 @@ abstract class AppTestCase extends WebTestCase
         $this->userManager = new FakeUserManager($this->em());
         $this->setUpEntityManager();
 
-        //TODO: add these roles to migration
         $this->save(AppRole::passenger());
         $this->save(AppRole::driver());
+
+        $this->userRepo = new UserRepository($this->em());
+        $this->locationRepo = new LocationRepository($this->em());
     }
 
     protected function em()
@@ -69,5 +86,57 @@ abstract class AppTestCase extends WebTestCase
     {
         $this->expectException($class);
         $this->expectExceptionMessage($message);
+    }
+
+    /**
+     * @return AppUser
+     * @throws NoResultException
+     * @throws NonUniqueResultException
+     */
+    protected function getRepoNewUser(): AppUser
+    {
+        $newUser = new AppUser(
+            'chris',
+            'holland'
+        );
+        $this->userRepo->saveUser($newUser);
+        /** @var AppUser $retrievedUser */
+        $retrievedUser = $this->userRepo->byId($newUser->getId());
+        self::assertTrue($retrievedUser->is($newUser));
+
+        return $retrievedUser;
+    }
+
+    /**
+     * @return AppUser
+     * @throws NoResultException
+     * @throws NonUniqueResultException
+     */
+    protected function getRepoNewPassenger(): AppUser
+    {
+        $newUser = $this->getRepoNewUser();
+        $newUser->assignRole(
+            $this->userRepo->getRoleReference(
+                AppRole::passenger()
+            )
+        );
+
+        $this->userRepo->saveUser($newUser);
+
+        return $newUser;
+    }
+
+    /**
+     * @return AppLocation
+     * @throws NonUniqueResultException
+     */
+    protected function getHomeLocation(): AppLocation
+    {
+        $retrievedLocation = $this->locationRepo->getOrCreateLocation(
+            self::HOME_LOCATION_LAT,
+            self::HOME_LOCATION_LONG
+        );
+
+        return $retrievedLocation;
     }
 }
