@@ -2,6 +2,7 @@
 
 namespace AppBundle\Service;
 
+use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
 use AppBundle\Repository\UserRepository;
 use Doctrine\ORM\NonUniqueResultException;
@@ -32,12 +33,22 @@ class UserSvc
 
     /**
      * @param Uuid $id
-     * @return AppUser|mixed
+     * @return AppUser
      * @throws NoResultException
      * @throws NonUniqueResultException
      */
-    public function byId(Uuid $id)
+    public function byId(Uuid $id) : AppUser
     {
         return $this->userRepository->byId($id);
+    }
+
+    public function assignRoleToUser(AppUser $user, AppRole $role)
+    {
+        $user->assignRole(
+            $this->userRepository->getRoleReference(
+                $role
+            )
+        );
+        $this->userRepository->saveUser($user);
     }
 }

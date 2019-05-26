@@ -2,6 +2,7 @@
 
 namespace Tests\AppBundle;
 
+use AppBundle\Entity\AppRole;
 use FOS\UserBundle\Model\UserManagerInterface;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -25,6 +26,10 @@ abstract class AppTestCase extends WebTestCase
         $this->em = static::$kernel->getContainer()->get('doctrine')->getManager();
         $this->userManager = new FakeUserManager($this->em());
         $this->setUpEntityManager();
+
+        //TODO: add these roles to migration
+        $this->save(AppRole::passenger());
+        $this->save(AppRole::driver());
     }
 
     protected function em()
