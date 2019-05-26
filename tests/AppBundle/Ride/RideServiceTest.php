@@ -2,6 +2,8 @@
 
 namespace Tests\AppBundle\Ride;
 
+use AppBundle\Entity\AppLocation;
+use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
 use AppBundle\Service\RideService;
 use Doctrine\ORM\NonUniqueResultException;
@@ -19,21 +21,51 @@ class RideServiceTest extends AppTestCase
     {
         $passenger = $this->getRepoNewPassenger();
         $destination = $this->getHomeLocation();
+        $retrievedRide = $this->getServiceNewRide($passenger, $destination);
 
-        $rideService = new RideService(
-            $this->rideRepository
+        self::assertTrue($retrievedRide->isRiddenBy($passenger));
+        self::assertTrue($retrievedRide->isLeavingFrom($destination));
+    }
+
+    /**
+     * @throws NoResultException
+     * @throws NonUniqueResultException
+     */
+    public function testAssignDriverToRide()
+    {
+        $ride = $this->getServiceNewRide(
+            $this->getRepoNewPassenger(),
+            $this->getHomeLocation()
         );
 
+        $driver = $this->getRepoNewDriver();
+        $this->rideService->assignDriverToRide($ride, $driver);
+        $retrievedRide = $this->rideService->byId($ride->getId());
+
+        self::assertTrue($retrievedRide->isDrivenBy($driver));
+    }
+
+    /**
+     * @param AppUser $passenger
+     * @param AppLocation $destination
+     * @return Ride
+     * @throws NoResultException
+     * @throws NonUniqueResultException
+     * @throws \Exception
+     */
+    protected function getServiceNewRide(
+        AppUser $passenger,
+        AppLocation $destination
+    ): Ride {
         /** @var Ride $newRide */
-        $newRide = $rideService->newRide(
+        $newRide = $this->rideService->newRide(
             $passenger,
             $destination
         );
 
         /** @var Ride $retrievedRide */
-        $retrievedRide = $rideService->byId($newRide->getId());
+        $retrievedRide = $this->rideService->byId($newRide->getId());
 
-        self::assertTrue($retrievedRide->isRiddenBy($passenger));
-        self::assertTrue($retrievedRide->isLeavingFrom($destination));
+        return $retrievedRide;
     }
 }
