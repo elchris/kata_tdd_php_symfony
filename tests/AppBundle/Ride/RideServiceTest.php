@@ -5,7 +5,6 @@ namespace Tests\AppBundle\Ride;
 use AppBundle\Entity\AppLocation;
 use AppBundle\Entity\AppUser;
 use AppBundle\Entity\Ride;
-use AppBundle\Service\RideService;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Tests\AppBundle\AppTestCase;
