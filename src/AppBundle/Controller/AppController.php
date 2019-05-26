@@ -15,11 +15,11 @@ use AppBundle\Service\RideService;
 use AppBundle\Service\RideTransitionService;
 use AppBundle\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
-use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\UserBundle\Model\UserManagerInterface;
 use Ramsey\Uuid\Uuid;
 
-class AppController extends FOSRestController
+class AppController extends AbstractFOSRestController
 {
     /** @var LocationService $locationService */
     private $locationService;
