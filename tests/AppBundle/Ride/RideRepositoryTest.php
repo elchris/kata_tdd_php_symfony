@@ -8,6 +8,7 @@ use AppBundle\Entity\Ride;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Tests\AppBundle\AppTestCase;
+use Tests\AppBundle\Location\LocationRepositoryTest;
 
 class RideRepositoryTest extends AppTestCase
 {
@@ -35,19 +36,34 @@ class RideRepositoryTest extends AppTestCase
      */
     public function testAssignDriverToRide()
     {
-        $rideWithPassengerAndDestination = $this->getRepoNewRideForPassengerAndDeparture(
-            $this->getRepoNewPassenger(),
-            $this->getHomeLocation()
-        );
-
         $newDriver = $this->getRepoNewDriver();
-        $rideWithPassengerAndDestination->assignDriver(
-            $newDriver
-        );
-        $this->rideRepository->saveRide($rideWithPassengerAndDestination);
-        $retrievedRide = $this->rideRepository->byId($rideWithPassengerAndDestination->getId());
+
+        $retrievedRide = $this->getRepoNewRideWithPassengerDepartureAndDriver($newDriver);
 
         self::assertTrue($retrievedRide->isDrivenBy($newDriver));
+    }
+
+    /**
+     * @throws NoResultException
+     * @throws NonUniqueResultException
+     */
+    public function testAssignDestinationToRide()
+    {
+        $ride = $this->getRepoNewRideWithPassengerDepartureAndDriver($this->getRepoNewDriver());
+
+        $ride->assignDestination(
+            $this->getWorkLocation()
+        );
+
+        $this->rideRepository->saveRide($ride);
+        $retrievedRide = $this->rideRepository->byId($ride->getId());
+
+        self::assertTrue($retrievedRide->isDestinedFor(
+            new AppLocation(
+                LocationRepositoryTest::WORK_LOCATION_LAT,
+                LocationRepositoryTest::WORK_LOCATION_LONG
+            )
+        ));
     }
 
     /**
@@ -68,6 +84,28 @@ class RideRepositoryTest extends AppTestCase
         );
         $this->rideRepository->saveRide($newRide);
         $retrievedRide = $this->rideRepository->byId($newRide->getId());
+
+        return $retrievedRide;
+    }
+
+    /**
+     * @param AppUser $newDriver
+     * @return Ride
+     * @throws NoResultException
+     * @throws NonUniqueResultException
+     */
+    protected function getRepoNewRideWithPassengerDepartureAndDriver(AppUser $newDriver): Ride
+    {
+        $rideWithPassengerAndDeparture = $this->getRepoNewRideForPassengerAndDeparture(
+            $this->getRepoNewPassenger(),
+            $this->getHomeLocation()
+        );
+
+        $rideWithPassengerAndDeparture->assignDriver(
+            $newDriver
+        );
+        $this->rideRepository->saveRide($rideWithPassengerAndDeparture);
+        $retrievedRide = $this->rideRepository->byId($rideWithPassengerAndDeparture->getId());
 
         return $retrievedRide;
     }

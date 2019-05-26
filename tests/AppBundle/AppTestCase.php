@@ -163,11 +163,21 @@ abstract class AppTestCase extends WebTestCase
      */
     protected function getHomeLocation(): AppLocation
     {
-        $retrievedLocation = $this->locationRepo->getOrCreateLocation(
+        return $this->locationRepo->getOrCreateLocation(
             self::HOME_LOCATION_LAT,
             self::HOME_LOCATION_LONG
         );
+    }
 
-        return $retrievedLocation;
+    /**
+     * @return AppLocation
+     * @throws NonUniqueResultException
+     */
+    protected function getWorkLocation(): AppLocation
+    {
+        return $this->locationRepo->getOrCreateLocation(
+            self::WORK_LOCATION_LAT,
+            self::WORK_LOCATION_LONG
+        );
     }
 }

@@ -37,6 +37,13 @@ class Ride
     private $departureLocation;
 
     /**
+     * @var AppLocation
+     * @ORM\ManyToOne(targetEntity="AppLocation", fetch="EAGER")
+     * @ORM\JoinColumn(name="destinationId", referencedColumnName="id")
+     */
+    private $destinationLocation;
+
+    /**
      * @var \DateTime
      * @ORM\Column(name="created", type="datetime", nullable=false)
      */
@@ -108,5 +115,15 @@ class Ride
     public function assignDriver(AppUser $driver)
     {
         $this->driver = $driver;
+    }
+
+    public function assignDestination(AppLocation $destination)
+    {
+        $this->destinationLocation = $destination;
+    }
+
+    public function isDestinedFor(AppLocation $locationToCompare)
+    {
+        return $locationToCompare->isSameAs($this->destinationLocation);
     }
 }
