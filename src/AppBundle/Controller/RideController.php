@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\DTO\RideDto;
+use AppBundle\Entity\AppLocation;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,6 +40,7 @@ class RideController extends AppController
      * @return RideDto
      * @throws NoResultException
      * @throws NonUniqueResultException
+     * @throws \Exception
      */
     public function patchRide(string $rideId, Request $request) : RideDto
     {
@@ -46,13 +48,32 @@ class RideController extends AppController
             $this->id($rideId)
         );
 
-        $driverToAssignToRide = $this->user()->byId(
-            $this->id($request->get('driverId'))
-        );
+        $driverId = $request->get('driverId');
+        if (! is_null($driverId)) {
+            $driverToAssignToRide = $this->user()->byId(
+                $this->id($driverId)
+            );
 
-        return $this->ride()->assignDriverToRide(
-            $rideToPatch,
-            $driverToAssignToRide
-        )->toDto();
+            return $this->ride()->assignDriverToRide(
+                $rideToPatch,
+                $driverToAssignToRide
+            )->toDto();
+        }
+
+        $destinationLat = $request->get('destinationLat');
+        $destinationLong = $request->get('destinationLong');
+
+        if (! is_null($destinationLat)
+            &&
+            ! is_null($destinationLong)
+        ) {
+            return $this->ride()->assignDestinationToRide(
+                $rideToPatch,
+                $this->location()->getLocation(
+                    $destinationLat,
+                    $destinationLong
+                )
+            )->toDto();
+        }
     }
 }

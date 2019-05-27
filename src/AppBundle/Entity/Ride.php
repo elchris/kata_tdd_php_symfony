@@ -102,13 +102,21 @@ class Ride
     {
 
         $driverId = ! is_null($this->driver) ? $this->driver->getId()->toString() : null;
+        $destinationLat = null;
+        $destinationLong = null;
+        if (! is_null($this->destinationLocation)) {
+            $destinationLat = $this->destinationLocation->getLat();
+            $destinationLong = $this->destinationLocation->getLong();
+        }
 
         return new RideDto(
             $this->id->toString(),
             $this->passenger->getId()->toString(),
             $this->departureLocation->getLat(),
             $this->departureLocation->getLong(),
-            $driverId
+            $driverId,
+            $destinationLat,
+            $destinationLong
         );
     }
 
