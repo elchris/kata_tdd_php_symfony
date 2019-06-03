@@ -92,11 +92,17 @@ class Ride
 
     public function toDto() : RideDto
     {
+
+        $driverId = $this->hasDriver()
+                    ? $this->driver->getId()->toString()
+                    : null;
+
         return new RideDto(
             $this->id->toString(),
             $this->passenger->getId()->toString(),
             $this->departure->getLat(),
-            $this->departure->getLong()
+            $this->departure->getLong(),
+            $driverId
         );
     }
 
@@ -108,5 +114,13 @@ class Ride
     public function isDrivenBy(AppUser $driver) : bool
     {
         return $this->driver->is($driver);
+    }
+
+    /**
+     * @return bool
+     */
+    private function hasDriver(): bool
+    {
+        return !is_null($this->driver);
     }
 }
