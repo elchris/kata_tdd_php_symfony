@@ -3,6 +3,7 @@
 namespace Tests\AppBundle;
 
 use AppBundle\Entity\AppRole;
+use AppBundle\Repository\LocationRepository;
 use AppBundle\Repository\UserRepository;
 use AppBundle\Service\UserSvc;
 use FOS\UserBundle\Model\UserManagerInterface;
@@ -28,6 +29,16 @@ abstract class AppTestCase extends WebTestCase
      * @var UserSvc
      */
     protected $userService;
+    /**
+     * @var LocationRepository
+     */
+    protected $locationRepository;
+
+    const HOME_LOCATION_LAT = 37.773160;
+    const HOME_LOCATION_LONG = -122.432444;
+
+    const WORK_LOCATION_LAT = 37.7721718;
+    const WORK_LOCATION_LONG = -122.4310872;
 
     protected function setUp()
     {
@@ -39,6 +50,10 @@ abstract class AppTestCase extends WebTestCase
 
         $this->userRepository = new UserRepository($this->em());
         $this->userService = new UserSvc($this->userRepository);
+        $this->locationRepository = new LocationRepository(
+            $this->em()
+        );
+
 
         //TODO: add roles to migration, or manually to DB table
         $this->save(AppRole::passenger());
