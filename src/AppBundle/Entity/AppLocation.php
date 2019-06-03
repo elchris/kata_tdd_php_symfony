@@ -83,4 +83,9 @@ class AppLocation
             ($this->long === $locationToCompare->long)
         );
     }
+
+    public function is(AppLocation $locationToCheck)
+    {
+        return $locationToCheck->id->equals($this->id);
+    }
 }
