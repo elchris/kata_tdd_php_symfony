@@ -82,7 +82,8 @@ class AppUser //extends BaseUser
         return new UserDto(
             $this->id->toString(),
             $this->first,
-            $this->last
+            $this->last,
+            $this->userRoles->toArray()
         );
     }
 

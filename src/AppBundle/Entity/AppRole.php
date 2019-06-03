@@ -13,6 +13,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class AppRole
 {
+    const PASSENGER = 'Passenger';
+    const DRIVER = 'Driver';
+    const PASSENGER_ID = 1;
+    const DRIVER_ID = 2;
     /**
      * @var int
      * @ORM\Id()
@@ -33,12 +37,26 @@ class AppRole
     
     public static function passenger()
     {
-        return new self(1, 'Passenger');
+        return new self(self::PASSENGER_ID, self::PASSENGER);
     }
 
     public static function driver()
     {
-        return new self(2, 'Driver');
+        return new self(self::DRIVER_ID, self::DRIVER);
+    }
+
+    public static function fromName(string $roleName)
+    {
+        $role = null;
+        switch ($roleName) {
+            case self::PASSENGER:
+                $role = self::passenger();
+                break;
+            case self::DRIVER:
+                $role = self::driver();
+                break;
+        }
+        return $role;
     }
 
     public function getId() : int
