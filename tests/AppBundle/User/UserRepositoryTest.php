@@ -4,7 +4,6 @@ namespace Tests\AppBundle\User;
 
 use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
-use AppBundle\Repository\UserRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Exception;
@@ -33,10 +32,6 @@ class UserRepositoryTest extends AppTestCase
      */
     public function testAssignPassengerRoleToUser()
     {
-        //TODO: add roles to migration, or manually to DB table
-        $this->save(AppRole::passenger());
-        $this->save(AppRole::driver());
-
         $user = $this->getRepoSavedUser();
 
         $user->assignRole(

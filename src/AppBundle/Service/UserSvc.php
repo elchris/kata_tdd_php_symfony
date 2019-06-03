@@ -2,6 +2,7 @@
 
 namespace AppBundle\Service;
 
+use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
 use AppBundle\Repository\UserRepository;
 use Exception;
@@ -38,5 +39,15 @@ class UserSvc
     public function byId(Uuid $userId)
     {
         return $this->userRepository->byId($userId);
+    }
+
+    public function assignRoleToUser(AppUser $user, AppRole $roleToAssign) : AppUser
+    {
+        $user->assignRole(
+            $this->userRepository->getRoleReference(
+                $roleToAssign
+            )
+        );
+        return $this->userRepository->saveUser($user);
     }
 }
