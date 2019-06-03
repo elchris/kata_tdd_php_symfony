@@ -117,18 +117,42 @@ class ApiTester extends \Codeception\Actor
 
     public function createPassengerAndGetId()
     {
+        $firstName = 'chris';
+        $lastName = 'holland';
+        $roleToAssign = AppRole::PASSENGER;
+
+        return $this->createUserWithRoleAndGetId($firstName, $lastName, $roleToAssign);
+    }
+
+    public function createDriverAndGetId()
+    {
+        $firstName = 'driver';
+        $lastName = 'dude';
+        $roleToAssign = AppRole::DRIVER;
+
+        return $this->createUserWithRoleAndGetId($firstName, $lastName, $roleToAssign);
+    }
+
+    /**
+     * @param string $firstName
+     * @param string $lastName
+     * @param string $roleToAssign
+     * @return mixed
+     */
+    private function createUserWithRoleAndGetId(string $firstName, string $lastName, string $roleToAssign)
+    {
         $createdUser = $this->sendPostApiRequest(
             '/user',
             [
-                'first' => 'chris',
-                'last' => 'holland'
+                'first' => $firstName,
+                'last' => $lastName
             ]
         );
 
         $this->seeResponseContainsJson(
             [
-                'first' => 'chris',
-                'last' => 'holland'
+                'first' => $firstName,
+                'last' => $lastName
             ]
         );
 
@@ -137,7 +161,7 @@ class ApiTester extends \Codeception\Actor
         $this->sendPatchApiRequest(
             '/user/' . $userId,
             [
-                'role' => AppRole::PASSENGER
+                'role' => $roleToAssign
             ]
         );
 

@@ -35,6 +35,14 @@ class Ride
     private $passenger;
 
     /**
+     * @var AppUser
+     * @ORM\ManyToOne(targetEntity="AppUser", fetch="EAGER")
+     * @ORM\JoinColumn(name="driverId", referencedColumnName="id")
+     */
+
+    private $driver;
+
+    /**
      * @var AppLocation
      * @ORM\ManyToOne(targetEntity="AppLocation", fetch="EAGER")
      * @ORM\JoinColumn(name="departureId", referencedColumnName="id")
@@ -46,6 +54,7 @@ class Ride
      * @ORM\Column(name="created_utc", type="datetime", nullable=false)
      */
     private $createdUTC;
+
 
     /**
      * Ride constructor.
@@ -89,5 +98,15 @@ class Ride
             $this->departure->getLat(),
             $this->departure->getLong()
         );
+    }
+
+    public function assignDriver(AppUser $driver) : void
+    {
+        $this->driver = $driver;
+    }
+
+    public function isDrivenBy(AppUser $driver) : bool
+    {
+        return $this->driver->is($driver);
     }
 }

@@ -130,14 +130,18 @@ abstract class AppTestCase extends WebTestCase
      */
     protected function getRepoPassenger(): AppUser
     {
-        $user = $this->getRepoSavedUser();
+        $roleToAssign = AppRole::passenger();
+        return $this->getRepoUserWithRole($roleToAssign);
+    }
 
-        $user->assignRole(
-            $this->userRepository->getRoleReference(
-                AppRole::passenger()
-            )
-        );
-        return $this->userRepository->saveUser($user);
+    /**
+     * @return AppUser
+     * @throws Exception
+     */
+    protected function getRepoDriver(): AppUser
+    {
+        $roleToAssign = AppRole::driver();
+        return $this->getRepoUserWithRole($roleToAssign);
     }
 
     /**
@@ -154,5 +158,22 @@ abstract class AppTestCase extends WebTestCase
         $this->locationRepository->getOrCreateLocation($homeLocation);
 
         return $homeLocation;
+    }
+
+    /**
+     * @param AppRole $roleToAssign
+     * @return AppUser
+     * @throws Exception
+     */
+    protected function getRepoUserWithRole(AppRole $roleToAssign): AppUser
+    {
+        $user = $this->getRepoSavedUser();
+        $user->assignRole(
+            $this->userRepository->getRoleReference(
+                $roleToAssign
+            )
+        );
+
+        return $this->userRepository->saveUser($user);
     }
 }

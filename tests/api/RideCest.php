@@ -11,7 +11,9 @@ class RideCest
     {
 
         $passengerUserId = $I->createPassengerAndGetId();
-        $I->sendPostApiRequest(
+        $driverUserId = $I->createDriverAndGetId();
+
+        $createdRide = $I->sendPostApiRequest(
             '/ride',
             [
                 'passenger_id' => $passengerUserId,
@@ -25,6 +27,24 @@ class RideCest
                 'passenger_id' => $passengerUserId,
                 'departure_lat' => LocationRepositoryTest::HOME_LOCATION_LAT,
                 'departure_long' => LocationRepositoryTest::HOME_LOCATION_LONG
+            ]
+        );
+
+        $rideId = $createdRide['id'];
+
+        $I->sendPatchApiRequest(
+            '/ride/'.$rideId,
+            [
+                'driver_id' => $driverUserId
+            ]
+        );
+
+        $I->seeResponseContainsJson(
+            [
+                'passenger_id' => $passengerUserId,
+                'departure_lat' => LocationRepositoryTest::HOME_LOCATION_LAT,
+                'departure_long' => LocationRepositoryTest::HOME_LOCATION_LONG,
+                'driver_id' => $driverUserId
             ]
         );
     }
