@@ -31,10 +31,7 @@ class RideRepositoryTest extends AppTestCase
      */
     public function testAssignDriverToRide()
     {
-        $ride = $this->getRideWithPassedPassengerAndDeparture(
-            $this->getRepoPassenger(),
-            $this->getRepoHomeLocation()
-        );
+        $ride = $this->getRideWithPassengerAndDeparture();
 
         $driver = $this->getRepoDriver();
         $ride->assignDriver(
@@ -44,6 +41,20 @@ class RideRepositoryTest extends AppTestCase
         $savedRide = $this->rideRepository->saveRide($ride);
 
         self::assertTrue($savedRide->isDrivenBy($driver));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testAssignDestinationToRide()
+    {
+        $ride = $this->getRideWithPassengerAndDeparture();
+        $destination = $this->getRepoWorkLocation();
+
+        $ride->assignDestination($destination);
+        $savedRide = $this->rideRepository->saveRide($ride);
+
+        self::assertTrue($savedRide->isDestinedFor($destination));
     }
 
     /**
@@ -62,5 +73,19 @@ class RideRepositoryTest extends AppTestCase
         );
 
         return $this->rideRepository->saveRide($newRide);
+    }
+
+    /**
+     * @return Ride
+     * @throws Exception
+     */
+    private function getRideWithPassengerAndDeparture(): Ride
+    {
+        $ride = $this->getRideWithPassedPassengerAndDeparture(
+            $this->getRepoPassenger(),
+            $this->getRepoHomeLocation()
+        );
+
+        return $ride;
     }
 }

@@ -158,14 +158,22 @@ abstract class AppTestCase extends WebTestCase
      */
     protected function getRepoHomeLocation(): AppLocation
     {
-        $homeLocation = new AppLocation(
-            self::HOME_LOCATION_LAT,
-            self::HOME_LOCATION_LONG
-        );
+        $lat = self::HOME_LOCATION_LAT;
+        $long = self::HOME_LOCATION_LONG;
 
-        $this->locationRepository->getOrCreateLocation($homeLocation);
+        return $this->getRepoLocationFromLatLong($lat, $long);
+    }
 
-        return $homeLocation;
+    /**
+     * @return AppLocation
+     * @throws Exception
+     */
+    protected function getRepoWorkLocation(): AppLocation
+    {
+        $lat = self::WORK_LOCATION_LAT;
+        $long = self::WORK_LOCATION_LONG;
+
+        return $this->getRepoLocationFromLatLong($lat, $long);
     }
 
     /**
@@ -183,5 +191,21 @@ abstract class AppTestCase extends WebTestCase
         );
 
         return $this->userRepository->saveUser($user);
+    }
+
+    /**
+     * @param float $lat
+     * @param int $long
+     * @return AppLocation
+     * @throws Exception
+     */
+    private function getRepoLocationFromLatLong(float $lat, int $long): AppLocation
+    {
+        $newLocation = new AppLocation(
+            $lat,
+            $long
+        );
+
+        return $this->locationRepository->getOrCreateLocation($newLocation);
     }
 }

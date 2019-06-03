@@ -50,11 +50,17 @@ class Ride
     private $departure;
 
     /**
+     * @var AppLocation
+     * @ORM\ManyToOne(targetEntity="AppLocation", fetch="EAGER")
+     * @ORM\JoinColumn(name="destinationId", referencedColumnName="id")
+     */
+    private $destination;
+
+    /**
      * @var DateTime
      * @ORM\Column(name="created_utc", type="datetime", nullable=false)
      */
     private $createdUTC;
-
 
     /**
      * Ride constructor.
@@ -122,5 +128,15 @@ class Ride
     private function hasDriver(): bool
     {
         return !is_null($this->driver);
+    }
+
+    public function assignDestination(AppLocation $destination)
+    {
+        $this->destination = $destination;
+    }
+
+    public function isDestinedFor(AppLocation $destination)
+    {
+        return $this->destination->is($destination);
     }
 }
