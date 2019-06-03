@@ -26,5 +26,29 @@ class RegisterUserCest
         );
 
         $userId = $createdUser['id'];
+
+        $patchedUser = $I->sendPatchApiRequest(
+            '/user/'.$userId,
+            [
+                'role' => 'Passenger'
+            ]
+        );
+
+        $I->canSeeResponseContainsJson(
+            [
+                'roles' => [
+                    0 => [
+                        'id' => 1,
+                        'name' => 'Passenger'
+                    ]
+                ]
+            ]
+        );
     }
+
+//,
+//1 => [
+//'id' => 2,
+//'name' => 'Driver'
+//]
 }
