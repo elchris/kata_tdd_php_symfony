@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Dto\RideDto;
 use DateTime;
 use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
@@ -78,5 +79,15 @@ class Ride
     public function isLeavingFrom(AppLocation $depatureToCheck)
     {
         return $depatureToCheck->is($this->departure);
+    }
+
+    public function toDto() : RideDto
+    {
+        return new RideDto(
+            $this->id->toString(),
+            $this->passenger->getId()->toString(),
+            $this->departure->getLat(),
+            $this->departure->getLong()
+        );
     }
 }

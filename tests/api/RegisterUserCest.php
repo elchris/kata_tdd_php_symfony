@@ -11,29 +11,7 @@ class RegisterUserCest
      */
     public function seeNewUserCreated(ApiTester $I)
     {
-        $createdUser = $I->sendPostApiRequest(
-            '/user',
-            [
-                'first' => 'chris',
-                'last' => 'holland'
-            ]
-        );
-
-        $I->seeResponseContainsJson(
-            [
-                'first' => 'chris',
-                'last' => 'holland'
-            ]
-        );
-
-        $userId = $createdUser['id'];
-
-        $I->sendPatchApiRequest(
-            '/user/'.$userId,
-            [
-                'role' => AppRole::PASSENGER
-            ]
-        );
+        $userId = $I->createPassengerAndGetId();
 
         $I->canSeeResponseContainsJson(
             [
@@ -68,10 +46,4 @@ class RegisterUserCest
             ]
         );
     }
-
-//,
-//1 => [
-//'id' => 2,
-//'name' => 'Driver'
-//]
 }
