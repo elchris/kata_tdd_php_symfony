@@ -66,4 +66,10 @@ class RideService
         $ride->assignDriver($driver);
         return $this->rideRepository->saveRide($ride);
     }
+
+    public function assignDestinationToRide(Ride $ride, AppLocation $destination)
+    {
+        $ride->assignDestination($destination);
+        return $this->rideRepository->saveRide($ride);
+    }
 }

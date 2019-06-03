@@ -36,6 +36,23 @@ class RideServiceTest extends AppTestCase
     }
 
     /**
+     * @throws Exception
+     */
+    public function testAssignDestinationToRide()
+    {
+        $ride = $this->getServiceRideWithPassengerAndDestination();
+        $workLocation = $this->getRepoWorkLocation();
+
+        /** @var Ride $patchedRide */
+        $patchedRide = $this->rideService->assignDestinationToRide(
+            $ride,
+            $workLocation
+        );
+
+        self::assertTrue($patchedRide->isDestinedFor($workLocation));
+    }
+
+    /**
      * @return Ride
      * @throws Exception
      */
