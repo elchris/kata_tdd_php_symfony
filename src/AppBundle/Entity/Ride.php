@@ -103,12 +103,21 @@ class Ride
                     ? $this->driver->getId()->toString()
                     : null;
 
+        $destinationLat = $this->hasDestination()
+                        ? $this->destination->getLat()
+                        : null;
+        $destinationLong = $this->hasDestination()
+            ? $this->destination->getLong()
+            : null;
+
         return new RideDto(
             $this->id->toString(),
             $this->passenger->getId()->toString(),
             $this->departure->getLat(),
             $this->departure->getLong(),
-            $driverId
+            $driverId,
+            $destinationLat,
+            $destinationLong
         );
     }
 
@@ -138,5 +147,13 @@ class Ride
     public function isDestinedFor(AppLocation $destination)
     {
         return $this->destination->is($destination);
+    }
+
+    /**
+     * @return bool
+     */
+    private function hasDestination(): bool
+    {
+        return !is_null($this->destination);
     }
 }

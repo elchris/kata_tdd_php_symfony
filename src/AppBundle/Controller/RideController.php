@@ -52,13 +52,32 @@ class RideController extends AppController
             $this->id($rideId)
         );
 
-        $driverToAssign = $this->userService()->byId(
-            $this->id($request->get('driver_id'))
-        );
+        $driverId = $request->get('driver_id');
 
-        return $this->rideService()->assignDriverToRide(
-            $rideToPatch,
-            $driverToAssign
-        )->toDto();
+        if (! is_null($driverId)) {
+            $driverToAssign = $this->userService()->byId(
+                $this->id($driverId)
+            );
+
+
+            return $this->rideService()->assignDriverToRide(
+                $rideToPatch,
+                $driverToAssign
+            )->toDto();
+        }
+
+        $destinationLat = $request->get('destination_lat');
+        $destinationLong = $request->get('destination_long');
+
+        if (! is_null($destinationLat) && !is_null($destinationLong)) {
+            $destination = $this->locationService()->getLocation(
+                $destinationLat,
+                $destinationLong
+            );
+            return $this->rideService()->assignDestinationToRide(
+                $rideToPatch,
+                $destination
+            )->toDto();
+        }
     }
 }

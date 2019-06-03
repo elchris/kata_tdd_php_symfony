@@ -67,7 +67,7 @@ class RideService
         return $this->rideRepository->saveRide($ride);
     }
 
-    public function assignDestinationToRide(Ride $ride, AppLocation $destination)
+    public function assignDestinationToRide(Ride $ride, AppLocation $destination) : Ride
     {
         $ride->assignDestination($destination);
         return $this->rideRepository->saveRide($ride);
