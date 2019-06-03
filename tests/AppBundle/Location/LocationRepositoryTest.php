@@ -2,19 +2,17 @@
 
 namespace Tests\AppBundle\Location;
 
-use AppBundle\Entity\AppLocation;
+use Exception;
 use Tests\AppBundle\AppTestCase;
 
 class LocationRepositoryTest extends AppTestCase
 {
+    /**
+     * @throws Exception
+     */
     public function testGetOrCreateLocation()
     {
-        $homeLocation = new AppLocation(
-            self::HOME_LOCATION_LAT,
-            self::HOME_LOCATION_LONG
-        );
-
-        $this->locationRepository->getOrCreateLocation($homeLocation);
+        $homeLocation = $this->getRepoHomeLocation();
         $locationByCoordinates = $this->locationRepository->getOrCreateLocation($homeLocation->clone());
 
         self::assertTrue($locationByCoordinates->isSameAs($homeLocation));

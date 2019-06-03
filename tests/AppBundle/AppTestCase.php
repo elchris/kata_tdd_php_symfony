@@ -2,10 +2,13 @@
 
 namespace Tests\AppBundle;
 
+use AppBundle\Entity\AppLocation;
 use AppBundle\Entity\AppRole;
+use AppBundle\Entity\AppUser;
 use AppBundle\Repository\LocationRepository;
 use AppBundle\Repository\UserRepository;
 use AppBundle\Service\UserSvc;
+use Exception;
 use FOS\UserBundle\Model\UserManagerInterface;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -91,5 +94,52 @@ abstract class AppTestCase extends WebTestCase
     {
         $this->expectException($class);
         $this->expectExceptionMessage($message);
+    }
+
+    /**
+     * @return AppUser
+     * @throws Exception
+     */
+    protected function getRepoSavedUser(): AppUser
+    {
+        $newUser = new AppUser('chris', 'holland');
+        self::assertNotNull($newUser->getId());
+
+        $savedUser = $this->userRepository->saveUser($newUser);
+
+        return $newUser;
+    }
+
+
+    /**
+     * @return AppUser
+     * @throws Exception
+     */
+    protected function getRepoPassenger(): AppUser
+    {
+        $user = $this->getRepoSavedUser();
+
+        $user->assignRole(
+            $this->userRepository->getRoleReference(
+                AppRole::passenger()
+            )
+        );
+        return $this->userRepository->saveUser($user);
+    }
+
+    /**
+     * @return AppLocation
+     * @throws Exception
+     */
+    protected function getRepoHomeLocation(): AppLocation
+    {
+        $homeLocation = new AppLocation(
+            self::HOME_LOCATION_LAT,
+            self::HOME_LOCATION_LONG
+        );
+
+        $this->locationRepository->getOrCreateLocation($homeLocation);
+
+        return $homeLocation;
     }
 }
