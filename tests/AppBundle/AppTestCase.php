@@ -6,7 +6,9 @@ use AppBundle\Entity\AppLocation;
 use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
 use AppBundle\Repository\LocationRepository;
+use AppBundle\Repository\RideRepository;
 use AppBundle\Repository\UserRepository;
+use AppBundle\Service\LocationService;
 use AppBundle\Service\UserSvc;
 use Exception;
 use FOS\UserBundle\Model\UserManagerInterface;
@@ -42,6 +44,14 @@ abstract class AppTestCase extends WebTestCase
 
     const WORK_LOCATION_LAT = 37.7721718;
     const WORK_LOCATION_LONG = -122.4310872;
+    /**
+     * @var RideRepository
+     */
+    protected $rideRepository;
+    /**
+     * @var LocationService
+     */
+    protected $locationService;
 
     protected function setUp()
     {
@@ -56,7 +66,10 @@ abstract class AppTestCase extends WebTestCase
         $this->locationRepository = new LocationRepository(
             $this->em()
         );
-
+        $this->rideRepository = new RideRepository($this->em());
+        $this->locationService = new LocationService(
+            $this->locationRepository
+        );
 
         //TODO: add roles to migration, or manually to DB table
         $this->save(AppRole::passenger());

@@ -4,12 +4,13 @@ namespace Tests\AppBundle\Ride;
 
 use AppBundle\Entity\Ride;
 use AppBundle\Repository\RideRepository;
+use Exception;
 use Tests\AppBundle\AppTestCase;
 
 class RideRepositoryTest extends AppTestCase
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testCreateRide()
     {
@@ -21,11 +22,9 @@ class RideRepositoryTest extends AppTestCase
             $departure
         );
 
-        $rideRepository = new RideRepository($this->em());
-
-        $rideRepository->saveRide($newRide);
+        $this->rideRepository->saveRide($newRide);
         $this->em()->clear();
-        $retrievedRide = $rideRepository->byId($newRide->getId());
+        $retrievedRide = $this->rideRepository->byId($newRide->getId());
 
         self::assertTrue($retrievedRide->is($newRide));
         self::assertTrue($retrievedRide->isRiddenBy($passenger));

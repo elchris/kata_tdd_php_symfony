@@ -14,17 +14,13 @@ class LocationServiceTest extends AppTestCase
      */
     public function testGetOrCreateLocation()
     {
-        $locationService = new LocationService(
-            $this->locationRepository
-        );
-
         $lookupLocation = new AppLocation(
             self::HOME_LOCATION_LAT,
             self::HOME_LOCATION_LONG
         );
 
         /** @var AppLocation $retrievedLocation */
-        $retrievedLocation = $locationService->getLocation(
+        $retrievedLocation = $this->locationService->getLocation(
             self::HOME_LOCATION_LAT,
             self::HOME_LOCATION_LONG
         );
