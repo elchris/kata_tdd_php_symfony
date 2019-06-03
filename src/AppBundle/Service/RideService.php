@@ -60,4 +60,10 @@ class RideService
     {
         return $this->rideRepository->byId($rideId);
     }
+
+    public function assignDriverToRide(Ride $ride, AppUser $driver) : Ride
+    {
+        $ride->assignDriver($driver);
+        return $this->rideRepository->saveRide($ride);
+    }
 }

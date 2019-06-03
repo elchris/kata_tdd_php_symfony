@@ -9,6 +9,7 @@ use AppBundle\Repository\LocationRepository;
 use AppBundle\Repository\RideRepository;
 use AppBundle\Repository\UserRepository;
 use AppBundle\Service\LocationService;
+use AppBundle\Service\RideService;
 use AppBundle\Service\UserSvc;
 use Exception;
 use FOS\UserBundle\Model\UserManagerInterface;
@@ -52,6 +53,10 @@ abstract class AppTestCase extends WebTestCase
      * @var LocationService
      */
     protected $locationService;
+    /**
+     * @var RideService
+     */
+    protected $rideService;
 
     protected function setUp()
     {
@@ -69,6 +74,9 @@ abstract class AppTestCase extends WebTestCase
         $this->rideRepository = new RideRepository($this->em());
         $this->locationService = new LocationService(
             $this->locationRepository
+        );
+        $this->rideService = new RideService(
+            $this->rideRepository
         );
 
         //TODO: add roles to migration, or manually to DB table
