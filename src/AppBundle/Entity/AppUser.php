@@ -2,7 +2,9 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Dto\UserDto;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 use Ramsey\Uuid\Uuid;
 use FOS\UserBundle\Model\User as BaseUser;
 
@@ -23,4 +25,51 @@ class AppUser //extends BaseUser
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      */
     protected $id;
+    /**
+     * @var string
+     * @ORM\Column(name="first", type="string", nullable=false)
+     */
+    private $first;
+    /**
+     * @var string
+     * @ORM\Column(name="last", type="string", nullable=false)
+     */
+    private $last;
+
+    /**
+     * AppUser constructor.
+     * @param string $first
+     * @param string $last
+     * @throws Exception
+     */
+    public function __construct(string $first, string $last)
+    {
+        $this->id = Uuid::uuid4();
+        $this->first = $first;
+        $this->last = $last;
+    }
+
+    public function getId() : Uuid
+    {
+        return $this->id;
+    }
+
+    public function isNamed(string $nameToCheck)
+    {
+        return $nameToCheck === $this->first.' '.$this->last;
+    }
+
+    public function is(AppUser $registeredUser) : bool
+    {
+        return $registeredUser->id->equals($this->id);
+    }
+
+    public function toDto() : UserDto
+    {
+        return new UserDto(
+            $this->id->toString(),
+            $this->first,
+            $this->last
+        );
+    }
 }
