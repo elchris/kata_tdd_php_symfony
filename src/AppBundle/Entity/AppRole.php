@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Exception\InvalidRoleException;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -47,8 +48,32 @@ class AppRole
         return new self(self::DRIVER_ID, self::DRIVER);
     }
 
+    /**
+     * @param string $name
+     * @return AppRole
+     * @throws InvalidRoleException
+     */
+    public static function fromName(string $name)
+    {
+        switch ($name) {
+            case self::PASSENGER:
+                return self::passenger();
+                break;
+            case self::DRIVER:
+                return self::driver();
+                break;
+            default:
+                throw new InvalidRoleException($name);
+        }
+    }
+
     public function getId() : int
     {
         return $this->id;
+    }
+
+    public function getName() : string
+    {
+        return $this->name;
     }
 }

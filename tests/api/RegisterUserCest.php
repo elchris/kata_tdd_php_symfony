@@ -2,6 +2,7 @@
 namespace Tests\api;
 
 use ApiTester;
+use AppBundle\Entity\AppRole;
 
 class RegisterUserCest
 {
@@ -26,5 +27,49 @@ class RegisterUserCest
         );
 
         $userId = $response['id'];
+
+        $I->sendPatchApiRequest(
+            '/user/'.$userId,
+            [
+                'role' => AppRole::PASSENGER
+            ]
+        );
+
+        $I->seeResponseContainsJson(
+            [
+                'first' => 'chris',
+                'last' => 'holland',
+                'roles' => [
+                    0 => [
+                        'id' => 1,
+                        'name' => AppRole::PASSENGER
+                    ]
+                ]
+            ]
+        );
+
+        $I->sendPatchApiRequest(
+            '/user/'.$userId,
+            [
+                'role' => AppRole::DRIVER
+            ]
+        );
+
+        $I->seeResponseContainsJson(
+            [
+                'first' => 'chris',
+                'last' => 'holland',
+                'roles' => [
+                    0 => [
+                        'id' => 1,
+                        'name' => AppRole::PASSENGER
+                    ],
+                    1 => [
+                        'id' => 2,
+                        'name' => AppRole::DRIVER
+                    ]
+                ]
+            ]
+        );
     }
 }

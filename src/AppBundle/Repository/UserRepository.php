@@ -4,6 +4,7 @@ namespace AppBundle\Repository;
 
 use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
+use AppBundle\Exception\MissingRoleException;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Ramsey\Uuid\Uuid;
@@ -35,15 +36,19 @@ class UserRepository extends AppRepository
     /**
      * @param AppRole $roleToFind
      * @return AppRole
-     * @throws NoResultException
+     * @throws MissingRoleException
      * @throws NonUniqueResultException
      */
     public function getRoleReference(AppRole $roleToFind) : AppRole
     {
-        return $this->em->createQuery(
-            'select r from E:AppRole r where r = :role'
-        )
-        ->setParameter('role', $roleToFind)
-        ->getSingleResult();
+        try {
+            return $this->em->createQuery(
+                'select r from E:AppRole r where r = :role'
+            )
+                ->setParameter('role', $roleToFind)
+                ->getSingleResult();
+        } catch (NoResultException $e) {
+            throw new MissingRoleException('Role not found: '.$roleToFind->getName());
+        }
     }
 }
