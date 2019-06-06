@@ -2,6 +2,7 @@
 
 namespace Tests\AppBundle;
 
+use AppBundle\Repository\UserRepository;
 use FOS\UserBundle\Model\UserManagerInterface;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,6 +18,10 @@ abstract class AppTestCase extends WebTestCase
 
     /** @var UserManagerInterface */
     private $userManager;
+    /**
+     * @var UserRepository
+     */
+    protected $userRepository;
 
     protected function setUp()
     {
@@ -25,6 +30,9 @@ abstract class AppTestCase extends WebTestCase
         $this->em = static::$kernel->getContainer()->get('doctrine')->getManager();
         $this->userManager = new FakeUserManager($this->em());
         $this->setUpEntityManager();
+
+
+        $this->userRepository = new UserRepository($this->em());
     }
 
     protected function em()

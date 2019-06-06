@@ -2,23 +2,51 @@
 
 namespace Tests\AppBundle\User;
 
+use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
-use AppBundle\Repository\UserRepository;
+use Exception;
 use Tests\AppBundle\AppTestCase;
 
 class UserRepositoryTest extends AppTestCase
 {
+    /**
+     * @throws Exception
+     */
     public function testCreateNewUser()
+    {
+        $newUser = $this->getRepoNewUser();
+        $this->em()->clear();
+        /** @var AppUser $retrievedUser */
+        $retrievedUser = $this->userRepository->byId($newUser->getId());
+
+        self::assertTrue($retrievedUser->isNamed('chris holland'));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testAssignPassengerRoleToUser()
+    {
+        $user = $this->getRepoNewUser();
+        $user->assignRole(AppRole::passenger());
+
+        $this->userRepository->saveAndGet($user);
+        $this->em()->clear();
+        $retrievedUser = $this->userRepository->byId($user->getId());
+
+        self::assertTrue($retrievedUser->hasRole(AppRole::passenger()));
+        self::assertFalse($retrievedUser->hasRole(AppRole::driver()));
+    }
+
+    /**
+     * @return AppUser
+     * @throws Exception
+     */
+    private function getRepoNewUser(): AppUser
     {
         $newUser = new AppUser('chris', 'holland');
         self::assertNotNull($newUser->getId());
 
-        $userRepository = new UserRepository($this->em());
-        $userRepository->saveAndGet($newUser);
-        $this->em()->clear();
-        /** @var AppUser $retrievedUser */
-        $retrievedUser = $userRepository->byId($newUser->getId());
-
-        self::assertTrue($retrievedUser->isNamed('chris holland'));
+        return $this->userRepository->saveAndGet($newUser);
     }
 }

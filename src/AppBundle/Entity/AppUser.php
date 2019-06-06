@@ -3,6 +3,8 @@
 namespace AppBundle\Entity;
 
 use AppBundle\Dto\UserDto;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Ramsey\Uuid\Uuid;
@@ -37,6 +39,17 @@ class AppUser //extends BaseUser
     private $last;
 
     /**
+     * @var ArrayCollection $roles
+     * @ORM\ManyToMany(targetEntity="AppRole")
+     * @ORM\JoinTable(
+     *     name="users_roles",
+     *     joinColumns={@ORM\JoinColumn(name="userId", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="roleId", referencedColumnName="id")}
+     * )
+     */
+    private $roles;
+
+    /**
      * AppUser constructor.
      * @param string $first
      * @param string $last
@@ -47,6 +60,7 @@ class AppUser //extends BaseUser
         $this->id = Uuid::uuid4();
         $this->first = $first;
         $this->last = $last;
+        $this->roles = new ArrayCollection();
     }
 
     public function getId() : Uuid
@@ -73,5 +87,22 @@ class AppUser //extends BaseUser
             $this->first,
             $this->last
         );
+    }
+
+    public function assignRole(AppRole $roleToAssign)
+    {
+        $this->roles->add($roleToAssign);
+    }
+
+    public function hasRole(AppRole $roleToFind)
+    {
+        $hasRoleCriteria =
+            Criteria::create()->andWhere(
+                Criteria::expr()->eq(
+                    'id',
+                    $roleToFind->getId()
+                )
+            );
+        return $this->roles->matching($hasRoleCriteria)->count() > 0;
     }
 }
