@@ -12,7 +12,7 @@ abstract class AppRepository
     protected $em;
 
     /**
-     * UserRepository constructor.
+     * DoctrineUserRepository constructor.
      * @param EntityManagerInterface $em
      */
     public function __construct(EntityManagerInterface $em)

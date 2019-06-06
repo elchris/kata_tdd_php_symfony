@@ -4,7 +4,9 @@ namespace AppBundle\Service;
 
 use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
-use AppBundle\Repository\UserRepository;
+use AppBundle\Exception\MissingRoleException;
+use AppBundle\Repository\DoctrineUserRepository;
+use AppBundle\Repository\UserRepositoryInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Exception;
@@ -13,15 +15,15 @@ use Ramsey\Uuid\Uuid;
 class UserSvc
 {
     /**
-     * @var UserRepository
+     * @var UserRepositoryInterface
      */
     private $userRepository;
 
     /**
      * UserSvc constructor.
-     * @param UserRepository $userRepository
+     * @param UserRepositoryInterface $userRepository
      */
-    public function __construct(UserRepository $userRepository)
+    public function __construct(UserRepositoryInterface $userRepository)
     {
         $this->userRepository = $userRepository;
     }
@@ -53,8 +55,8 @@ class UserSvc
      * @param AppUser $user
      * @param AppRole $role
      * @return AppUser
-     * @throws NoResultException
      * @throws NonUniqueResultException
+     * @throws MissingRoleException
      */
     public function assignRoleToUser(
         AppUser $user,

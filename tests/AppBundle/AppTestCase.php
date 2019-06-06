@@ -3,7 +3,8 @@
 namespace Tests\AppBundle;
 
 use AppBundle\Entity\AppRole;
-use AppBundle\Repository\UserRepository;
+use AppBundle\Repository\DoctrineUserRepository;
+use AppBundle\Repository\UserRepositoryInterface;
 use AppBundle\Service\UserSvc;
 use FOS\UserBundle\Model\UserManagerInterface;
 
@@ -21,7 +22,7 @@ abstract class AppTestCase extends WebTestCase
     /** @var UserManagerInterface */
     private $userManager;
     /**
-     * @var UserRepository
+     * @var UserRepositoryInterface
      */
     protected $userRepository;
     /**
@@ -38,7 +39,7 @@ abstract class AppTestCase extends WebTestCase
         $this->setUpEntityManager();
 
 
-        $this->userRepository = new UserRepository($this->em());
+        $this->userRepository = new DoctrineUserRepository($this->em());
         $this->userService = new UserSvc(
             $this->userRepository
         );

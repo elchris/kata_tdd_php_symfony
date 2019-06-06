@@ -3,7 +3,7 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Repository\UserRepository;
+use AppBundle\Repository\DoctrineUserRepository;
 use AppBundle\Service\UserSvc;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
@@ -20,7 +20,7 @@ class AppController extends AbstractFOSRestController
     protected function userService() : UserSvc
     {
         return new UserSvc(
-            new UserRepository(
+            new DoctrineUserRepository(
                 $this->em()
             )
         );

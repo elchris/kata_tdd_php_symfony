@@ -9,7 +9,7 @@ use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Ramsey\Uuid\Uuid;
 
-class UserRepository extends AppRepository
+class DoctrineUserRepository extends AppRepository implements UserRepositoryInterface
 {
 
     public function saveAndGet(AppUser $user) : AppUser
