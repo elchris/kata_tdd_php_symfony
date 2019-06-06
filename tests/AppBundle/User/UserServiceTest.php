@@ -13,10 +13,23 @@ class UserServiceTest extends AppTestCase
      */
     public function testRegisterNewUser()
     {
-        /** @var AppUser $newUser */
-        $newUser = $this->userService->register('chris', 'holland');
+        $newUser = $this->getSvcNewUser();
         $retrievedUser = $this->userService->byId($newUser->getId());
 
         self::assertTrue($retrievedUser->is($newUser));
+    }
+
+//    public function testAssignRoleToUser()
+//    {
+//
+//    }
+
+    /**
+     * @return AppUser
+     * @throws Exception
+     */
+    private function getSvcNewUser(): AppUser
+    {
+        return $this->userService->register('chris', 'holland');
     }
 }
