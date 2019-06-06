@@ -35,6 +35,15 @@ class UserServiceTest extends AppTestCase
 
         self::assertTrue($patchedUser->hasRole(AppRole::passenger()));
         self::assertFalse($patchedUser->hasRole(AppRole::driver()));
+
+        $rePatchedUser = $this->userService->assignRoleToUser(
+            $patchedUser,
+            AppRole::driver()
+        );
+
+        self::assertTrue($rePatchedUser->hasRole(AppRole::passenger()));
+        self::assertTrue($rePatchedUser->hasRole(AppRole::driver()));
+
     }
 
     /**
