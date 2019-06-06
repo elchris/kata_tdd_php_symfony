@@ -2,6 +2,7 @@
 
 namespace Tests\AppBundle;
 
+use AppBundle\Entity\AppRole;
 use AppBundle\Repository\UserRepository;
 use AppBundle\Service\UserSvc;
 use FOS\UserBundle\Model\UserManagerInterface;
@@ -41,6 +42,9 @@ abstract class AppTestCase extends WebTestCase
         $this->userService = new UserSvc(
             $this->userRepository
         );
+        //TODO: add these to migration
+        $this->save(AppRole::passenger());
+        $this->save(AppRole::driver());
     }
 
     protected function em()

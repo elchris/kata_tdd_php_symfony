@@ -27,10 +27,6 @@ class UserRepositoryTest extends AppTestCase
      */
     public function testAssignPassengerRoleToUser()
     {
-        //TODO: add these to migration
-        $this->save(AppRole::passenger());
-        $this->save(AppRole::driver());
-
         $user = $this->getRepoNewUser();
         $user->assignRole(
             $this->userRepository->getRoleReference(
