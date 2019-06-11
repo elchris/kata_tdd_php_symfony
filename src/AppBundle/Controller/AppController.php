@@ -4,11 +4,11 @@
 namespace AppBundle\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
-use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\UserBundle\Model\UserManagerInterface;
 use Ramsey\Uuid\Uuid;
 
-class AppController extends FOSRestController
+class AppController extends AbstractFOSRestController
 {
     protected function getUserManager() : UserManagerInterface
     {
