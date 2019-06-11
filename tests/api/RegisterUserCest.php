@@ -9,7 +9,7 @@ class RegisterUserCest
     /**
      * @param ApiTester $I
      */
-    public function seeNewUserCreated(ApiTester $I)
+    public function seeNewUserCreated(ApiTester $I): void
     {
         $response = $I->sendPostApiRequest(
             '/user',

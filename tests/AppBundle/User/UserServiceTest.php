@@ -12,7 +12,7 @@ class UserServiceTest extends AppTestCase
     /**
      * @throws Exception
      */
-    public function testRegisterNewUser()
+    public function testRegisterNewUser(): void
     {
         $newUser = $this->getSvcNewUser();
         $retrievedUser = $this->userService->byId($newUser->getId());
@@ -23,7 +23,7 @@ class UserServiceTest extends AppTestCase
     /**
      * @throws Exception
      */
-    public function testAssignRoleToUser()
+    public function testAssignRoleToUser(): void
     {
         $newUser = $this->getSvcNewUser();
 
@@ -43,7 +43,6 @@ class UserServiceTest extends AppTestCase
 
         self::assertTrue($rePatchedUser->hasRole(AppRole::passenger()));
         self::assertTrue($rePatchedUser->hasRole(AppRole::driver()));
-
     }
 
     /**

@@ -12,7 +12,7 @@ class UserRepositoryTest extends AppTestCase
     /**
      * @throws Exception
      */
-    public function testCreateNewUser()
+    public function testCreateNewUser(): void
     {
         $newUser = $this->getRepoNewUser();
         $this->em()->clear();
@@ -25,7 +25,7 @@ class UserRepositoryTest extends AppTestCase
     /**
      * @throws Exception
      */
-    public function testAssignPassengerRoleToUser()
+    public function testAssignPassengerRoleToUser(): void
     {
         $user = $this->getRepoNewUser();
         $user->assignRole(

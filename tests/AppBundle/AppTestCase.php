@@ -38,17 +38,16 @@ abstract class AppTestCase extends WebTestCase
         $this->userManager = new FakeUserManager($this->em());
         $this->setUpEntityManager();
 
-
         $this->userRepository = new DoctrineUserRepository($this->em());
         $this->userService = new UserSvc(
             $this->userRepository
         );
-        //TODO: add these to migration
+
         $this->save(AppRole::passenger());
         $this->save(AppRole::driver());
     }
 
-    protected function em()
+    protected function em(): EntityManagerInterface
     {
         return $this->em;
     }
@@ -60,7 +59,7 @@ abstract class AppTestCase extends WebTestCase
         return $entity;
     }
 
-    private function setUpEntityManager()
+    private function setUpEntityManager(): void
     {
         $classes = $this->em()->getMetadataFactory()->getAllMetadata();
         $tool = new SchemaTool($this->em);
