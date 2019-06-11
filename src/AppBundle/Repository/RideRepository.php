@@ -24,7 +24,7 @@ class RideRepository extends AppRepository
     public function byId(Uuid $rideId) : Ride
     {
         return $this->em->createQuery(
-            'select r from E:Ride r where r.id = :id'
+            /** @lang DQL */'select r from AppBundle\Entity\Ride r where r.id = :id'
         )
         ->setParameter('id', $rideId)
         ->getSingleResult();
