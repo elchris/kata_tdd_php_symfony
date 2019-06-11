@@ -90,12 +90,12 @@ class AppUser //extends BaseUser
         );
     }
 
-    public function assignRole(AppRole $roleToAssign)
+    public function assignRole(AppRole $roleToAssign): void
     {
         $this->roles->add($roleToAssign);
     }
 
-    public function hasRole(AppRole $roleToFind)
+    public function hasRole(AppRole $roleToFind): bool
     {
         $hasRoleCriteria =
             Criteria::create()->andWhere(

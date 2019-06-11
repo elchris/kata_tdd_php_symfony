@@ -14,11 +14,11 @@ class DefaultController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function indexAction(Request $request)
+    public function indexAction(Request $request): Response
     {
         // replace this example code with whatever you need
         return $this->render('default/index.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
+            'base_dir' => dirname($this->getParameter('kernel.root_dir')) . '' .DIRECTORY_SEPARATOR,
         ]);
     }
 }

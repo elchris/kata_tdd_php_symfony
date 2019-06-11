@@ -30,7 +30,7 @@ class AppController extends AbstractFOSRestController
      * @param string $id
      * @return Uuid
      */
-    protected function id(string $id)
+    protected function id(string $id): Uuid
     {
         /** @var Uuid $uuid */
         $uuid = Uuid::fromString($id);
@@ -40,7 +40,7 @@ class AppController extends AbstractFOSRestController
     /**
      * @return EntityManagerInterface
      */
-    private function em()
+    private function em(): EntityManagerInterface
     {
         /** @var EntityManagerInterface $em */
         $em = $this->getDoctrine()->getManager();

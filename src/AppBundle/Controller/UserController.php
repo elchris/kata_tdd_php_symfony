@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Dto\UserDto;
 use AppBundle\Entity\AppRole;
 use AppBundle\Exception\InvalidRoleException;
+use AppBundle\Exception\MissingRoleException;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Exception;
@@ -35,8 +36,9 @@ class UserController extends AppController
      * @throws NoResultException
      * @throws NonUniqueResultException
      * @throws InvalidRoleException
+     * @throws MissingRoleException
      */
-    public function patchUser(string $userId, Request $request)
+    public function patchUser(string $userId, Request $request): UserDto
     {
         $userToPatch =
             $this

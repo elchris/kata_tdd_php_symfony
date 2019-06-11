@@ -14,10 +14,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class AppRole
 {
-    const PASSENGER = 'Passenger';
-    const DRIVER = 'Driver';
-    const PASSENGER_ID = 1;
-    const DRIVER_ID = 2;
+    public const PASSENGER = 'Passenger';
+    public const DRIVER = 'Driver';
+    public const PASSENGER_ID = 1;
+    public const DRIVER_ID = 2;
 
     /**
      * @var int
@@ -38,12 +38,12 @@ class AppRole
         $this->name = $name;
     }
 
-    public static function passenger()
+    public static function passenger(): AppRole
     {
         return new self(self::PASSENGER_ID, self::PASSENGER);
     }
 
-    public static function driver()
+    public static function driver(): AppRole
     {
         return new self(self::DRIVER_ID, self::DRIVER);
     }
@@ -53,7 +53,7 @@ class AppRole
      * @return AppRole
      * @throws InvalidRoleException
      */
-    public static function fromName(string $name)
+    public static function fromName(string $name): ?AppRole
     {
         switch ($name) {
             case self::PASSENGER:
