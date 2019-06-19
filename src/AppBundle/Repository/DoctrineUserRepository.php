@@ -5,6 +5,7 @@ namespace AppBundle\Repository;
 use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
 use AppBundle\Exception\MissingRoleException;
+use AppBundle\Exception\UserWasNotFound;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Ramsey\Uuid\Uuid;
@@ -21,16 +22,20 @@ class DoctrineUserRepository extends AppRepository implements UserRepositoryInte
     /**
      * @param Uuid $id
      * @return AppUser
-     * @throws NoResultException
      * @throws NonUniqueResultException
+     * @throws UserWasNotFound
      */
     public function byId(Uuid $id) : AppUser
     {
-        return $this->em->createQuery(
-            'select u from E:AppUser u where u.id = :id'
-        )
-        ->setParameter('id', $id)
-        ->getSingleResult();
+        try {
+            return $this->em->createQuery(
+                'select u from E:AppUser u where u.id = :id'
+            )
+                ->setParameter('id', $id)
+                ->getSingleResult();
+        } catch (NoResultException $e) {
+            throw new UserWasNotFound();
+        }
     }
 
     /**

@@ -4,6 +4,7 @@ namespace Tests\AppBundle\User;
 
 use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
+use AppBundle\Exception\UserWasNotFound;
 use Exception;
 use Tests\AppBundle\AppTestCase;
 
@@ -22,10 +23,21 @@ class UserRepositoryTest extends AppTestCase
         self::assertTrue($retrievedUser->isNamed('chris holland'));
     }
 
+    public function testRogueUserIdThrowsUserNotFoundException()
+    {
+        $goodUser = $this->getRepoNewUser();
+
+        $rogueUser = new AppUser('rogue', 'user');
+
+        $this->expectException(UserWasNotFound::class);
+
+        $this->userRepository->byId($rogueUser->getId());
+    }
+
     /**
      * @throws Exception
      */
-    public function testAssignPassengerRoleToUser(): void
+    public function testAssignPassengerRoleToUser()
     {
         $user = $this->getRepoNewUser();
         $user->assignRole(
