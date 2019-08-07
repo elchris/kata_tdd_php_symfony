@@ -1,3 +1,3 @@
 <component name="DependencyValidationManager">
-  <scope name="web-scope" pattern="file[*]:web/*&amp;&amp;!file:web/app.php&amp;&amp;!file:web/app_dev.php&amp;&amp;!file:web/config.php" />
+  <scope name="web-scope" pattern="file[*]:public/web/*&amp;&amp;!file:web/app.php&amp;&amp;!file:web/app_dev.php&amp;&amp;!file:web/config.php" />
 </component>

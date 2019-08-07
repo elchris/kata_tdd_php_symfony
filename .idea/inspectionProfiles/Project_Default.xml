@@ -700,6 +700,7 @@
     <inspection_tool class="PhpCSValidationInspection" enabled="true" level="WEAK WARNING" enabled_by_default="false">
       <scope name="psr2-scope" level="WEAK WARNING" enabled="true">
         <option name="CODING_STANDARD" value="PSR2" />
+        <option name="EXTENSIONS" value="php,js,css,inc" />
       </scope>
       <option name="CODING_STANDARD" value="PSR2" />
     </inspection_tool>
