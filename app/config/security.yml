@@ -31,9 +31,10 @@ security:
             stateless: true                            # Do no set session cookies
             anonymous: false
             provider: fos_userbundle
+            user_checker: security.user_checker
 
         main:
-            anonymous: ~
+            #anonymous: ~
             # activate different ways to authenticate
 
             # http_basic: ~
@@ -41,6 +42,7 @@ security:
             # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
 
             pattern: ^/
+            user_checker: security.user_checker
             form_login:
                 provider: fos_userbundle
                 check_path: fos_user_security_check
