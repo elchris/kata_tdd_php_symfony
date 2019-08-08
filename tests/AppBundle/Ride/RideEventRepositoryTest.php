@@ -20,13 +20,16 @@ class RideEventRepositoryTest extends AppTestCase
      * @throws UserNotFoundException
      * @throws UnauthorizedOperationException
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->savedRide = $this->ride()->getRepoSavedRide();
     }
 
-    public function testNonExistentRideThrowsException()
+    /**
+     * @throws \Exception
+     */
+    public function testNonExistentRideThrowsException(): void
     {
         $nonExistentRide = new Ride(
             $this->user()->getSavedUser(),
@@ -44,7 +47,7 @@ class RideEventRepositoryTest extends AppTestCase
      * @throws UserNotFoundException
      * @throws UnauthorizedOperationException
      */
-    public function testSaveNewRideEvent()
+    public function testSaveNewRideEvent(): void
     {
         $rideEvent = $this->getSavedRequestedRideEvent();
 
@@ -56,7 +59,7 @@ class RideEventRepositoryTest extends AppTestCase
      * @throws UserNotFoundException
      * @throws UnauthorizedOperationException
      */
-    public function testRideIsCurrentlyRequested()
+    public function testRideIsCurrentlyRequested(): void
     {
         $this->getSavedRequestedRideEvent();
 
@@ -70,7 +73,7 @@ class RideEventRepositoryTest extends AppTestCase
      * @throws UserNotFoundException
      * @throws UnauthorizedOperationException
      */
-    public function testRideIsCurrentlyAccepted()
+    public function testRideIsCurrentlyAccepted(): void
     {
         $this->assertLastEventIsOfType($this->ride()->accepted);
     }
@@ -80,7 +83,7 @@ class RideEventRepositoryTest extends AppTestCase
      * @throws UserNotFoundException
      * @throws UnauthorizedOperationException
      */
-    public function testRideIsCurrentlyInProgress()
+    public function testRideIsCurrentlyInProgress(): void
     {
         $this->assertLastEventIsOfType($this->ride()->inProgress);
     }
@@ -90,7 +93,7 @@ class RideEventRepositoryTest extends AppTestCase
      * @throws UserNotFoundException
      * @throws UnauthorizedOperationException
      */
-    public function testRideIsCurrentlyCancelled()
+    public function testRideIsCurrentlyCancelled(): void
     {
         $this->assertLastEventIsOfType($this->ride()->cancelled);
     }
@@ -100,7 +103,7 @@ class RideEventRepositoryTest extends AppTestCase
      * @throws UserNotFoundException
      * @throws UnauthorizedOperationException
      */
-    public function testRideIsCurrentlyCompleted()
+    public function testRideIsCurrentlyCompleted(): void
     {
         $this->assertLastEventIsOfType($this->ride()->completed);
     }
@@ -110,7 +113,7 @@ class RideEventRepositoryTest extends AppTestCase
      * @throws UserNotFoundException
      * @throws UnauthorizedOperationException
      */
-    public function testRideIsCurrentlyRejected()
+    public function testRideIsCurrentlyRejected(): void
     {
         $this->assertLastEventIsOfType($this->ride()->rejected);
     }
@@ -120,7 +123,7 @@ class RideEventRepositoryTest extends AppTestCase
      * @throws UserNotFoundException
      * @throws UnauthorizedOperationException
      */
-    public function testMarkRideAsStatus()
+    public function testMarkRideAsStatus(): void
     {
         $this->ride()->markRepoRide(
             $this->savedRide,
@@ -138,7 +141,7 @@ class RideEventRepositoryTest extends AppTestCase
      * @throws UserNotFoundException
      * @throws UnauthorizedOperationException
      */
-    private function getSavedRequestedRideEvent()
+    private function getSavedRequestedRideEvent(): RideEvent
     {
         return $this->ride()->markRepoRide(
             $this->savedRide,

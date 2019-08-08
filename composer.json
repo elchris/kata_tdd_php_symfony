@@ -45,13 +45,12 @@
         "friendsofsymfony/user-bundle": "^2.0",
         "friendsofsymfony/oauth-server-bundle": "^1.5",
         "symfony/process": "^4.3",
-        "symfony/swiftmailer-bundle": "^3.2",
-        "symfony/templating": "^4.3"
+        "symfony/swiftmailer-bundle": "^3.2"
     },
     "require-dev": {
-        "symfony/phpunit-bridge": "^4.2",
-        "phpunit/phpunit": "^7.0",
-        "codeception/codeception": "^2.4"
+        "codeception/codeception": "^3.0",
+        "phpunit/phpunit": "^8.3",
+        "symfony/phpunit-bridge": "^4.3"
     },
     "scripts": {
         "symfony-scripts": [

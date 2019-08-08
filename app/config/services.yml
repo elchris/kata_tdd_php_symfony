@@ -10,3 +10,8 @@ services:
     fos_user.user_manager.public:
         alias: fos_user.user_manager
         public: true
+
+    AppBundle\Controller\DefaultController:
+        autowire: true
+        autoconfigure: true
+        public: true

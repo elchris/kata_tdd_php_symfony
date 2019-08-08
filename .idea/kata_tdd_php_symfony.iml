@@ -35,6 +35,15 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/guzzlehttp/guzzle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/guzzlehttp/promises" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/guzzlehttp/psr7" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/hoa/consistency" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/hoa/console" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/hoa/event" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/hoa/exception" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/hoa/file" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/hoa/iterator" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/hoa/protocol" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/hoa/stream" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/hoa/ustring" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/incenteev/composer-parameter-handler" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/jdorn/sql-formatter" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/jms/metadata" />
@@ -79,6 +88,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/sebastian/object-reflector" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/sebastian/recursion-context" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/sebastian/resource-operations" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/sebastian/type" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/sebastian/version" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/squizlabs/php_codesniffer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/swiftmailer/swiftmailer" />

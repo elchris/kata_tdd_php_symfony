@@ -32,7 +32,7 @@ abstract class AppTestCase extends WebTestCase
     /** @var UserManagerInterface */
     private $userManager;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
         self::bootKernel();
@@ -66,7 +66,7 @@ abstract class AppTestCase extends WebTestCase
         return (new FakeUser($firstName, $lastName))->toEntity();
     }
 
-    private function setUpEntityManager()
+    private function setUpEntityManager(): void
     {
         $classes = $this->em()->getMetadataFactory()->getAllMetadata();
         $tool = new SchemaTool($this->em);
@@ -90,9 +90,9 @@ abstract class AppTestCase extends WebTestCase
     /**
      * @return UserApi
      */
-    protected function user()
+    protected function user(): UserApi
     {
-        if (is_null($this->userApi)) {
+        if ($this->userApi === null) {
             $this->userApi = new UserApi(
                 $this->em(),
                 $this->userManager
@@ -104,9 +104,9 @@ abstract class AppTestCase extends WebTestCase
     /**
      * @return LocationApi
      */
-    protected function location()
+    protected function location(): LocationApi
     {
-        if (is_null($this->locationApi)) {
+        if ($this->locationApi === null) {
             $this->locationApi = new LocationApi($this->em());
         }
         return $this->locationApi;
@@ -115,9 +115,9 @@ abstract class AppTestCase extends WebTestCase
     /**
      * @return RideApi
      */
-    protected function ride()
+    protected function ride(): RideApi
     {
-        if (is_null($this->rideApi)) {
+        if ($this->rideApi === null) {
             $this->rideApi = new RideApi(
                 $this->em(),
                 $this->user(),
