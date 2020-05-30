@@ -25,22 +25,13 @@ class UserRepository extends AppRepository implements UserRepositoryInterface
         $this->userManager = $userManager;
     }
 
-    /**
-     * @param Uuid $userId
-     * @return AppUser
-     * @throws UserNotFoundException
-     */
     public function getUserById(Uuid $userId): AppUser
     {
-        try {
-            return $this->em->createQuery(
-                'select u from E:AppUser u where u.id = :userId'
-            )
-                ->setParameter('userId', $userId)
-                ->getSingleResult();
-        } catch (\Exception $e) {
-            throw new UserNotFoundException();
-        }
+        return $this->em->createQuery(
+            'select u from E:AppUser u where u.id = :userId'
+        )
+            ->setParameter('userId', $userId)
+            ->getSingleResult();
     }
 
     /**
