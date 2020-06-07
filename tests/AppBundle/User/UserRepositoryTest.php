@@ -1,19 +1,21 @@
 <?php
 
-namespace Tests\AppBundle;
+namespace Tests\AppBundle\User;
 
 use AppBundle\Entity\AppRole;
 use AppBundle\Entity\AppUser;
 use AppBundle\Exception\DuplicateRoleAssignmentException;
 use AppBundle\Exception\UserNotFoundException;
+use Exception;
 use Ramsey\Uuid\Uuid;
+use Tests\AppBundle\AppTestCase;
 
 class UserRepositoryTest extends AppTestCase
 {
     /**
      * @throws UserNotFoundException
      */
-    public function testUserUuid()
+    public function testUserUuid(): void
     {
         $user = $this->user()->getSavedUser();
         $this->em()->clear();
@@ -21,7 +23,7 @@ class UserRepositoryTest extends AppTestCase
         self::assertTrue($retrievedUser->is($user));
     }
 
-    public function testCreateAndSaveNewUser()
+    public function testCreateAndSaveNewUser(): void
     {
         $user = $this->user()->getSavedUser();
 
@@ -31,7 +33,7 @@ class UserRepositoryTest extends AppTestCase
     /**
      * @throws UserNotFoundException
      */
-    public function testGetUserById()
+    public function testGetUserById(): void
     {
         $savedUser = $this->user()->getSavedUser();
 
@@ -42,8 +44,9 @@ class UserRepositoryTest extends AppTestCase
 
     /**
      * @throws UserNotFoundException
+     * @throws Exception
      */
-    public function testBadUserIdThrowsUserNotFoundException()
+    public function testBadUserIdThrowsUserNotFoundException(): void
     {
         /** @var Uuid $nonExistentId */
         $nonExistentId = Uuid::uuid4();
@@ -59,7 +62,7 @@ class UserRepositoryTest extends AppTestCase
      * @throws DuplicateRoleAssignmentException
      * @throws UserNotFoundException
      */
-    public function testAssignDriverRoleToUser()
+    public function testAssignDriverRoleToUser(): void
     {
         $this->assertUserHasExpectedRole(AppRole::driver());
     }
@@ -68,7 +71,7 @@ class UserRepositoryTest extends AppTestCase
      * @throws DuplicateRoleAssignmentException
      * @throws UserNotFoundException
      */
-    public function testAssignPassengerRoleToUser()
+    public function testAssignPassengerRoleToUser(): void
     {
         $this->assertUserHasExpectedRole(AppRole::passenger());
     }
@@ -77,7 +80,7 @@ class UserRepositoryTest extends AppTestCase
      * @throws DuplicateRoleAssignmentException
      * @throws UserNotFoundException
      */
-    public function testUserCanHaveBothRoles()
+    public function testUserCanHaveBothRoles(): void
     {
         $savedUser = $this->user()->getSavedUser();
 
@@ -93,7 +96,7 @@ class UserRepositoryTest extends AppTestCase
     /**
      * @throws DuplicateRoleAssignmentException
      */
-    public function testDuplicateRoleAssignmentThrows()
+    public function testDuplicateRoleAssignmentThrows(): void
     {
         $savedUser = $this->user()->getSavedUser();
 
@@ -111,7 +114,7 @@ class UserRepositoryTest extends AppTestCase
      * @throws DuplicateRoleAssignmentException
      * @throws UserNotFoundException
      */
-    private function assertUserHasExpectedRole(AppRole $role)
+    private function assertUserHasExpectedRole(AppRole $role): void
     {
         $savedUser = $this->user()->getSavedUser();
 
@@ -126,7 +129,7 @@ class UserRepositoryTest extends AppTestCase
      * @param AppRole $role
      * @throws DuplicateRoleAssignmentException
      */
-    protected function assignRepoRoleToUser(AppUser $user, AppRole $role)
+    protected function assignRepoRoleToUser(AppUser $user, AppRole $role): void
     {
         $this->user()->getRepo()->assignRoleToUser($user, $role);
     }
